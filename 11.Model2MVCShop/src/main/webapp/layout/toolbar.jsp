@@ -10,7 +10,7 @@
 	
 	<div class="container">
 	       
-		<a class="navbar-brand" href="/index.jsp">Model2 MVC Shop</a>
+		<a class="navbar-brand" href="/index.jsp">Newjeans Goods shop</a>
 		
 		<!-- toolBar Button Start //////////////////////// -->
 		<div class="navbar-header">
@@ -123,5 +123,21 @@
 	 		//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
 			$(self.location).attr("href","/user/getUser?userId=${sessionScope.user.userId}");
 		});
+		
+	 	$( "a:contains('판매상품등록')" ).on("click" , function() {
+	 		
+			$(self.location).attr("href","/product/addProduct");
+		});
+	 	
+	 	$( "a:contains('판매상품관리')" ).on("click" , function() {
+	 		
+			$(self.location).attr("href","/product/listProduct?menu=manage");
+		});
+	 	
+		$( "a:contains('상 품 검 색')" ).on("click" , function() {
+	 		
+			$(self.location).attr("href","/product/listProduct?menu=search");
+		});
+		
 		
 	</script>  

@@ -17,9 +17,18 @@
 			<c:if test="${ resultPage.currentPage > resultPage.pageUnit }">
 				<li>
 			</c:if>
-		      <a href="javascript:fncGetUserList('${ resultPage.currentPage-1}')" aria-label="Previous">
-		        <span aria-hidden="true">&laquo;</span>
-		      </a>
+			
+				<c:if test="${param.id == 'user'}">
+			      <a href="javascript:fncGetUserList('${ resultPage.currentPage-1}')" aria-label="Previous">
+			        <span aria-hidden="true">&laquo;</span>
+			      </a>
+		      	</c:if>
+				<c:if test="${param.id == 'product'}">
+				  <a href="javascript:fncGetProductList('${ resultPage.currentPage-1}')" aria-label="Previous">
+			        <span aria-hidden="true">&laquo;</span>
+			      </a>
+				</c:if>
+				
 		    </li>
 		    
 		    <!--  중앙  -->
@@ -28,13 +37,23 @@
 				<c:if test="${ resultPage.currentPage == i }">
 					<!--  현재 page 가르킬경우 : active -->
 				    <li class="active">
-				    	<a href="javascript:fncGetUserList('${ i }');">${ i }<span class="sr-only">(current)</span></a>
+				    	<c:if test="${param.id == 'user'}">
+				    		<a href="javascript:fncGetUserList('${ i }');">${ i }<span class="sr-only">(current)</span></a>
+				    	</c:if>
+				    	<c:if test="${param.id == 'product'}">
+				    		<a href="javascript:fncGetProductList('${ i }');">${ i }<span class="sr-only">(current)</span></a>
+				    	</c:if>
 				    </li>
 				</c:if>	
 				
 				<c:if test="${ resultPage.currentPage != i}">	
 					<li>
-						<a href="javascript:fncGetUserList('${ i }');">${ i }</a>
+						<c:if test="${param.id == 'user'}">
+							<a href="javascript:fncGetUserList('${ i }');">${ i }</a>
+						</c:if>
+						<c:if test="${param.id == 'product'}">
+							<a href="javascript:fncGetProductList('${ i }');">${ i }</a>
+						</c:if>
 					</li>
 				</c:if>
 			</c:forEach>
@@ -46,7 +65,13 @@
 			<c:if test="${ resultPage.endUnitPage < resultPage.maxPage }">
 				<li>
 			</c:if>
-		      <a href="javascript:fncGetUserList('${resultPage.endUnitPage+1}')" aria-label="Next">
+		      
+		      <c:if test="${param.id == 'user'}">
+		      	<a href="javascript:fncGetUserList('${resultPage.endUnitPage+1}')" aria-label="Next">
+		      </c:if>  
+		      <c:if test="${param.id == 'product'}">
+		        <a href="javascript:fncGetProductList('${resultPage.endUnitPage+1}')" aria-label="Next">
+		      </c:if>
 		        <span aria-hidden="true">&raquo;</span>
 		      </a>
 		    </li>

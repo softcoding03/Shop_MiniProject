@@ -54,9 +54,9 @@
 		//============= "검색"  Event  처리 =============	
 		 $(function() {
 			 //==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
-			 //$( "button.btn.btn-default" ).on("click" , function() {
-			//	fncGetUserList(1);
-			//});
+			 $( "button.btn.btn-default" ).on("click" , function() {
+				fncGetUserList(1);
+			});
 		 });
 		
 		
@@ -167,7 +167,7 @@
 	    	</div>
 	    	
 		</div>
-		<!-- table 위쪽 검색 Start /////////////////////////////////////-->
+		<!-- table 위쪽 검색 end /////////////////////////////////////-->
 		
 		
       <!--  table Start /////////////////////////////////////-->
@@ -210,7 +210,9 @@
  	
  	
  	<!-- PageNavigation Start... -->
-	<jsp:include page="../common/pageNavigator_new.jsp"/>
+	<jsp:include page="../common/pageNavigator_new.jsp">
+		<jsp:param name="id" value="user" />
+	</jsp:include>
 	<!-- PageNavigation End... -->
 	
 </body>

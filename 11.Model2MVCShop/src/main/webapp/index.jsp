@@ -7,7 +7,7 @@
 
 <!-- ///////////////////////////// 로그인시 Forward  /////////////////////////////////////// -->
  <c:if test="${ ! empty user }">
- 	<jsp:forward page="main.jsp"/>
+ 	<jsp:forward page="main2.jsp"/>
  </c:if>
  <!-- //////////////////////////////////////////////////////////////////////////////////////////////////// -->
 
@@ -61,7 +61,7 @@
 		
         <div class="container">
         
-        	<a class="navbar-brand" href="#">Model2 MVC Shop</a>
+        	<a class="navbar-brand" href="#">NewJeans Goods Shop</a>
 			
 			<!-- toolBar Button Start //////////////////////// -->
 			<div class="navbar-header">

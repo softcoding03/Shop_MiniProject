@@ -21,7 +21,7 @@
 	<!--  ///////////////////////// CSS ////////////////////////// -->
 	<style>
     	 body >  div.container{ 
-        	border: 3px solid #D6CDB7;
+        	border: 3px solid #FEE6F2;
             margin-top: 10px;
         }
     </style>
@@ -73,7 +73,7 @@
 	<!-- ToolBar Start /////////////////////////////////////-->
 	<div class="navbar  navbar-default">
         <div class="container">
-        	<a class="navbar-brand" href="/index.jsp">Model2 MVC Shop</a>
+        	<a class="navbar-brand" href="/index.jsp">NewJeans Goods Shop</a>
    		</div>
    	</div>
    	<!-- ToolBar End /////////////////////////////////////-->	
@@ -83,28 +83,28 @@
 		<!--  row Start /////////////////////////////////////-->
 		<div class="row">
 		
-			<div class="col-md-6">
-					<img src="/images/logo-spring.png" class="img-rounded" width="100%" />
+			<div class="col-md-8">
+					<img src="/images/style_63a5ae5b9d820.jpg" class="img-rounded" width="100%" />
 			</div>
 	   	 	
-	 	 	<div class="col-md-6">
+	 	 	<div class="col-md-4">
 	 	 	
 		 	 	<br/><br/>
 				
 				<div class="jumbotron">	 	 	
-		 	 		<h1 class="text-center">로 &nbsp;&nbsp;그 &nbsp;&nbsp;인</h1>
+		 	 		<h2 class="text-center">로 &nbsp;그 &nbsp;인</h1>
 
 			        <form class="form-horizontal">
 		  
 					  <div class="form-group">
-					    <label for="userId" class="col-sm-4 control-label">아 이 디</label>
+					    <label for="userId" class="col-sm-4 control-label">아이디</label>
 					    <div class="col-sm-6">
 					      <input type="text" class="form-control" name="userId" id="userId"  placeholder="아이디" >
 					    </div>
 					  </div>
 					  
 					  <div class="form-group">
-					    <label for="password" class="col-sm-4 control-label">패 스 워 드</label>
+					    <label for="password" class="col-sm-4 control-label">패스워드</label>
 					    <div class="col-sm-6">
 					      <input type="password" class="form-control" name="password" id="password" placeholder="패스워드" >
 					    </div>

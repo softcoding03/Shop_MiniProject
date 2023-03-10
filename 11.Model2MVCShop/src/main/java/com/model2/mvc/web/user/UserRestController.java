@@ -47,12 +47,10 @@ public class UserRestController {
 		System.out.println("::"+user);
 		User dbUser=userService.getUser(user.getUserId());
 		
-		////////////////////////////////////////////////////////////////////////////////
 		// 아이디가 없다면.
 		if( dbUser==null ) {
 		dbUser = new User();
 		}
-		/////////////////////////////////////////////////////////////////////////////////
 		
 		if( user.getPassword().equals(dbUser.getPassword())){
 			session.setAttribute("user", dbUser);

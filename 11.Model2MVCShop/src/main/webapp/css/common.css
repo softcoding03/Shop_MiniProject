@@ -18,7 +18,7 @@ BODY {
 body.bg {
 	margin-top:0px;
 	margin-left:10px;
-	BACKGROUND-IMAGE: url(/synergyweb/images/imgBodyBg.gif);
+/* 	BACKGROUND-IMAGE: url(/synergyweb/images/imgBodyBg.gif); */	BACKGROUND-IMAGE: url(/synergyweb/images/imgBodyBg.gif);
 	background-repeat: repeat-x;
 }
 
