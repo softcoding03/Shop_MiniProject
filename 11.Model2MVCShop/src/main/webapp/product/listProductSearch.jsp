@@ -45,6 +45,12 @@
             padding-top : 50px;
           }
 		  
+		  img {
+			  width: 300px;
+			  height: 150px;
+			  object-fit: cover;
+			}
+					  
 		</style>
 	
 	
@@ -64,55 +70,20 @@
 		$(function() {
 			//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
 			//==> 1 과 3 방법 조합 : $("tagName.className:filter함수") 사용함.	
-			$( "button.btn.btn-default" ).on("click" , function() {
+			$("button.btn.btn-default").on("click" , function() {
 				fncGetProductList(1);
 			});
 			
-			$( "td:nth-child(6) > i" ).on("click" ,function() {
-				//Debug..
-						
-
+			$(".btn-primary").on("click", function() {
 				alert($(this).find("input").val().trim());
-//					self.location ="/product/getProduct?prodNo="+$(this).find("input").val().trim();
-				
-				var prodNo = $(this).find("input").val().trim();
-				$.ajax(
-						{
-							url:"/product/json/getProduct/"+prodNo ,
-							method : "GET",
-							dataType : "json",
-							headers : {
-								"Accept" : "application/json",
-								"Content-Type" : "application/json"
-							},
-							success : function(JSONData, status) {
-								
-								console.log(JSONData.regDateString);
-								console.log(JSONData);
-								var displayValue = "<h6>" 
-														+"상품명 : "+JSONData.prodName+"<br/>"
-														+"상품이미지 : "+JSONData.fileName+"<br/>"
-														+"상품상세정보 : "+JSONData.prodDetail+"<br/>"
-														+"제조일자 : "+JSONData.manuDate+"<br/>"
-														+"가격 : "+JSONData.price+"<br/>"
-														+"등록일자 : "+JSONData.regDateString+"<br/>"
-														+"</h6>";
-								$("h6").remove();
-								$( "#"+prodNo+"" ).html(displayValue);
-							}
-						});
+				self.location="/product/getProduct?prodNo="+$(this).find("input").val().trim();
 			});
 			
-
-			
-			$( ".ct_list_pop td:nth-child(3)" ).css("color" , "red");
+			$(".ct_list_pop td:nth-child(3)").css("color" , "red");
 			$("h7").css("color" , "red");
-			$(".ct_list_pop:nth-child(4n+6)" ).css("background-color" , "whitesmoke");
+			$(".ct_list_pop:nth-child(4n+6)").css("background-color" , "whitesmoke");
 		
-			
-			
-			
-			$( "#searchKeyword" ).autocomplete({
+			$("#searchKeyword").autocomplete({
 			      source: function(request, response) {
 			    	  
 			    	  var searchCondition = $('option:selected').val();
@@ -137,9 +108,6 @@
 					   });
 			    	}
 			    });
-		
-		
-		
 		
 		});	
 		
@@ -198,52 +166,41 @@
 		<!-- table 위쪽 검색 end /////////////////////////////////////-->
 		
 		
-      <!--  table Start /////////////////////////////////////-->
-      <table class="table table-hover table-striped" >
-      
-        <thead>
-          <tr>
-            <th align="center">No</th>
-            <th align="left" >굿즈명</th>
-            <th align="left">가격</th>
-            <th align="left">등록일</th>
-            <th align="left">현재 상태</th>
-            <th align="left">간략정보</th>
-          </tr>
-        </thead>
-       
-		<tbody>
+	 <c:set var="i" value="0" />
+	 
+	<div class="row">
+		 <c:forEach var="product" items="${list}">
+		  	<c:set var="i" value="${i+1}" />
+		    
+			  <div class="col-sm-6 col-md-4">
+			    <div class="thumbnail">
+			      <img src="/images/uploadFiles/${product.fileName}"/>
+			      <div class="caption">
+			        <h4 id="prodName">상품명 : ${product.prodName}</h4>
+			        
+			        <h4>가격 : ${product.price} 원</h4>
+				        <p>
+					       <button type="button" class="btn btn-primary">
+					       		상세보기
+					       		<input type="hidden" value="${product.prodNo}"/>
+					       </button>
+					       <button type="button" class="btn btn-default" role="button">장바구니에 추가</button>
+				        </p>
+			      </div>
+			    </div>
+			  </div>
+			 
+		 </c:forEach>
+	</div>		
+
+
+    
+
+
+</div>
 		
-		  <c:set var="i" value="0" />
-		  <c:forEach var="product" items="${list}">
-			<c:set var="i" value="${i+1}" />
-			<tr>
-			  <td align="center">${ i }</td>
-		<!--  상품정보 getProduct 들어가서 상품 판매중일대만 구매 버튼 활성화 만들기 -->
-			  <td align="left"  title="Click : 상품정보 확인">${product.prodName}</td>
-			  
-			  <td align="left">${product.price}</td>
-			  <td align="left">${product.regDate}</td>
-			  <td align="left">
-			  	 	<c:if test="${product.proTranCode == '0'}">
-		               판매중
-		            </c:if>
-		            <c:if test="${product.proTranCode != '0'}">
-						판매완료
-					</c:if>
-			  </td>
-			  <td align="left">
-			  	<i class="glyphicon glyphicon-ok" id= "${product.prodNo}">
-			  		<input type="hidden" id="prodNo" value="${product.prodNo}"/>
-				</i>	
-			  </td>
-			</tr>
-          </c:forEach>
-        
-        </tbody>
-      
-      </table>
-	  <!--  table End /////////////////////////////////////-->
+		
+		
 	  
  	</div>
  	<!--  화면구성 div End /////////////////////////////////////-->

@@ -29,6 +29,11 @@
  		body {
             padding-top : 50px;
         }
+        
+        img {
+			  width: 500px;
+			  object-fit: cover;
+		}
     </style>
 	
 	
@@ -53,9 +58,6 @@
 		});
 		
 	</script>
-
-
-
 
 
 </head>

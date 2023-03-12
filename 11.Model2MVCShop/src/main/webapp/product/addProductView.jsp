@@ -131,7 +131,7 @@
 		  <div class="form-group">
 		    <label for="manuDate" class="col-sm-offset-1 col-sm-3 control-label">力炼老磊</label>
 		    <div class="col-sm-4">
-		      <input type="date" autocomplete="off" class="form-control" value="2023-03-12" name="manuDate" placeholder="力炼老磊">
+		      <input type="date" autocomplete="off" class="form-control"  name="manuDate" placeholder="力炼老磊">
 		    </div>
 		  </div>
 		  
