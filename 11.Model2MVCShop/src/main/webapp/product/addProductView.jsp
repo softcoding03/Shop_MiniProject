@@ -9,27 +9,20 @@
 		<!-- 참조 : http://getbootstrap.com/css/   참조 -->
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		
-	<link rel="stylesheet" href="/css/admin.css" type="text/css">
+	<!--  ///////////////////////// Bootstrap, jQuery CDN ////////////////////////// -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" >
-	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
-	  
-	  <script src="//code.jquery.com/jquery-1.12.4.js"></script>
-	  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" ></script>
-		
-	  <!-- Bootstrap Dropdown Hover CSS -->
-	  <link href="/css/animate.min.css" rel="stylesheet">
-	  <link href="/css/bootstrap-dropdownhover.min.css" rel="stylesheet">
-	   <!-- Bootstrap Dropdown Hover JS -->
-	  <script src="/javascript/bootstrap-dropdownhover.min.js"></script>
-	   
-	  <!-- jQuery UI toolTip 사용 CSS-->
-	  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-	  <!-- jQuery UI toolTip 사용 JS-->
-	  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-			
-		
-		
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" ></script>
+	
+	<!-- Bootstrap Dropdown Hover CSS -->
+   <link href="/css/animate.min.css" rel="stylesheet">
+   <link href="/css/bootstrap-dropdownhover.min.css" rel="stylesheet">
+   
+    <!-- Bootstrap Dropdown Hover JS -->
+   <script src="/javascript/bootstrap-dropdownhover.min.js"></script>
+	
+	<!-- Datepicker CDN -->
 		<style>
 	       body > div.container{
 	        	border: 3px solid #D6CDB7;
@@ -91,22 +84,16 @@
 					resetData();
 				});
 				
+				$('input[name="price"]').on("click" , function() {
+					//Debug..
+					console.log('input[name="manuDate"]');
+				});
 				
-	
+				
 			});
 			
-			$(function(){
-				
-					$("#datepicker").datepicker({
-						altField: "#datepicker" , altFormat: "yy-mm-dd",
-						
-						showButtonPanel: true,
-						currentText: '오늘날짜',
-						closeText: '닫기',
-						dateFormat:"yymmdd"
-					
-					});
-			});
+
+
 			
 	</script>
 	</head>
@@ -144,7 +131,7 @@
 		  <div class="form-group">
 		    <label for="manuDate" class="col-sm-offset-1 col-sm-3 control-label">제조일자</label>
 		    <div class="col-sm-4">
-		      <input type="text" autocomplete="off" class="form-control" id="datepicker" name="manuDate" placeholder="제조일자">
+		      <input type="date" autocomplete="off" class="form-control" value="2023-03-12" name="manuDate" placeholder="제조일자">
 		    </div>
 		  </div>
 		  

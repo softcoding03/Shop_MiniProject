@@ -9,7 +9,6 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		
 		<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-		<link rel="stylesheet" href="/css/admin.css" type="text/css">
 		<!--  ///////////////////////// Bootstrap, jQuery CDN ////////////////////////// -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" >
@@ -21,6 +20,7 @@
 	    <link href="/css/bootstrap-dropdownhover.min.css" rel="stylesheet">
 	    <!-- Bootstrap Dropdown Hover JS -->
 	    <script src="/javascript/bootstrap-dropdownhover.min.js"></script>
+	    
 		<!-- jQuery UI toolTip 사용 CSS-->
 		<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 		<!-- jQuery UI toolTip 사용 JS-->

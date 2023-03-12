@@ -9,7 +9,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		
 		<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-		<link rel="stylesheet" href="/css/admin.css" type="text/css">
+	
 		<!--  ///////////////////////// Bootstrap, jQuery CDN ////////////////////////// -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" >
@@ -59,6 +59,21 @@
 			//document.detailForm.submit();
 			$("form").attr("method" ,"POST").attr("action" , "/product/listProduct?menu=manage").submit();
 		}
+		
+		//============= userId 에 회원정보보기  Event  처리(Click) =============	
+		$(function() {
+		
+			//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
+			$( "td:nth-child(2)" ).on("click" , function() {
+				 self.location ="/product/getProduct?prodNo="+$(this).find("input").val().trim();
+			});
+						
+			//==> userId LINK Event End User 에게 보일수 있도록 
+			$( "td:nth-child(2)" ).css("color" , "red");
+			
+		});	
+		
+		
 		
 		
 		$(function() {
@@ -216,7 +231,9 @@
 			<c:set var="i" value="${i+1}" />
 			<tr>
 			  <td align="center">${ i }</td>
-			  <td align="left"  title="Click : 상품정보 확인">${product.prodName}</td>
+			  <td align="left"  title="Click : 상품정보 확인">${product.prodName}
+			  	<input type="hidden" id="prodNo" value="${product.prodNo}"/>	
+			  </td>
 			  <td align="left">${product.price}</td>
 			  <td align="left">${product.regDate}</td>
 			  <td align="left">
