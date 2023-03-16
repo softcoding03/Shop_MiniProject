@@ -29,6 +29,13 @@
 		body {
             padding-top : 50px;
         }
+        
+         img {
+  			  max-height: 300px;  
+  			  width: 300px; 
+  			  object-fit: scale-down; 
+		  }
+        
     </style>
 <script type="text/javascript">
 
@@ -43,11 +50,11 @@ $(function() {
 		//Debug..
 		alert($('#name').val().trim());
 		
-		var prodName = $('#name').val().trim();
+		var prodNo = $('#name').val().trim();
 		
 		$.ajax({
 			
-			url:"/product/json/getFileName/"+prodName,
+			url:"/product/json/getFileName/"+prodNo,
 			method: "GET",
 			dataType : "json",
 			headers : {
@@ -141,14 +148,14 @@ $(function() {
 		<div class="row">
 	  		<div class="col-xs-4 col-md-2 "><strong>굿즈 이미지</strong></div>
 			<div id="a" class="col-xs-8 col-md-4">상품 이미지를 보시려면 클릭해주세요.
-		      <input type="hidden" id = "name" value="${product.prodName}"/>
+		      <input type="hidden" id = "name" value="${product.prodNo}"/>
 		      	<img src="/images/newjeans/bunny2.gif" id="button" width="50">
 		      	
 		     </div>
 		</div>
 		
 		<hr/>
-		
+	
 		<div class="row">
 			
 		  		<div class="col-md-12 text-center ">

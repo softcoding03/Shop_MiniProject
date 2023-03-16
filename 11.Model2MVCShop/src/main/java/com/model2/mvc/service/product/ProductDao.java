@@ -36,6 +36,8 @@ import com.model2.mvc.service.domain.*;
 		public List<String> getAll2(Search searchKeyword) throws Exception;
 		
 		public String getFileName(Product prodName) throws Exception;
+		
+		public int getProdNoLast() throws Exception;
 	}
 
 

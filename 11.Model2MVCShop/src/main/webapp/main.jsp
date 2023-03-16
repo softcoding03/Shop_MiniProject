@@ -32,7 +32,11 @@
             padding-top : 70px;
         }
         
-        
+         img {
+  			  max-height: 400px;  
+  			  width: 400px; 
+  			  object-fit: scale-down; 
+		  }
         
    	</style>
    	
@@ -74,16 +78,16 @@
         
         <div class="carousel-inner" role="listbox">
           <div class="item active" display="center">
-            <img src="/images/newjeans/book.jpg" alt="Third slide" width="500" height="140" class="img-responsive center-block">
+            <img src="/images/newjeans/book.jpg" alt="Third slide" class="img-responsive center-block">
           </div>
           <div class="item">
-            <img src="/images/newjeans/keyring.jpg" alt="Second slide" width="400" height="140" class="img-responsive center-block">
+            <img src="/images/newjeans/keyring.jpg" alt="Second slide" class="img-responsive center-block">
           </div>
           <div class="item">
-            <img src="/images/newjeans/bag.jpg" alt="Third slide" width="400" height="140" class="img-responsive center-block">
+            <img src="/images/newjeans/bag.jpg" alt="Third slide" class="img-responsive center-block">
           </div>
           <div class="item">
-            <img src="/images/newjeans/bag2.jpg" alt="Third slide" width="400" height="140" class="img-responsive center-block">
+            <img src="/images/newjeans/bag2.jpg" alt="Third slide"  class="img-responsive center-block">
           </div>
         </div>
         

@@ -75,9 +75,15 @@ public class ProductServiceImpl implements ProductService{
 		return list;
 	}
 	
-	public String getFileName(Product prodName) throws Exception{
-		String fileName = productDao.getFileName(prodName);
+	public String getFileName(Product prodNo) throws Exception{
+		String fileName = productDao.getFileName(prodNo);
 		return fileName;
+	}
+
+
+	public int getProdNoLast() throws Exception {
+		int prodNo = productDao.getProdNoLast();
+		return prodNo;
 	}
 
 }

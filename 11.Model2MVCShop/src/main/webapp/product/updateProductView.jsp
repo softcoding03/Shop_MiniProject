@@ -31,6 +31,12 @@
 		body {
             padding-top : 50px;
         }
+        
+        img {
+  			  max-height: 300px;  
+  			  width: 300px; 
+  			  object-fit: scale-down; 
+		  }
     </style>
 	
 	<script type="text/javascript">

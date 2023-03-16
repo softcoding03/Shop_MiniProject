@@ -66,10 +66,13 @@ public class ProductDaoImpl implements ProductDao{
 		return sqlSession.selectList("ProductMapper.getAll2",searchKeyword);
 	}
 
-	public String getFileName(Product prodName) throws Exception {
-		return sqlSession.selectOne("ProductMapper.getFileName", prodName);
+	public String getFileName(Product prodNo) throws Exception {
+		return sqlSession.selectOne("ProductMapper.getFileName", prodNo);
 	}
 	
+	public int getProdNoLast() throws Exception {
+		return sqlSession.selectOne("ProductMapper.getProdNoLast");
+	}
 	
 }
 /*

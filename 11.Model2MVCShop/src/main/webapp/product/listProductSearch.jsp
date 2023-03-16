@@ -42,14 +42,14 @@
 		  }
 		  
 		  body {
-            padding-top : 50px;
+             padding-top : 50px; 
           }
 		  
 		  img {
-			  width: 300px;
-			  height: 150px;
-			  object-fit: cover;
-			}
+  			  max-height: 100px;  
+  			  min-width: 100px; 
+/*   			  object-fit: scale-down;  */
+		  }
 					  
 		</style>
 	
@@ -59,6 +59,38 @@
 	  	<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 		<script type="text/javascript">
 	
+		
+		
+		
+// 		무한 스크롤 start
+
+	
+
+
+		//////////////////무한 스크롤 end//////////////
+		/*무한 스크롤 ajax
+		
+			$.ajax({
+				url:"",
+				method: "GET",
+				dataType: "json",
+				headers : {
+					"Accept" : "application/json",
+					"Content-Type" : "application/json"
+				},
+				success : function(JSONData, status) {
+					console.log(JSONData);
+					
+				}
+				
+			})
+		*/
+	
+		
+		
+		
+		
+		
 	
 		function fncGetProductList(currentPage){
 	// 		document.getElementById("currentPage").value = currentPage;
@@ -75,7 +107,7 @@
 			});
 			
 			$(".btn-primary").on("click", function() {
-				alert($(this).find("input").val().trim());
+// 				alert($(this).find("input").val().trim());
 				self.location="/product/getProduct?prodNo="+$(this).find("input").val().trim();
 			});
 			
@@ -110,6 +142,8 @@
 			    });
 		
 		});	
+		
+		
 		
 		
 	</script>
@@ -173,21 +207,23 @@
 		  	<c:set var="i" value="${i+1}" />
 		    
 			  <div class="col-sm-6 col-md-4">
-			    <div class="thumbnail">
-			      <img src="/images/uploadFiles/${product.fileName}"/>
-			      <div class="caption">
-			        <h4 id="prodName">상품명 : ${product.prodName}</h4>
-			        
-			        <h4>가격 : ${product.price} 원</h4>
-				        <p>
-					       <button type="button" class="btn btn-primary">
-					       		상세보기
-					       		<input type="hidden" value="${product.prodNo}"/>
-					       </button>
-					       <button type="button" class="btn btn-default" role="button">장바구니에 추가</button>
-				        </p>
-			      </div>
-			    </div>
+			  
+					    <div class="thumbnail">
+					      <img src="/images/uploadFiles/${product.fileName}"/>
+					      <div class="caption">
+					        <h4 id="prodName">상품명 : ${product.prodName}</h4>
+					        
+					        <h4>가격 : ${product.price} 원</h4>
+						        <p>
+							       <button type="button" class="btn btn-primary">
+							       		상세보기
+							       		<input type="hidden" value="${product.prodNo}"/>
+							       </button>
+							       <button type="button" class="btn btn-default" role="button">장바구니에 추가</button>
+						        </p>
+					      </div>
+					    </div>
+					    
 			  </div>
 			 
 		 </c:forEach>

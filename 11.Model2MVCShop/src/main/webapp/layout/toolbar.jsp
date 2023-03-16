@@ -56,8 +56,8 @@
 		                         <span class="caret"></span>
 		                     </a>
 		                     <ul class="dropdown-menu">
-		                         <li><a href="#">판매상품등록</a></li>
-		                         <li><a href="#">판매상품관리</a></li>
+		                         <li><a href="#">판매굿즈등록</a></li>
+		                         <li><a href="#">판매굿즈관리</a></li>
 		                         <li class="divider"></li>
 		                         <li><a href="#">etc..</a></li>
 		                     </ul>
@@ -67,17 +67,17 @@
 	              <!-- 구매관리 DrowDown -->
 	              <li class="dropdown">
 	                     <a  href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-	                         <span >상품구매</span>
+	                         <span >굿즈구매</span>
 	                         <span class="caret"></span>
 	                     </a>
 	                     <ul class="dropdown-menu">
-	                         <li><a href="#">상 품 검 색</a></li>
+	                         <li><a href="#">굿 즈 검 색</a></li>
 	                         
 	                         <c:if test="${sessionScope.user.role == 'user'}">
 	                           <li><a href="#">구매이력조회</a></li>
 	                         </c:if>
 	                         
-	                         <li><a href="#">최근본상품</a></li>
+	                         <li><a href="#">최근본굿즈</a></li>
 	                         <li class="divider"></li>
 	                         <li><a href="#">etc..</a></li>
 	                     </ul>
@@ -124,17 +124,17 @@
 			$(self.location).attr("href","/user/getUser?userId=${sessionScope.user.userId}");
 		});
 		
-	 	$( "a:contains('판매상품등록')" ).on("click" , function() {
+	 	$( "a:contains('판매굿즈등록')" ).on("click" , function() {
 	 		
 			$(self.location).attr("href","/product/addProduct");
 		});
 	 	
-	 	$( "a:contains('판매상품관리')" ).on("click" , function() {
+	 	$( "a:contains('판매굿즈관리')" ).on("click" , function() {
 	 		
 			$(self.location).attr("href","/product/listProduct?menu=manage");
 		});
 	 	
-		$( "a:contains('상 품 검 색')" ).on("click" , function() {
+		$( "a:contains('굿 즈 검 색')" ).on("click" , function() {
 	 		
 			$(self.location).attr("href","/product/listProduct?menu=search");
 		});

@@ -140,10 +140,21 @@ public class ProductController {
 		System.out.println("/product/addProduct : POST");
 		//Business Logic
 		productService.addProduct(product);
-		model.addAttribute("product", product);
+		
+		System.out.println("상품추가완료");
+		//가장 최근에 insert 된 prod_no 가져오기 -> ?마지막에 insert 되었다는 뜻=prod_no가 가장 큰것 !
+		int prodNo = productService.getProdNoLast();
+		System.out.println("insert 완료 후 가져온 마지막 prodNo ? -> "+prodNo);
+		
+		Product product2 = new Product();
+		product2 = productService.getProduct(prodNo);
+		System.out.println("가져온 prodNo로 다시 getProduct한 객체 ->" + product2);
+		
+		model.addAttribute("product", product2);
 		
 		return "forward:/product/addProduct.jsp";
 	}
+	
 	
 	
 //	@RequestMapping("/getProduct.do")

@@ -32,6 +32,7 @@ public interface ProductService {
 	
 	public String getFileName(Product prodName) throws Exception;
 	
+	public int getProdNoLast() throws Exception;
 }
 /*
 public interface ProductService {

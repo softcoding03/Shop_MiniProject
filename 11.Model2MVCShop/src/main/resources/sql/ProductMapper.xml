@@ -37,7 +37,7 @@
 	
 	<select id="getFileName" parameterType="Product" resultType="string">
 		SELECT image_file FROM product
-		WHERE prod_name = #{prodName}
+		WHERE prod_no = #{prodNo}
 	</select>
 	
 	
@@ -55,6 +55,11 @@
 		prod_no , prod_name , prod_detail , manufacture_day ,  price ,  image_file , reg_date		
 		FROM product
 		WHERE prod_no = #{value}
+	 </select>
+	 
+	 <!-- 마지막에 insert 된 값 가져오기 -->
+	 <select id="getProdNoLast" resultType="_int">
+	 	SELECT MAX(prod_no) FROM product
 	 </select>
 	 
 	 <!-- SQL : UPDATE -->
