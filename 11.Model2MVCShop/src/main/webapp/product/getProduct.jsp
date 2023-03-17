@@ -44,7 +44,7 @@
 			//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
 			//==> 1 과 3 방법 조합 : $("tagName.className:filter함수") 사용함.	
 			 $( "button:contains('구매')" ).on("click" , function() {
-					self.location = "/product/addPurchase?prodNo=${product.prodNo}"
+					self.location = "/purchase/addPurchase?prodNo=${product.prodNo}"
 				});
 			
 			 $( "button:contains('수정')" ).on("click" , function() {
@@ -126,17 +126,19 @@
 		  			<button type="button" class="btn btn-primary">수정</button>
 		  		</div>
 		  	</c:if>
-		  	<c:if test="${user.userId != 'admin'} "> <!--추가하기 && ${product.TranCode == '0' }  -->
+		  	<c:if test="${user.userId != 'admin'}"> 
 		  		<div class="col-md-12 text-center ">
 		  		<!-- 만약 이미 판매완료된 상품이라면 품절 버튼(클릭못함) 만들기 -->
 		  			<button type="button" class="btn btn-primary">구매</button>
 		  		</div>
 		  	</c:if>	
-		  	<c:if test="${user.userId != 'admin'}"> <!--추가하기 && ${product.TranCode != '0' }  -->
+		  	<!--
+		  	<c:if test="${user.userId != 'admin'}">   추가하기 && ${purchase.TranCode == '0' } // 추가하기 && ${purchase.TranCode != '0' } 
 		  		<div class="col-md-12 text-center ">
 		  			<button type="button" class="btn btn-primary" disabled>품절</button>
 		  		</div>
-		  	</c:if>	
+		  	</c:if>
+		  	-->
 		  		<div class="col-md-12 text-center ">
 		  			<button type="button" class="btn btn-primary">이전</button>
 		  		</div>

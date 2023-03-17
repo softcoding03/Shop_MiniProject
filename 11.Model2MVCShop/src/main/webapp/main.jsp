@@ -37,12 +37,24 @@
   			  width: 400px; 
   			  object-fit: scale-down; 
 		  }
+		 
         
    	</style>
    	
      <!--  ///////////////////////// JavaScript ////////////////////////// -->
-	 	
-	
+     <script type="text/javascript">
+     $(function() {
+    	 $("#a").hover(function(){
+
+    	        $(this).css("background-color", "yellow");
+
+    	    }, function(){
+
+    	        $(this).css("background-color", "pink");
+
+    	  });
+     });
+	 </script>	
 </head>
 	
 <body>
@@ -78,16 +90,28 @@
         
         <div class="carousel-inner" role="listbox">
           <div class="item active" display="center">
-            <img src="/images/newjeans/book.jpg" alt="Third slide" class="img-responsive center-block">
+          	<a href = "/product/getProduct?prodNo=10243" id="a">
+            	<img  src="/images/newjeans/book.jpg" alt="Third slide" class="img-responsive center-block">
+            	<p>뉴진스 1st OMG 싱글 앨범 // 굿즈 상세보기를 하려면 클릭해주세요.</p>
+          	</a>
           </div>
           <div class="item">
-            <img src="/images/newjeans/keyring.jpg" alt="Second slide" class="img-responsive center-block">
+          	<a href = "/product/getProduct?prodNo=10244">
+            	<img src="/images/newjeans/keyring.jpg" alt="Second slide" class="img-responsive center-block">
+          		<p>뉴진스 키링 // 굿즈 상세보기를 하려면 클릭해주세요.</p>
+          	</a>
           </div>
           <div class="item">
-            <img src="/images/newjeans/bag.jpg" alt="Third slide" class="img-responsive center-block">
+          	<a href = "/product/getProduct?prodNo=10241">
+            	<img src="/images/newjeans/bag.jpg" alt="Third slide" class="img-responsive center-block">
+          		<p>뉴진스 핸드백1 // 굿즈 상세보기를 하려면 클릭해주세요.</p>
+          	</a>
           </div>
           <div class="item">
-            <img src="/images/newjeans/bag2.jpg" alt="Third slide"  class="img-responsive center-block">
+          	<a href = "/product/getProduct?prodNo=10245">
+            	<img src="/images/newjeans/bag2.jpg" alt="Third slide"  class="img-responsive center-block">
+          		<p>뉴진스 핸드백2 // 굿즈 상세보기를 하려면 클릭해주세요.</p>
+          	</a>
           </div>
         </div>
         
@@ -106,7 +130,7 @@
 	<!-- 참조 : http://getbootstrap.com/css/   : container part..... -->
 	<div class="container">
         <h3 style="border:1px solid blue;">뉴진스(NewJeans)...</h3>
-        <h2>매일 찾게 되고 언제 입어도 질리지 않는 진처럼 시대의 아이콘이 되겠다는 포부와 New Genes가 되겠다는 각오가 담겨 있다</h2>
+        <h2 >매일 찾게 되고 언제 입어도 질리지 않는 진처럼 시대의 아이콘이 되겠다는 포부와 New Genes가 되겠다는 각오가 담겨 있다</h2>
   	 	
   	 </div>
 

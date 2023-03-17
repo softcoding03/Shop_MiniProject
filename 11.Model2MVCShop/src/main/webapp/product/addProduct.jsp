@@ -155,7 +155,7 @@
 		  <div class="form-group">
 		    <label for="price" class="col-sm-offset-1 col-sm-3 control-label">°¡°Ý</label>
 		    <div class="col-sm-4">
-		      <div>${product.price}</div>
+		      <div>${product.price} ¿ø</div>
 		    </div>
 		  </div>
 		  
