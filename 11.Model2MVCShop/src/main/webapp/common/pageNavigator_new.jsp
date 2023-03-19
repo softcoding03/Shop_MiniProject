@@ -28,6 +28,11 @@
 			        <span aria-hidden="true">&laquo;</span>
 			      </a>
 				</c:if>
+				<c:if test="${param.id == 'purchase'}">
+				  <a href="javascript:fncGetPurchaseList('${ resultPage.currentPage-1}')" aria-label="Previous">
+			        <span aria-hidden="true">&laquo;</span>
+			      </a>
+				</c:if>
 				
 		    </li>
 		    
@@ -43,6 +48,9 @@
 				    	<c:if test="${param.id == 'product'}">
 				    		<a href="javascript:fncGetProductList('${ i }');">${ i }<span class="sr-only">(current)</span></a>
 				    	</c:if>
+				    	<c:if test="${param.id == 'purchase'}">
+				    		<a href="javascript:fncGetPurchaseList('${ i }');">${ i }<span class="sr-only">(current)</span></a>
+				    	</c:if>
 				    </li>
 				</c:if>	
 				
@@ -53,6 +61,9 @@
 						</c:if>
 						<c:if test="${param.id == 'product'}">
 							<a href="javascript:fncGetProductList('${ i }');">${ i }</a>
+						</c:if>
+						<c:if test="${param.id == 'purchase'}">
+							<a href="javascript:fncGetPurchaseList('${ i }');">${ i }</a>
 						</c:if>
 					</li>
 				</c:if>
@@ -71,6 +82,9 @@
 		      </c:if>  
 		      <c:if test="${param.id == 'product'}">
 		        <a href="javascript:fncGetProductList('${resultPage.endUnitPage+1}')" aria-label="Next">
+		      </c:if>
+		      <c:if test="${param.id == 'purchase'}">
+		        <a href="javascript:fncGetPurchaseList('${resultPage.endUnitPage+1}')" aria-label="Next">
 		      </c:if>
 		        <span aria-hidden="true">&raquo;</span>
 		      </a>

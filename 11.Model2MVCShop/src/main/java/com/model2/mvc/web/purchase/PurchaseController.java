@@ -17,7 +17,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
 import com.model2.mvc.common.Page;
 import com.model2.mvc.common.Search;
@@ -26,6 +27,7 @@ import com.model2.mvc.service.domain.Purchase;
 import com.model2.mvc.service.domain.User;
 import com.model2.mvc.service.product.ProductService;
 import com.model2.mvc.service.purchase.PurchaseService;
+import com.model2.mvc.service.user.UserService;
 
 
 
@@ -38,9 +40,14 @@ public class PurchaseController {
 	@Autowired
 	@Qualifier("purchaseServiceImpl")
 	private PurchaseService purchaseService;
+	
 	@Autowired
 	@Qualifier("productServiceImpl")
 	private ProductService productService;
+	
+	@Autowired
+	@Qualifier("userServiceImpl")
+	private UserService userService;
 	
 		
 	public PurchaseController(){
@@ -60,13 +67,13 @@ public class PurchaseController {
 	
 	//구매View
 	@RequestMapping(value="addPurchase", method=RequestMethod.GET)
-	public String addPurchase(@RequestParam("prodNo") int prodNo, Model model, HttpServletRequest request) throws Exception {
+	public String addPurchase(@RequestParam("prodNo") int prodNo, Model model, HttpServletRequest session) throws Exception {
 
 		System.out.println("/purchase/addPurchase : GET");
 		System.out.println("prodNo는 ?"+prodNo);
 		
 		Product product = productService.getProduct(prodNo);
-		HttpSession session=request.getSession();
+		
 		User user = (User)session.getAttribute("user");
 		
 		System.out.println("Session-user객체는 ?"+user);
@@ -78,26 +85,42 @@ public class PurchaseController {
 	}
 	
 	@RequestMapping(value="addPurchase", method=RequestMethod.POST)
-	public String addPurchase(@ModelAttribute("purchase") Purchase purchase,
+	public RedirectView addPurchase(@ModelAttribute("purchase") Purchase purchase,
 								@RequestParam("prodNo") int prodNo,
-										Model model) throws Exception {
+								@RequestParam("userId") String userId,
+								RedirectAttributes redirect) throws Exception {
 
-			System.out.println("purchase객체는 ???:  "+purchase);
-			System.out.println("prodNo ???:  "+prodNo);
-			System.out.println("/purchase/addPurchase : POST");
+			System.out.println("   purchase객체는 ?:  "+purchase);
+			System.out.println("   prodNo ?:  "+prodNo);
+			System.out.println("   userId ?:  "+userId);
+			System.out.println("   /purchase/addPurchase : POST");
 		
-		Product product = productService.getProduct(prodNo);
+		Product product = productService.getProduct(prodNo); //product 객체 정보 싹다 가져오기
+		User user = userService.getUser(userId); //user 객체 정보 싹다 가져오기
+		
+		purchase.setBuyer(user);
 		purchase.setPurchaseProd(product);
 		purchase.setTranCode("1"); // => 구매 직후는 '구매완료' / '배송중(배송하기)' 2 / '물건도착' 3
 		
 		purchaseService.addPurchase(purchase);
-			System.out.println("세팅한 purchase객체는?  : "+purchase);
-			System.out.println("상품추가완료");
+			System.out.println("   세팅한 purchase객체는?  : "+purchase);
+			System.out.println("   상품추가완료");
 		
-		model.addAttribute("purchase", purchase);
+//		model.addAttribute("purchase", purchase);
 		
-		return "forward:/purchase/addPurchase.jsp";
+		//업데이트 된 제품의 tranNo 바로 가져오는 쿼리
+		int tranNo = purchaseService.getPurchaseLast();
+		System.out.println("   tranNO는 ? "+tranNo);
+		
+		Purchase purchase2 = purchaseService.getPurchase(tranNo);	
+		redirect.addFlashAttribute("purchase",purchase2);
+		System.out.println(   "뭐야 ? -> "+ purchase2);
+		RedirectView a =new RedirectView("addPurchase.jsp");
+		
+		System.out.println("  a ? "+a);
+		return a;
 	}
+	
 	
 	
 	@RequestMapping(value="getPurchase", method=RequestMethod.GET)
@@ -122,8 +145,8 @@ public class PurchaseController {
 	public String listPurchase( @ModelAttribute("search") Search search,
 							Model model , HttpServletRequest request) throws Exception{
 		
-		System.out.println("/purchase/listPurchase : GET / POST");
-		
+		System.out.println("   /purchase/listPurchase : GET / POST");
+		System.out.println("   search 는? "+ search);
 		
 		if(search.getCurrentPage()==0 ){
 			search.setCurrentPage(1);
@@ -133,26 +156,21 @@ public class PurchaseController {
 		HttpSession session=request.getSession();
 		User user = (User)session.getAttribute("user");
 		
-		
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("search", search);
 		map.put("user", user);
+		System.out.println("   map은 무엇 ? :  "+map);
 		
 		Map<String , Object> map2=purchaseService.getPurchaseList(map);
 		
-		Page resultPage = new Page( search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
-		System.out.println(resultPage);
-		
+		System.out.println("   map2는 무엇 ?  :  "+map2);
+
 		// Model 과 View 연결
 		model.addAttribute("list", map2.get("list"));
-		model.addAttribute("resultPage", resultPage);
-		model.addAttribute("search", search);
-		System.out.println("resultpage 잘 세팅되었나요 ??? --->"+resultPage);
-		System.out.println("list 잘 넘어 왔나요 ?? --->"+map2.get("list"));
 
-		
+		System.out.println("   list ?? --->"+map2.get("list"));
+
 			return "forward:/purchase/listPurchase.jsp";
-		
 	}
 		
 
@@ -212,7 +230,7 @@ public class PurchaseController {
 		
 		Purchase purchase = new Purchase();
 		purchase.setTranNo(tranNo);
-		purchase.setProdNo(prodNo);
+		
 		
 		purchaseService.updateTranCode(purchase);
 		System.out.println("디버깅 UpdateTranCode 완료");

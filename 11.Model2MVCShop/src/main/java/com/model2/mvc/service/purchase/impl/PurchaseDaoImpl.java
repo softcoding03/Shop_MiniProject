@@ -60,7 +60,9 @@ public class PurchaseDaoImpl implements PurchaseDao{
 		return sqlSession.selectOne("PurchaseMapper.getTotalCount", userId);
 	}
 
-
+	public int getPurchaseLast() throws Exception {
+		return sqlSession.selectOne("PurchaseMapper.getPurchaseLast");
+	}
 
 	///Method
 	

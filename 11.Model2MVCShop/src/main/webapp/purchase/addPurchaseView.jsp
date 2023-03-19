@@ -57,7 +57,7 @@
 	
 	function fncAddPurchase() {
 // 	document.addPurchase.submit();
-	$("form").attr("method" ,"POST").attr("action" , "/purchase/addPurchase?prodNo=${product.prodNo}").submit();
+	$("form").attr("method" ,"POST").attr("action" , "addPurchase?prodNo=${product.prodNo}&userId=${user.userId}").submit();
 	}
 
 </script>
@@ -82,7 +82,7 @@
 		  <div class="form-group">
 		    <label for="prodNo" class="col-sm-offset-1 col-sm-3 control-label">상품번호</label>
 		    <div class="col-sm-4">
-		      <input type="text" class="form-control" id="prodNo" name="prodNo" value="${product.prodNo}" readonly>
+		      <input type="text" class="form-control" id="prodNo" value="${product.prodNo}" readonly>
 		    </div>
 		  </div>
 		  
@@ -90,42 +90,42 @@
 		  <div class="form-group">
 		    <label for="prodName" class="col-sm-offset-1 col-sm-3 control-label">상품명</label>
 		    <div class="col-sm-4">
-		      <input type="text" class="form-control" id="prodName" name="prodName" value="${product.prodName}" readonly>
+		      <input type="text" class="form-control" id="prodName" value="${product.prodName}" readonly>
 		    </div>
 		  </div>
 		  
 		  <div class="form-group">
 		    <label for="prodDetail" class="col-sm-offset-1 col-sm-3 control-label">상품상세정보</label>
 		    <div class="col-sm-4">
-		      <input type="text" class="form-control" id="prodDetail" name="prodDetail" value="${product.prodDetail}" readonly>
+		      <input type="text" class="form-control" id="prodDetail" value="${product.prodDetail}" readonly>
 		    </div>
 		  </div>
 		  
 		  <div class="form-group">
 		    <label for="manuDate" class="col-sm-offset-1 col-sm-3 control-label">제조일자</label>
 		    <div class="col-sm-4">
-		      <input type="text" class="form-control" id="manuDate" name="manuDate" value="${product.manuDate}" readonly>
+		      <input type="text" class="form-control" id="manuDate" value="${product.manuDate}" readonly>
 		    </div>
 		  </div>
 		  
 		  <div class="form-group">
 		    <label for="price" class="col-sm-offset-1 col-sm-3 control-label">가격</label>
 		    <div class="col-sm-4">
-		      <input type="text" class="form-control" id="price" name="price" value="${product.price}" readonly>
+		      <input type="text" class="form-control" id="price" value="${product.price}" readonly>
 		    </div>
 		  </div>
 		  
 		  <div class="form-group">
 		    <label for="regDate" class="col-sm-offset-1 col-sm-3 control-label">등록일자</label>
 		    <div class="col-sm-4">
-		      <input type="text" class="form-control" id="regDate" name="regDate" value="${product.regDate}" readonly>
+		      <input type="text" class="form-control" id="regDate" value="${product.regDate}" readonly>
 		    </div>
 		  </div>
 		  
 		  <div class="form-group">
 		    <label for="buyerId" class="col-sm-offset-1 col-sm-3 control-label">구매자 아이디</label>
 		    <div class="col-sm-4">
-		      <input type="text" class="form-control" id="buyerId" name="buyerId" value="${user.userId}" readonly>
+		      <input type="text" class="form-control" id="buyerId" value="${user.userId}" readonly>
 		    </div>
 		  </div>
 		  
@@ -157,24 +157,23 @@
 		  <div class="form-group">
 		    <label for="addr" class="col-sm-offset-1 col-sm-3 control-label">구매자 주소</label>
 		    <div class="col-sm-4">
-		      <input type="text" class="form-control" id="addr" name="addr" value="${user.addr}">
+		      <input type="text" class="form-control" id="addr" name="dlvyAddr" value="${user.addr}">
 		    </div>
 		  </div>
 		  
 		  <div class="form-group">
-		    <label for="receiverRequest" class="col-sm-offset-1 col-sm-3 control-label">구매요청사항</label>
+		    <label for="dlvyRequest" class="col-sm-offset-1 col-sm-3 control-label">구매요청사항</label>
 		    <div class="col-sm-4">
-		      <input type="text" class="form-control" id="receiverRequest" name="receiverRequest" >
+		      <input type="text" class="form-control" id="dlvyRequest" name="dlvyRequest" >
 		    </div>
 		  </div>
 		  
 		  <div class="form-group">
 		    <label for="addr" class="col-sm-offset-1 col-sm-3 control-label">배송희망일자</label>
 		    <div class="col-sm-4">
-		      <input 	type="text" readonly="readonly" name="receiverDate" class="ct_input_g" 
-							style="width: 100px; height: 19px" maxLength="20" minLength="6"/>
-			&nbsp;<img src="../images/ct_icon_date.gif" width="15" height="15"	
-						onclick="show_calendar('document.addPurchase.receiverDate', document.addPurchase.receiverDate.value)"/>
+		      
+		      <input type="date" autocomplete="off" class="form-control"  name="dlvyDate" placeholder="배송희망일자">
+		    
 		    </div>
 		  </div>
 		  

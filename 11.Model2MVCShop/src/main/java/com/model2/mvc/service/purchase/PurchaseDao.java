@@ -41,7 +41,7 @@ public interface PurchaseDao {
 		
 		
 		public int getTotalCount(String userId) throws Exception ;
-		
 
+		public int getPurchaseLast() throws Exception;
 	
 }

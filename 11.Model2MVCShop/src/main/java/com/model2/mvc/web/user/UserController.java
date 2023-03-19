@@ -120,6 +120,8 @@ public class UserController {
 		if( user.getPassword().equals(dbUser.getPassword())){
 			session.setAttribute("user", dbUser);
 		}
+		System.out.println("    技记俊 淬阑 user"+dbUser);
+		System.out.println("    技记? "+session.getAttribute("user"));
 		
 		return "redirect:/index.jsp";
 	}

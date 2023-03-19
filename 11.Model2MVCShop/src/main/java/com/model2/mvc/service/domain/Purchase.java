@@ -5,42 +5,24 @@ import java.sql.Date;
 import com.model2.mvc.service.domain.Product;
 import com.model2.mvc.service.domain.User;
 
-
 public class Purchase {
 	
-	private User buyer;   //객체임
+	private int tranNo;
 	private Product purchaseProd; //객체임
-	private String dlvyAddr;
-	private String dlvyDate;
-	private String dlvyRequest;
-	private Date orderDate; //sql 컬럼명은 order_data
+	private User buyer;   //객체임
 	private String paymentOption;
 	private String receiverName;
 	private String receiverPhone;
+	private String dlvyAddr;
+	private String dlvyRequest;
 	private String tranCode;
-	private int tranNo;
+	private Date orderDate; //sql 컬럼명은 order_data
+	private String dlvyDate;
 	
-	//mapper 를 위해 추가
-	private int prodNo;
-	private String userId;
-	
+		
 	public Purchase(){
 	}
-	
-	public int getProdNo() {
-		return prodNo;
-	}
-	public void setProdNo(int prodNo) {
-		this.prodNo = prodNo;
-	}
-	public String getUserId() {
-		return userId;
-	}
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-	
-	
+
 	public User getBuyer() {
 		return buyer;
 	}

@@ -48,10 +48,28 @@
     </style>
 	
 	<script type="text/javascript">
-		$('#golist').on("click" , function() {
-			
-			self.location = "/product/listProduct?menu=search"
+		$(function() {
+			$('button').on("click" , function() {
+				alert("확인 클릭");
+				self.location = "/product/listProduct?menu=search"
+			});
 		});
+		
+		
+// 		function NotReload(){
+// 		    if( (event.ctrlKey == true && (event.keyCode == 78 || event.keyCode == 82)) || (event.keyCode == 116) ) {
+// 		        event.keyCode = 0;
+// 		        event.cancelBubble = true;
+// 		        event.returnValue = false;
+// 		    alert("새로고침이 금지된 페이지입니다. 상품목록보기로 이동합니다.")
+// 		    self.location = "/product/listProduct?menu=search";
+		
+// 		    } 
+// 		}
+// 		document.onkeydown = NotReload;
+		
+		
+		
 	</script>
 
 </head>
@@ -59,7 +77,6 @@
 <body>
 <jsp:include page="/layout/toolbar.jsp" />
 
-다음과 같이 구매가 되었습니다.
 
 <div class="container">
 	
@@ -72,14 +89,14 @@
 		  <div class="form-group">
 		    <label for="prodNo" class="col-sm-offset-1 col-sm-3 control-label">물품번호</label>
 		    <div class="col-sm-4">
-		      <div>${purchase.prodNo}</div>
+		      <div>${purchase.purchaseProd.prodNo}</div>
 		    </div>
 		  </div>
 		  
 		  <div class="form-group">
 		    <label for="userId" class="col-sm-offset-1 col-sm-3 control-label">구매자 아이디</label>
 		    <div class="col-sm-4">
-		      <div>${purchase.userId}</div>
+		      <div>${purchase.buyer.userId}</div>
 		    </div>
 		  </div>
 		  
