@@ -83,7 +83,7 @@ public class PurchaseController {
 		
 		return "forward:/purchase/addPurchaseView.jsp";
 	}
-	
+	// REDIRECT로 새로고침 및 화면 뒤로가기 방지 해야하는지 ?
 	@RequestMapping(value="addPurchase", method=RequestMethod.POST)
 	public RedirectView addPurchase(@ModelAttribute("purchase") Purchase purchase,
 								@RequestParam("prodNo") int prodNo,
@@ -113,8 +113,11 @@ public class PurchaseController {
 		System.out.println("   tranNO는 ? "+tranNo);
 		
 		Purchase purchase2 = purchaseService.getPurchase(tranNo);	
+		
 		redirect.addFlashAttribute("purchase",purchase2);
+		
 		System.out.println(   "뭐야 ? -> "+ purchase2);
+		
 		RedirectView a =new RedirectView("addPurchase.jsp");
 		
 		System.out.println("  a ? "+a);
