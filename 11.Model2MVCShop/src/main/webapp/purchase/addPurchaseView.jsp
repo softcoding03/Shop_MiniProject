@@ -22,6 +22,11 @@
    <link href="/css/animate.min.css" rel="stylesheet">
    <link href="/css/bootstrap-dropdownhover.min.css" rel="stylesheet">
    
+   <!-- 포트원 라이브러리 
+   <script src="https://cdn.iamport.kr/v1/iamport.js"></script>-->
+   <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-{SDK-최신버전}.js"></script>
+   
+   
     <!-- Bootstrap Dropdown Hover JS -->
    <script src="/javascript/bootstrap-dropdownhover.min.js"></script>
 	
@@ -39,6 +44,34 @@
 	
 	<script type="text/javascript">
 	
+		const IMP = window.IMP; // 생략 가능
+		IMP.init("imp13567041"); // 예: imp00000000a
+		
+		function requestPay() {
+			console.log("pay시작")
+		    IMP.request_pay({
+		      pg: "kcp.{상점ID}",
+		      pay_method: "card",
+		      merchant_uid: "ORD20180131-0000011",   // 주문번호
+		      name: "노르웨이 회전 의자",
+		      amount: 64900,                         // 숫자 타입
+		      buyer_email: "gildong@gmail.com",
+		      buyer_name: "홍길동",
+		      buyer_tel: "010-4242-4242",
+		      buyer_addr: "서울특별시 강남구 신사동",
+		      buyer_postcode: "01181"
+		    },
+		    function (rsp) { // callback
+		      if (rsp.success) {
+		        alert("결제성공입니다.");
+		      } else {
+		    	alert("결제실패입니다.");
+		      }
+		    });
+			console.log("pay끝")
+		}
+
+	
 	$(function() {
 		//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
 		$("a[href='#' ]").on("click" , function() {
@@ -49,7 +82,7 @@
 	
 	$(function() {
 		
-		$( "#add" ).on("click" , function() {
+		$('.btn-primary').on("click" , function() {
 			fncAddPurchase();
 		});
 	});	
@@ -178,9 +211,14 @@
 		  </div>
 		  
 		  
+		  <!--   <!-- 결제하기 버튼 생성 -->-->
+		  <div>
+		  	<button onclick="requestPay()">결제하기</button>
+		  </div>
+		  
 		  <div class="form-group">
 		    <div class="col-sm-offset-4  col-sm-4 text-center">
-		      <button type="button" id="add" class="btn btn-primary" >구&nbsp;매</button>
+		      <button type="button" id="add" class="btn-primary" >구&nbsp;매</button>
 			  <a class="btn btn-primary btn" href="#" role="button">취&nbsp;소</a>
 		    </div>
 		  </div>
