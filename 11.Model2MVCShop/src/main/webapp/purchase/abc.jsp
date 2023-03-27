@@ -16,7 +16,7 @@
             IMP.request_pay({
                 pg : 'html5_inicis.{TC0ONETIME}',
                 pay_method : 'card',
-                merchant_uid: "57008833-33009", 
+                merchant_uid: "57008833-33010", 
                 name : '무봤나숯불 양념치킨',
                 amount : 1000,
                 buyer_email : 'didtn1233@gmail.com',
@@ -29,7 +29,7 @@
                     // 결제 성공 시: 결제 승인 또는 가상계좌 발급에 성공한 경우
                     // jQuery로 HTTP 요청
                     jQuery.ajax({
-                      url: "https://api.iamport.kr/payments/57008833-33009", 
+                      url: "https://api.iamport.kr/payments/57008833-33009",   //실제 홈페이지 url보고 필요한 정보 가져올 수 있다. 참고하기
                       method: "POST",
                       headers: { "Content-Type": "application/json" },
                       data: {
