@@ -12,9 +12,9 @@
         var IMP = window.IMP; 
         IMP.init("imp13567041"); 
     
-        function requestPay() {
+        function requestPay() {  //CORS 문제 해결하기 위해 검색해야한다.
             IMP.request_pay({
-                pg : 'html5_inicis.{TC0ONETIME}',
+                pg : 'html5_inicis',
                 pay_method : 'card',
                 merchant_uid: "57008833-33010", 
                 name : '무봤나숯불 양념치킨',
