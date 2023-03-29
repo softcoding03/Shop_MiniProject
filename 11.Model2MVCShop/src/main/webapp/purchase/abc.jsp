@@ -9,6 +9,15 @@
     <!-- iamport.payment.js -->
     <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
     <script>
+    
+    	//CORS문제 해결할 수 있는 방법을 아마 아임포트측에서 제공할것임. 확인해볼것, 제공 안해주면 Controller이용해서 해결해보기.
+    	//강사님이 설명해주신 것도 떠올리기.
+    	//redirect 문제 공부하기. 혹은 강사님께 여줘보기
+    
+    
+    
+    
+    
         var IMP = window.IMP; 
         IMP.init("imp13567041"); 
     
