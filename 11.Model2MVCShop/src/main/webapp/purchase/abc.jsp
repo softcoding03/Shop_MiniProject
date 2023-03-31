@@ -14,6 +14,7 @@
     	//강사님이 설명해주신 것도 떠올리기.
     	//redirect 문제 공부하기. 혹은 강사님께 여줘보기
     	//Naver SNS 서비스 메커니즘 공부하기. 
+    	//0331 controller 만들건지 >?
     
     
     
@@ -23,7 +24,7 @@
     
         function requestPay() {  //CORS 문제 해결하기 위해 검색해야한다.
             IMP.request_pay({
-                pg : 'html5_inicis',
+                pg : 'kakaopay', //html5_inicis
                 pay_method : 'card',
                 merchant_uid: "57008833-33010", 
                 name : '무봤나숯불 양념치킨',
