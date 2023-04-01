@@ -85,9 +85,7 @@ public class ProductRestController {
 		product.setProdNo(prodNo1);
 		//Business Logic
 		
-	
 		product.setFileName(productService.getFileName(product));
-		
 		
 		return product;
 	}
