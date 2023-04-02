@@ -17,7 +17,7 @@
     	//0331 controller 만들건지 >?
     	
     			//token 값 가져와서 header에 넣어주면 api사용이 가능하다 ..?
-    
+    			//api 참고 ...
     
     
     

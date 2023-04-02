@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="PurchaseMapper">
+ 	
+ 	
+	<resultMap id="purchaseSelectMap" type="purchase">
+		<result property="tranNo" 				column="tran_no" 			jdbcType="NUMERIC"/>
+		<result property="purchaseProd.prodNo"	column="prod_no" 			jdbcType="NUMERIC" />
+		<result property="buyer.userId" 		column="buyer_id" 			jdbcType="VARCHAR" />
+		<result property="paymentOption" 		column="payment_option" 	jdbcType="CHAR" />
+		<result property="receiverName" 		column="receiver_name" 		jdbcType="VARCHAR" />
+		<result property="receiverPhone" 		column="receiver_phone" 	jdbcType="VARCHAR" />
+		<result property="dlvyAddr" 			column="dlvy_addr" 			jdbcType="VARCHAR" />
+		<result property="dlvyRequest" 			column="dlvy_request" 		jdbcType="VARCHAR" />		
+		<result property="tranCode" 			column="tran_status_code" 	jdbcType="VARCHAR" />
+		<result property="orderDate" 			column="order_data" 		jdbcType="DATE" />		
+		<result property="dlvyDate" 			column="dlvy_date" 			jdbcType="DATE" />
+	</resultMap>
+	
+	<!-- SQL : 구매 하기(구매이력에 추가) INSERT -->
+	<insert 	id="addPurchase"	parameterType="purchase" >
+	 	INSERT
+		INTO transaction 
+		VALUES	 (seq_transaction_tran_no.nextval, #{purchaseProd.prodNo} , #{buyer.userId} , 
+					#{paymentOption} , #{receiverName}, #{receiverPhone},
+							#{dlvyAddr} , #{dlvyRequest} ,#{tranCode}, sysdate , #{dlvyDate})
+	</insert>
+	 
+	 <!-- SQL : 선택한 하나의 상품 구매상세내역 보기 SELECT ONE -->
+	 <select 	id="getPurchase"	parameterType="int"	resultMap="purchaseSelectMap">
+		SELECT * 		
+		FROM transaction
+		WHERE tran_no = #{value}
+	 </select>
+	 
+	 <!-- 마지막에 insert 된 값 가져오기 -->
+	 <select id="getPurchaseLast" resultType="_int">
+	 	SELECT MAX(tran_no) FROM transaction
+	 </select>
+	 
+		 
+	<!-- SQL : 구매이력 리스트 출력 SELECT LIST -->
+	<select  id="getPurchaseList"  parameterType="hashmap"	resultMap="purchaseSelectMap">
+	  		  	
+	  	SELECT * 
+	  	FROM (SELECT inner_table. * , ROWNUM AS row_seq 
+	  			FROM (select * 
+	  					from transaction 
+	  					where buyer_Id =#{user.userId}
+	  					order by tran_no) inner_table 
+	  			WHERE ROWNUM &lt;= #{search.endRowNum} )
+		WHERE row_seq BETWEEN #{search.startRowNum} AND #{search.endRowNum} 
+	 
+	 </select>
+	 
+	 
+	 <!-- SQL : 구매 상세정보 변경 UPDATE -->
+	 <update	id="updatePurchase"	parameterType="purchase" >
+	   	UPDATE transaction
+	   	<set>
+	   		payment_option 	= #{paymentOption} ,
+			receiver_name	= #{receiverName},
+			receiver_phone 	= #{receiverPhone} ,
+			dlvy_addr		= #{dlvyAddr} ,
+			dlvy_request	= #{dlvyRequest},
+			dlvy_date	= #{dlvyDate}
+	   	</set>
+	   	WHERE tran_NO = #{tranNo}
+	 </update>
+	 
+	 
+	 <!-- 구매상태 변경 0,1,2 sql -->
+	 <update	id="updateTranCode"	parameterType="purchase" >
+	   	UPDATE transaction
+	   	<set>
+	   		tran_status_code = #{tranCode} 
+	   	</set>
+	   	<if test="purchaseProd == '' ">
+	   		WHERE tran_NO = #{tranNo}
+	   	</if>
+	   		WHERE prod_no = #{prodNo}
+	 </update>
+	 
+	 
+	 	
+	<!-- SQL : SELECT ROW Count -->	 
+	 <select  id="getTotalCount"  parameterType="string" resultType="int">
+	  	SELECT COUNT(*)
+	  	FROM(	SELECT *
+	  			FROM transaction
+	  			WHERE buyer_id = #{userId}
+	  			Order by tran_no ) countTable						
+	 </select>
+	 
+</mapper>
