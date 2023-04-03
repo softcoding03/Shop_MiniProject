@@ -18,7 +18,7 @@
     	
     			//token 값 가져와서 header에 넣어주면 api사용이 가능하다 ..?
     			//api 참고 ...
-    
+    			//sd
     
     
         var IMP = window.IMP; 
@@ -28,7 +28,7 @@
             IMP.request_pay({
                 pg : 'html5_inicis', //html5_inicis
                 pay_method : 'card',
-                merchant_uid: "57008833-33020", 
+                merchant_uid: "57008833-33021", 
                 name : '뉴진스앨범1st',
                 amount : 100,
                 buyer_email : 'didtn1233@gmail.com',
