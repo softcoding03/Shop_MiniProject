@@ -18,7 +18,8 @@
     	
     			//token 값 가져와서 header에 넣어주면 api사용이 가능하다 ..?
     			//api 참고 ...
-    			//sd
+    			
+    			//이미지 다중업로드 및 드래그앤 드랍 구현하기
     
     
         var IMP = window.IMP; 
