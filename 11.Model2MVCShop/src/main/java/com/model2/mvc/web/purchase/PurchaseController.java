@@ -82,7 +82,7 @@ public class PurchaseController {
 		model.addAttribute("product", product);
 		
 		//return "forward:/purchase/addPurchaseView.jsp";
-		return "forward:/purchase/abc.jsp";
+		return "forward:/purchase/addPurchaseView.jsp";
 	}
 	// REDIRECT로 새로고침 및 화면 뒤로가기 방지 해야하는지 ?
 	@RequestMapping(value="addPurchase", method=RequestMethod.POST)

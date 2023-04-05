@@ -20,7 +20,9 @@
     			//api 참고 ...
     			
     			//이미지 다중업로드 및 드래그앤 드랍 구현하기
-    
+    			//purchase 구현하기
+    			
+    			
     
         var IMP = window.IMP; 
         IMP.init("imp13567041"); 
