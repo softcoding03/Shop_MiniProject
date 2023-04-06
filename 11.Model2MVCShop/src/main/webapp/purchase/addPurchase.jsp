@@ -84,7 +84,9 @@
 		
 		<!-- form Start /////////////////////////////////////-->
 		<form class="form-horizontal">
-	
+			<div> 
+			${purchase}
+			</div>
 		  
 		  <div class="form-group">
 		    <label for="prodNo" class="col-sm-offset-1 col-sm-3 control-label">물품번호</label>
