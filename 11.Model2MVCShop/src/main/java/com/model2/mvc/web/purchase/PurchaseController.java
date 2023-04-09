@@ -153,7 +153,7 @@ public class PurchaseController {
 
 	@RequestMapping(value="listPurchase")
 	public String listPurchase( @ModelAttribute("search") Search search,
-							Model model , HttpServletRequest request) throws Exception{
+								Model model , HttpServletRequest request) throws Exception{
 		
 		System.out.println("   /purchase/listPurchase : GET / POST");
 		System.out.println("   search 绰? "+ search);
@@ -163,12 +163,15 @@ public class PurchaseController {
 		}
 		search.setPageSize(pageSize);
 		
+		System.out.println("  pageSize绰 ? "+pageSize);
+		
 		HttpSession session=request.getSession();
 		User user = (User)session.getAttribute("user");
 		
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("search", search);
 		map.put("user", user);
+		System.out.println("   search绰 公均? :  "+search);
 		System.out.println("   map篮 公均 ? :  "+map);
 		
 		Map<String , Object> map2=purchaseService.getPurchaseList(map);

@@ -162,7 +162,7 @@
 		    </div>
 		  </div>
 		  
-		  
+		  <!--  아임포트 사용할 것이라 필요없지만 테이블에 Null Point Exception 뜨므로 일단 놔두기 -->
 		  <div class="form-group">
 		    <label for="paymentOption" class="col-sm-offset-1 col-sm-3 control-label">결제 방법</label>
 		    <select name="paymentOption"	class="ct_input_g" 

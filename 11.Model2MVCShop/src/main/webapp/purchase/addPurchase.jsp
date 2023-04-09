@@ -56,17 +56,17 @@
 		});
 		
 		
-// 		function NotReload(){
-// 		    if( (event.ctrlKey == true && (event.keyCode == 78 || event.keyCode == 82)) || (event.keyCode == 116) ) {
-// 		        event.keyCode = 0;
-// 		        event.cancelBubble = true;
-// 		        event.returnValue = false;
-// 		    alert("새로고침이 금지된 페이지입니다. 상품목록보기로 이동합니다.")
-// 		    self.location = "/product/listProduct?menu=search";
+	
+	//뒤로가기 금지 로직(새로고침은 redirect로 해결)
+		history.pushState(null, null, document.URL);
 		
-// 		    } 
-// 		}
-// 		document.onkeydown = NotReload;
+		window.addEventListener('popstate', function () {
+		    history.pushState(null, null, document.URL);
+		    alert("뒤로가기가 금지된 페이지입니다. 상품목록보기로 이동합니다.")
+			    self.location = "/product/listProduct?menu=search";
+		});
+			
+
 		
 		
 		
@@ -101,21 +101,20 @@
 		      <div>${purchase.buyer.userId}</div>
 		    </div>
 		  </div>
-		  
-		  <div class="form-group">
-		    <label for="paymentOption" class="col-sm-offset-1 col-sm-3 control-label">구매방법</label>
-		    <div class="col-sm-4">
-		      <div>
-			      <c:set var="a" value="${purchase.paymentOption}" />
-					<c:if test="${a=='1'}">
-								현금구매
-					</c:if>
-					<c:if test="${a=='2'}">
-								신용구매
-					</c:if>
-				</div>
-		    </div>
-		  </div>
+		  <!-- 아임포트 사용할 것 -->
+<!-- 		  <div class="form-group"> -->
+<!-- 		    <label for="paymentOption" class="col-sm-offset-1 col-sm-3 control-label">구매방법</label> -->
+<!-- 		    <div class="col-sm-4"> -->
+<!-- 		      	<div> -->
+<%-- 					<c:if test="${purchase.paymentOption == '1'}"> --%>
+<!-- 								현금구매 -->
+<%-- 					</c:if> --%>
+<%-- 					<c:if test="${purchase.paymentOption == '2'}"> --%>
+<!-- 								신용구매 -->
+<%-- 					</c:if> --%>
+<!-- 				</div> -->
+<!-- 		    </div> -->
+<!-- 		  </div> -->
 		  
 		  
 		  

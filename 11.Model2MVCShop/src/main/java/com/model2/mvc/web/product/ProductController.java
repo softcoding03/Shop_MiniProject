@@ -181,6 +181,7 @@ public class ProductController {
 		
 		System.out.println("/product/listProduct : GET / POST");
 		System.out.println("menu 잘 넘어 왔나요 ?? --->"+menu);
+		System.out.println("  search넘어온게 있어?? "+search); //없음
 		
 		if(search.getCurrentPage()==0 ){
 			search.setCurrentPage(1);
@@ -191,7 +192,7 @@ public class ProductController {
 		Map<String , Object> map=productService.getProductList(search);
 		
 		Page resultPage = new Page( search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
-		System.out.println(resultPage);
+		System.out.println("  resultPage ? -> "+resultPage);
 		
 		// Model 과 View 연결
 		model.addAttribute("list", map.get("list"));
