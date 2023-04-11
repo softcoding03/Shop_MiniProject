@@ -17,7 +17,7 @@ public class Purchase {
 	private String dlvyRequest;
 	private String tranCode;
 	private Date orderDate; //sql 컬럼명은 order_data
-	private String dlvyDate;
+	private String dlvyDate; //.
 	
 		
 	public Purchase(){
