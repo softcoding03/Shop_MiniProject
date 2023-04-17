@@ -84,7 +84,7 @@
 			});
 			
 			$( "td:nth-child(6) > i" ).on("click" ,function() {
-					//Debug..
+					//Debug...
 							
 
 					alert($(this).find("input").val().trim());
