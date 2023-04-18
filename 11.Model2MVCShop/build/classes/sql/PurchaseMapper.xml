@@ -11,14 +11,12 @@
 		<result property="tranNo" 				column="tran_no" 			jdbcType="NUMERIC"/>
 		<result property="purchaseProd.prodNo"	column="prod_no" 			jdbcType="NUMERIC" />
 		<result property="buyer.userId" 		column="buyer_id" 			jdbcType="VARCHAR" />
-		<result property="paymentOption" 		column="payment_option" 	jdbcType="CHAR" />
 		<result property="receiverName" 		column="receiver_name" 		jdbcType="VARCHAR" />
 		<result property="receiverPhone" 		column="receiver_phone" 	jdbcType="VARCHAR" />
 		<result property="dlvyAddr" 			column="dlvy_addr" 			jdbcType="VARCHAR" />
 		<result property="dlvyRequest" 			column="dlvy_request" 		jdbcType="VARCHAR" />		
 		<result property="tranCode" 			column="tran_status_code" 	jdbcType="VARCHAR" />
 		<result property="orderDate" 			column="order_data" 		jdbcType="DATE" />		
-		<result property="dlvyDate" 			column="dlvy_date" 			jdbcType="DATE" />
 	</resultMap>
 	
 	<!-- SQL : 구매 하기(구매이력에 추가) INSERT -->
@@ -26,8 +24,7 @@
 	 	INSERT
 		INTO transaction 
 		VALUES	 (seq_transaction_tran_no.nextval, #{purchaseProd.prodNo} , #{buyer.userId} , 
-					#{paymentOption} , #{receiverName}, #{receiverPhone},
-							#{dlvyAddr} , #{dlvyRequest} ,#{tranCode}, sysdate , #{dlvyDate})
+				 #{receiverName}, #{receiverPhone},	#{dlvyAddr} , #{dlvyRequest} ,#{tranCode}, sysdate)
 	</insert>
 	 
 	 <!-- SQL : 선택한 하나의 상품 구매상세내역 보기 SELECT ONE -->
@@ -66,8 +63,7 @@
 			receiver_name	= #{receiverName},
 			receiver_phone 	= #{receiverPhone} ,
 			dlvy_addr		= #{dlvyAddr} ,
-			dlvy_request	= #{dlvyRequest},
-			dlvy_date	= #{dlvyDate}
+			dlvy_request	= #{dlvyRequest}
 	   	</set>
 	   	WHERE tran_NO = #{tranNo}
 	 </update>

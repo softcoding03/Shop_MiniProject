@@ -117,6 +117,11 @@ public class PurchaseController {
 		
 		Purchase purchase2 = purchaseService.getPurchase(tranNo);	
 		
+		//구매한 상품 정보랑 user정보 가져오기 위함
+		purchase2.setBuyer(user);
+		purchase2.setPurchaseProd(product);
+		
+		
 		redirect.addFlashAttribute("purchase",purchase2);
 		System.out.println("   뭐야 ? -> "+ purchase2);
 		

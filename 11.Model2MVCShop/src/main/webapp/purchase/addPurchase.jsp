@@ -61,14 +61,12 @@
 		history.pushState(null, null, document.URL);
 		
 		window.addEventListener('popstate', function () {
-		    history.pushState(null, null, document.URL);
-		    alert("뒤로가기가 금지된 페이지입니다. 상품목록보기로 이동합니다.")
+			
+			    history.pushState(null, null, document.URL);
+			    alert("뒤로가기가 금지된 페이지입니다. 상품목록보기로 이동합니다.")
 			    self.location = "/product/listProduct?menu=search";
 		});
-			
 
-		
-		
 		
 	</script>
 
@@ -84,82 +82,84 @@
 		
 		<!-- form Start /////////////////////////////////////-->
 		<form class="form-horizontal">
-			<div> 
-			${purchase}
-			</div>
-		  
-		  <div class="form-group">
-		    <label for="prodNo" class="col-sm-offset-1 col-sm-3 control-label">물품번호</label>
-		    <div class="col-sm-4">
-		      <div>${purchase.purchaseProd.prodNo}</div>
-		    </div>
-		  </div>
-		  
-		  <div class="form-group">
-		    <label for="userId" class="col-sm-offset-1 col-sm-3 control-label">구매자 아이디</label>
-		    <div class="col-sm-4">
-		      <div>${purchase.buyer.userId}</div>
-		    </div>
-		  </div>
-		  <!-- 아임포트 사용할 것 -->
-<!-- 		  <div class="form-group"> -->
-<!-- 		    <label for="paymentOption" class="col-sm-offset-1 col-sm-3 control-label">구매방법</label> -->
-<!-- 		    <div class="col-sm-4"> -->
-<!-- 		      	<div> -->
-<%-- 					<c:if test="${purchase.paymentOption == '1'}"> --%>
-<!-- 								현금구매 -->
-<%-- 					</c:if> --%>
-<%-- 					<c:if test="${purchase.paymentOption == '2'}"> --%>
-<!-- 								신용구매 -->
-<%-- 					</c:if> --%>
-<!-- 				</div> -->
-<!-- 		    </div> -->
-<!-- 		  </div> -->
-		  
-		  
-		  
-		  <div class="form-group">
-		    <label for="receiverName" class="col-sm-offset-1 col-sm-3 control-label">구매자 이름</label>
-		    <div class="col-sm-4">
-		      <div>${purchase.receiverName}</div>
-		    </div>
-		  </div>
-		  
-		  <div class="form-group">
-		    <label for="receiverPhone" class="col-sm-offset-1 col-sm-3 control-label">구매자연락처</label>
-		    <div class="col-sm-4">
-		      <div>${purchase.receiverPhone}</div>
-		    </div>
-		  </div>
-		  
-		  <div class="form-group">
-		    <label for="dlvyAddr" class="col-sm-offset-1 col-sm-3 control-label">구매자 주소</label>
-		    <div class="col-sm-4">
-		      <div>${purchase.dlvyAddr}</div>
-		    </div>
-		  </div>
-		  
-		  <div class="form-group">
-		    <label for="dlvyRequest" class="col-sm-offset-1 col-sm-3 control-label">구매요청사항</label>
-		    <div class="col-sm-4">
-		      <div>${purchase.dlvyRequest}</div>
-		    </div>
-		  </div>
-		  
-		  <div class="form-group">
-		    <label for="dlvyDate" class="col-sm-offset-1 col-sm-3 control-label">배송희망일자</label>
-		    <div class="col-sm-4">
-		      <div>${purchase.dlvyDate}</div>
-		    </div>
-		  </div>
-		  
-		 
-		  
-		  <div class="form-group">
-		    <div class="col-sm-offset-4  col-sm-4 text-center">
-		      <button type="button" id="golist" class="btn btn-primary" >확&nbsp;인</button>
-		    </div>
-		  </div>
+		
+				<div> 
+				${purchase}
+				</div>
+	 		  
+	 		  <div class="form-group">
+			    <label for="prodNo" class="col-sm-offset-1 col-sm-3 control-label">주문 번호</label>
+			    <div class="col-sm-4">
+			      <div>${purchase.tranNo}</div>
+			    </div>
+			  </div>
+	 		  
+			  <div class="form-group">
+			    <label for="prodNo" class="col-sm-offset-1 col-sm-3 control-label">굿즈명</label>
+			    <div class="col-sm-4">
+			      <div>${purchase.purchaseProd.prodName}</div>
+			    </div>
+			  </div>
+			  
+			  <div class="form-group">
+			    <label for="userId" class="col-sm-offset-1 col-sm-3 control-label">굿즈가격</label>
+			    <div class="col-sm-4">
+			      <div>${purchase.purchaseProd.price} 원</div>
+			    </div>
+			  </div>
+			  
+		<!--	   아임포트 사용할 것 -
+			  <div class="form-group"> 
+	 		    <label for="paymentOption" class="col-sm-offset-1 col-sm-3 control-label">구매방법</label> -->
+	<!-- 		    <div class="col-sm-4"> -->
+	<!-- 		      	<div> -->
+	<%-- 					<c:if test="${purchase.paymentOption == '1'}"> --%>
+	<!-- 								현금구매 -->
+	<%-- 					</c:if> --%>
+	<%-- 					<c:if test="${purchase.paymentOption == '2'}"> --%>
+	<!-- 								신용구매 -->
+	<%-- 					</c:if> --%>
+	<!-- 				</div> -->
+	<!-- 		    </div> -->
+	<!-- 		  </div> -->
+			  
+			  
+			  
+			  <div class="form-group">
+			    <label for="receiverName" class="col-sm-offset-1 col-sm-3 control-label">배송받을분 이름</label>
+			    <div class="col-sm-4">
+			      <div>${purchase.receiverName}</div>
+			    </div>
+			  </div>
+			  
+			  <div class="form-group">
+			    <label for="receiverPhone" class="col-sm-offset-1 col-sm-3 control-label">배송받을분 연락처</label>
+			    <div class="col-sm-4">
+			      <div>${purchase.receiverPhone}</div>
+			    </div>
+			  </div>
+			  
+			  <div class="form-group">
+			    <label for="dlvyAddr" class="col-sm-offset-1 col-sm-3 control-label">배송받을 주소</label>
+			    <div class="col-sm-4">
+			      <div>${purchase.dlvyAddr}</div>
+			    </div>
+			  </div>
+			  
+			  <div class="form-group">
+			    <label for="dlvyRequest" class="col-sm-offset-1 col-sm-3 control-label">배송요청사항</label>
+			    <div class="col-sm-4">
+			      <div>${purchase.dlvyRequest}</div>
+			    </div>
+			  </div>
+	
+	
+			  <div class="form-group">
+			    <div class="col-sm-offset-4  col-sm-4 text-center">
+			      <button type="button" id="golist" class="btn btn-primary" >확&nbsp;인</button>
+			    </div>
+			  </div>
+			  
 		</form>
 		<!-- form Start /////////////////////////////////////-->
 		

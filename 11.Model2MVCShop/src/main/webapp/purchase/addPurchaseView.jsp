@@ -15,6 +15,7 @@
 	<!--  ///////////////////////// Bootstrap, jQuery CDN ////////////////////////// -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" >
+	
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" ></script>
 	
@@ -22,20 +23,21 @@
    <link href="/css/animate.min.css" rel="stylesheet">
    <link href="/css/bootstrap-dropdownhover.min.css" rel="stylesheet">
    
-   <!-- 포트원 라이브러리 
-   <script src="https://cdn.iamport.kr/v1/iamport.js"></script>-->
-   <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-{SDK-최신버전}.js"></script>
+    <!-- iamport.payment.js -->
+    <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
    
+   <!--  다음 주소 api -->
+   <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
    
     <!-- Bootstrap Dropdown Hover JS -->
    <script src="/javascript/bootstrap-dropdownhover.min.js"></script>
 	
 	<!-- Datepicker CDN -->
 		<style>
-	       body > div.container{
+	        body > div.container{
 	        	border: 3px solid #D6CDB7;
 	            margin-top: 10px;
-	        }
+	        } 
 	        
 	        body {
             padding-top : 50px;
@@ -44,55 +46,94 @@
 	
 	<script type="text/javascript">
 	
-// 		const IMP = window.IMP; // 생략 가능
-// 		IMP.init("imp13567041"); // 예: imp00000000a
+	$(function() {
 		
-// 		function requestPay() {
-// 			console.log("pay시작")
-// 		    IMP.request_pay({
-// 		      pg: "kcp.{상점ID}",
-// 		      pay_method: "card",
-// 		      merchant_uid: "ORD20180131-0000011",   // 주문번호
-// 		      name: "노르웨이 회전 의자",
-// 		      amount: 64900,                         // 숫자 타입
-// 		      buyer_email: "gildong@gmail.com",
-// 		      buyer_name: "홍길동",
-// 		      buyer_tel: "010-4242-4242",
-// 		      buyer_addr: "서울특별시 강남구 신사동",
-// 		      buyer_postcode: "01181"
-// 		    },
-// 		    function (rsp) { // callback
-// 		      if (rsp.success) {
-// 		        alert("결제성공입니다.");
-// 		      } else {
-// 		    	alert("결제실패입니다.");
-// 		      }
-// 		    });
-// 			console.log("pay끝")
-// 		}
+		//다음 주소 api 사용
+		$('#bt3').on("click" , function() {
+			new daum.Postcode({
+		        oncomplete: function(data) {
+		            // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분입니다.
+		            // 예제를 참고하여 다양한 활용법을 확인해 보세요.
+		        }
+		 }).open();
+		});
+		
+		
+		//기본 user.addr 값 바로 넣어주기
+		$('#bt4').on("click", function() {
+			$('#addr').val('${user.addr}');
+		})
+	
+	
+	})
+	
 
+ 		const IMP = window.IMP; // 생략 가능
+ 		IMP.init("imp13567041"); // 예: imp00000000a
+ 		
+ 		var UID = new Date().getTime().toString(20);
+		
+ 		console.log(UID);
+ 		
+ 		
+ 		function requestPay() {
+ 			console.log("pay시작")
+ 			
+ 		    IMP.request_pay({
+ 		      pg: "html5_inicis",
+ 		      pay_method: "card",
+ 		      merchant_uid: UID,   // 주문번호
+ 		      name: "${product.prodName}",
+ 		      amount: "${product.price}",
+ 		      //amount: 100, 
+ 		      buyer_email: "gildong@gmail.com",
+ 		      buyer_name: "${user.userName}",
+ 		      buyer_tel: "${user.phone}",
+ 		      buyer_addr: "서울특별시 강남구 신사동",
+ 		      buyer_postcode: "01181"
+ 		    },
+ 		    function (rsp) { // callback
+ 		      if (rsp.success) {
+ 		        alert("결제성공입니다.");
+ 		        fncAddPurchase();
+ 		      } else {
+ 		    	 alert("결제에 실패하였습니다. 에러 내용: " + rsp.error_msg);
+ 		      }
+ 		    });
+ 			console.log("pay끝")
+ 		} 
+
+	$(function() {
+		
+		$('#bt1').on("click" , function() {
+			requestPay();
+		});
+	});	
 	
 	$(function() {
 		//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
-		$("a[href='#' ]").on("click" , function() {
+		$('#bt2').on("click" , function() {
 			$("form")[0].reset();
 		});
 	});	
 	
 	
-	$(function() {
-		
-		$('.btn-primary').on("click" , function() {
-			fncAddPurchase();
-		});
-	});	
-	
-	
-	function fncAddPurchase() {
-// 	document.addPurchase.submit();
+ 	function fncAddPurchase() {
 	$("form").attr("method" ,"POST").attr("action" , "addPurchase?prodNo=${product.prodNo}&userId=${user.userId}").submit();
-	}
-
+	} 
+	
+ 	
+ 	var price = ${product.price}; 
+ 	price = Number(price).toLocaleString();	
+ 	
+ 	$(document).ready(function() {
+		var good = $('#prodprice');
+		good.html(price+'원');
+	 	console.log(price);
+	 	//$('#price').val(price);
+ 	})
+ 	
+ 	
 </script>
 </head>
 
@@ -106,54 +147,100 @@
 		<!--  화면구성 div Start /////////////////////////////////////-->
 	<div class="container">
 	
-		<h1 class="bg-primary text-center" style="background-color:#FDCEE2;">구매 등록</h1>
+		<h1 class="bg-primary text-center">주문/결제</h1>
+		
+		
+<div class="product_area">
+    
+    <table cellspacing="0" class="tb_products">
+	    
+	    <colgroup>
+	        <col width="300">
+	        <col width="220">
+	        <col width="220">
+	        <col width="120">
+	        <col width="110">
+	        <col>
+	    </colgroup>
+	    <thead class="point_plus">
+	    <tr>
+	    <th scope="col"></th>
+		<th scope="col">상품명</th>
+		<th scope="col">상품상세정보</th>
+	    <th scope="col">배송비</th>
+	    <th scope="col">수량</th>
+	    
+	    <th scope="col" class="col_price">상품금액</th>
+	    </tr>
+	    </thead>
+	    <tbody>
+
+		<tr >
+			<td>
+			    <span class="bdr"></span>
+			    <div class="product_info">
+					<a href="/product/getProduct?prodNo=${product.prodNo}" class="product_thmb" target="_blank" >
+	        			<span class="mask"></span><img src="/images/uploadFiles/${product.fileName}" width="200" height="200">
+	        		</a>
+			        
+			    </div>
+			</td>
+			
+			<td rowspan="1">
+	            	<span class="deli_fee">[${product.prodName}]</span> 
+	        </td>    	
+	            	</br></br></br>
+	            	
+	        <td rowspan="1">    	
+	            	<span class="deli_fee">${product.prodDetail}</span>
+            </td>
+			
+			<td rowspan="1">
+	            	<span class="deli_fee">무료</span>
+            </td>
+
+			<td>1개</td>
+			
+			<td class="col_price">
+			    <span id="prodprice" value=""> </span>
+			</td>
+		</tr>
+
+
+	    </tbody>
+	</table>
+</div>
+		
+		
+		
 		
 		<!-- form Start /////////////////////////////////////-->
 		<form class="form-horizontal">
-	
+			<h2 class="bg-primary text-center">배송 정보 입력</h2>
 		  
-		  <div class="form-group">
+<%-- 		  <div class="form-group">
 		    <label for="prodNo" class="col-sm-offset-1 col-sm-3 control-label">상품번호</label>
 		    <div class="col-sm-4">
 		      <input type="text" class="form-control" id="prodNo" value="${product.prodNo}" readonly>
 		    </div>
-		  </div>
+		  </div> --%>
 		  
 		  
-		  <div class="form-group">
-		    <label for="prodName" class="col-sm-offset-1 col-sm-3 control-label">상품명</label>
-		    <div class="col-sm-4">
-		      <input type="text" class="form-control" id="prodName" value="${product.prodName}" readonly>
-		    </div>
-		  </div>
-		  
-		  <div class="form-group">
-		    <label for="prodDetail" class="col-sm-offset-1 col-sm-3 control-label">상품상세정보</label>
-		    <div class="col-sm-4">
-		      <input type="text" class="form-control" id="prodDetail" value="${product.prodDetail}" readonly>
-		    </div>
-		  </div>
-		  
-		  <div class="form-group">
+<%-- 		  <div class="form-group">
 		    <label for="manuDate" class="col-sm-offset-1 col-sm-3 control-label">제조일자</label>
 		    <div class="col-sm-4">
 		      <input type="text" class="form-control" id="manuDate" value="${product.manuDate}" readonly>
 		    </div>
-		  </div>
+		  </div> 
 		  
-		  <div class="form-group">
-		    <label for="price" class="col-sm-offset-1 col-sm-3 control-label">가격</label>
-		    <div class="col-sm-4">
-		      <input type="text" class="form-control" id="price" value="${product.price}" readonly>
-		    </div>
-		  </div>
 		  
+		등록일자 및 구매자아이디는 구매 시 알 필요 없음	
 		  <div class="form-group">
 		    <label for="regDate" class="col-sm-offset-1 col-sm-3 control-label">등록일자</label>
 		    <div class="col-sm-4">
 		      <input type="text" class="form-control" id="regDate" value="${product.regDate}" readonly>
 		    </div>
-		  </div>
+		  </div> 
 		  
 		  <div class="form-group">
 		    <label for="buyerId" class="col-sm-offset-1 col-sm-3 control-label">구매자 아이디</label>
@@ -161,8 +248,9 @@
 		      <input type="text" class="form-control" id="buyerId" value="${user.userId}" readonly>
 		    </div>
 		  </div>
+		  --%>
 		  
-		  <!--  아임포트 사용할 것이라 필요없지만 테이블에 Null Point Exception 뜨므로 일단 놔두기 -->
+		  <!--  아임포트 사용할 것이라 필요없지만 테이블에 Null Point Exception 뜨므로 일단 놔두기 
 		  <div class="form-group">
 		    <label for="paymentOption" class="col-sm-offset-1 col-sm-3 control-label">결제 방법</label>
 		    <select name="paymentOption"	class="ct_input_g" 
@@ -171,55 +259,50 @@
 				<option value="2">신용구매</option>
 			</select>
 		  </div>
+		  -->
+		  
 		  	
 
 		  <div class="form-group">
-		    <label for="receiverName" class="col-sm-offset-1 col-sm-3 control-label">구매자 이름</label>
+		    <label for="receiverName" class="col-sm-offset-1 col-sm-3 control-label">배송받을분 이름</label>
 		    <div class="col-sm-4">
-		      <input type="text" class="form-control" id="receiverName" name="receiverName" value="${user.userId}">
+		      <input type="text" class="form-control" id="receiverName" name="receiverName" value="${user.userName}">
 		    </div>
 		  </div>
 		  
 		  <div class="form-group">
-		    <label for="receiverPhone" class="col-sm-offset-1 col-sm-3 control-label">구매자 연락처</label>
+		    <label for="receiverPhone" class="col-sm-offset-1 col-sm-3 control-label">배송받을분 연락처</label>
 		    <div class="col-sm-4">
 		      <input type="text" class="form-control" id="receiverPhone" name="receiverPhone" value="${user.phone}">
 		    </div>
 		  </div>
 		  
 		  <div class="form-group">
-		    <label for="addr" class="col-sm-offset-1 col-sm-3 control-label">구매자 주소</label>
-		    <div class="col-sm-4">
-		      <input type="text" class="form-control" id="addr" name="dlvyAddr" value="${user.addr}">
+		    <label for="addr" class="col-sm-offset-1 col-sm-3 control-label">배송받을 주소</label>
+		    <div class="col-sm-6">
+		    	<a class="btn btn-primary" href="#" id="bt3" role="button">새로운 주소 검색</a>
+		    	<a class="btn btn-primary" href="#" id="bt4" role="button">내 기본주소 입력</a>
+		    	
+		      <input type="text" class="form-control" id="addr" name="dlvyAddr" value="">
+		      <strong class="text-danger">새로운 주소 검색 시 상세주소를 추가 입력 바랍니다.</strong>
 		    </div>
 		  </div>
 		  
 		  <div class="form-group">
-		    <label for="dlvyRequest" class="col-sm-offset-1 col-sm-3 control-label">구매요청사항</label>
-		    <div class="col-sm-4">
+		    <label for="dlvyRequest" class="col-sm-offset-1 col-sm-3 control-label">배송요청사항</label>
+		    <div class="col-sm-6">
 		      <input type="text" class="form-control" id="dlvyRequest" name="dlvyRequest" >
 		    </div>
 		  </div>
-		  
-		  <div class="form-group">
-		    <label for="addr" class="col-sm-offset-1 col-sm-3 control-label">배송희망일자</label>
-		    <div class="col-sm-4">
-		      
-		      <input type="date" autocomplete="off" class="form-control"  name="dlvyDate" placeholder="배송희망일자">
-		    
-		    </div>
-		  </div>
-		  
-		  
-		  <!--   <!-- 결제하기 버튼 생성 -->-->
-		  <div>
-		  	<button onclick="requestPay()">결제하기</button>
-		  </div>
+		 
+		 
 		  
 		  <div class="form-group">
 		    <div class="col-sm-offset-4  col-sm-4 text-center">
-		      <button type="button" id="add" class="btn-primary" >구&nbsp;매</button>
-			  <a class="btn btn-primary btn" href="#" role="button">취&nbsp;소</a>
+		      <!--  <button type="button" id="add" class="btn-primary" >구&nbsp;매</button>-->
+		      
+		      <a class="btn btn-primary" href="#" id="bt1" role="button">결&nbsp;제</a>
+			  <a class="btn btn-primary" href="#" id="bt2" role="button">취&nbsp;소</a>
 		    </div>
 		  </div>
 		</form>
