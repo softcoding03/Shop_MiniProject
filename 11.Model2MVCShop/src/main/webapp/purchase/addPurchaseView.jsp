@@ -32,17 +32,19 @@
     <!-- Bootstrap Dropdown Hover JS -->
    <script src="/javascript/bootstrap-dropdownhover.min.js"></script>
 	
+	
 	<!-- Datepicker CDN -->
-		<style>
-	        body > div.container{
-	        	border: 3px solid #D6CDB7;
-	            margin-top: 10px;
-	        } 
-	        
-	        body {
-            padding-top : 50px;
-       		 }
-	    </style>
+	<style>
+        body > div.container{
+        	border: 3px solid #D6CDB7;
+            margin-top: 10px;
+        } 
+        
+        body {
+           padding-top : 50px;
+      	}
+    </style>
+	
 	
 	<script type="text/javascript">
 	
@@ -52,16 +54,30 @@
 		$('#bt3').on("click" , function() {
 			new daum.Postcode({
 		        oncomplete: function(data) {
-		            // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분입니다.
-		            // 예제를 참고하여 다양한 활용법을 확인해 보세요.
+		            
+		        	var addr = ''; // 주소 변수
+
+	                //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+	                if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+	                    addr = data.roadAddress;
+	                } else { // 사용자가 지번 주소를 선택했을 경우(J)
+	                    addr = data.jibunAddress;
+	                }
+		        	
+		        	console.log(addr);
+		        	
+	                $("#addr1").val(addr);
+	                
+	                // 커서를 상세주소 필드로 이동한다.
+	                $('#addr2').focus();
 		        }
-		 }).open();
+		 	}).open();
 		});
 		
 		
 		//기본 user.addr 값 바로 넣어주기
 		$('#bt4').on("click", function() {
-			$('#addr').val('${user.addr}');
+			$('#addr1').val('${user.addr}');
 		})
 	
 	
@@ -85,17 +101,29 @@
  		      merchant_uid: UID,   // 주문번호
  		      name: "${product.prodName}",
  		      amount: "${product.price}",
- 		      //amount: 100, 
- 		      buyer_email: "gildong@gmail.com",
+ 		      buyer_email: "${user.email}",
  		      buyer_name: "${user.userName}",
  		      buyer_tel: "${user.phone}",
- 		      buyer_addr: "서울특별시 강남구 신사동",
- 		      buyer_postcode: "01181"
+ 		      buyer_addr: "addr"
  		    },
+ 		    
  		    function (rsp) { // callback
  		      if (rsp.success) {
- 		        alert("결제성공입니다.");
- 		        fncAddPurchase();
+ 		    	 $.ajax({
+ 		    		 
+ 		    		url: "/purchase/json/", 
+ 		            method: "POST",
+ 		            headers: { "Content-Type": "application/json" },
+ 		            data: {
+ 		             	imp_uid: rsp.imp_uid,            // 결제 고유번호
+ 		             	merchant_uid: rsp.merchant_uid   // 주문번호
+ 		            }
+ 		    		 
+ 		    	 }).done(
+	    			alert("결제성공입니다.");
+	 		        fncAddPurchase();	 
+ 		    	 )   	  
+ 		        
  		      } else {
  		    	 alert("결제에 실패하였습니다. 에러 내용: " + rsp.error_msg);
  		      }
@@ -180,7 +208,7 @@
 			    <span class="bdr"></span>
 			    <div class="product_info">
 					<a href="/product/getProduct?prodNo=${product.prodNo}" class="product_thmb" target="_blank" >
-	        			<span class="mask"></span><img src="/images/uploadFiles/${product.fileName}" width="200" height="200">
+	        			<span class="mask"></span><img src="/images/uploadFiles/${product.fileName}" width="240" height="240">
 	        		</a>
 			        
 			    </div>
@@ -223,10 +251,10 @@
 		    <div class="col-sm-4">
 		      <input type="text" class="form-control" id="prodNo" value="${product.prodNo}" readonly>
 		    </div>
-		  </div> --%>
+		  </div>
 		  
 		  
-<%-- 		  <div class="form-group">
+		  <div class="form-group">
 		    <label for="manuDate" class="col-sm-offset-1 col-sm-3 control-label">제조일자</label>
 		    <div class="col-sm-4">
 		      <input type="text" class="form-control" id="manuDate" value="${product.manuDate}" readonly>
@@ -248,9 +276,9 @@
 		      <input type="text" class="form-control" id="buyerId" value="${user.userId}" readonly>
 		    </div>
 		  </div>
-		  --%>
 		  
-		  <!--  아임포트 사용할 것이라 필요없지만 테이블에 Null Point Exception 뜨므로 일단 놔두기 
+		  
+		    아임포트 사용할 것이라 필요없지만 테이블에 Null Point Exception 뜨므로 일단 놔두기 
 		  <div class="form-group">
 		    <label for="paymentOption" class="col-sm-offset-1 col-sm-3 control-label">결제 방법</label>
 		    <select name="paymentOption"	class="ct_input_g" 
@@ -259,7 +287,7 @@
 				<option value="2">신용구매</option>
 			</select>
 		  </div>
-		  -->
+		  --%>
 		  
 		  	
 
@@ -280,10 +308,11 @@
 		  <div class="form-group">
 		    <label for="addr" class="col-sm-offset-1 col-sm-3 control-label">배송받을 주소</label>
 		    <div class="col-sm-6">
-		    	<a class="btn btn-primary" href="#" id="bt3" role="button">새로운 주소 검색</a>
-		    	<a class="btn btn-primary" href="#" id="bt4" role="button">내 기본주소 입력</a>
+		    	<button type="button" class="btn btn-default" id="bt3" role="button">새로운 주소 검색</button>&nbsp;&nbsp;&nbsp;&nbsp;
+		    	<button type="button" class="btn btn-default" id="bt4" role="button">내 기본주소 입력</button>
 		    	
-		      <input type="text" class="form-control" id="addr" name="dlvyAddr" value="">
+		      <input type="text" class="form-control" id="addr1" name="dlvyAddr1" value="">
+		      <input type="text" class="form-control" id="addr2" name="dlvyAddr2" value="" placeholder="상세주소 입력">
 		      <strong class="text-danger">새로운 주소 검색 시 상세주소를 추가 입력 바랍니다.</strong>
 		    </div>
 		  </div>

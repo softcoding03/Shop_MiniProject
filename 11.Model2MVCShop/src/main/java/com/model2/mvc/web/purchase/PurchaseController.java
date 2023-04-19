@@ -103,6 +103,7 @@ public class PurchaseController {
 		
 		purchase.setBuyer(user);
 		purchase.setPurchaseProd(product);
+		purchase.setDlvyAddr(purchase.getDlvyAddr1()+" "+purchase.getDlvyAddr2());
 		purchase.setTranCode("1"); // => 구매 직후는 '구매완료' / '배송중(배송하기)' 2 / '물건도착' 3
 		
 		purchaseService.addPurchase(purchase);

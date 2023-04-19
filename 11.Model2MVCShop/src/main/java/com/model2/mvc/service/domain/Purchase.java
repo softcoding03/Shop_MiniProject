@@ -14,6 +14,8 @@ public class Purchase {
 	private String receiverName;
 	private String receiverPhone;
 	private String dlvyAddr;
+	private String dlvyAddr1;
+	private String dlvyAddr2;
 	private String dlvyRequest;
 	private String tranCode;
 	private Date orderDate; //sql 컬럼명은 order_data
@@ -34,6 +36,18 @@ public class Purchase {
 	}
 	public void setDlvyAddr(String dlvyAddr) {
 		this.dlvyAddr = dlvyAddr;
+	}
+	public String getDlvyAddr1() {
+		return dlvyAddr1;
+	}
+	public void setDlvyAddr1(String dlvyAddr1) {
+		this.dlvyAddr1 = dlvyAddr1;
+	}
+	public String getDlvyAddr2() {
+		return dlvyAddr2;
+	}
+	public void setDlvyAddr2(String dlvyAddr2) {
+		this.dlvyAddr2 = dlvyAddr2;
 	}
 	public String getDlvyDate() {
 		return dlvyDate;
