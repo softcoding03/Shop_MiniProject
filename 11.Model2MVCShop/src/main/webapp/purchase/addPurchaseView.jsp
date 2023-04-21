@@ -153,10 +153,12 @@
 	} 
 	
  	
+ //가격 서식 변경하는 코드	
  	var price = ${product.price}; 
- 	price = Number(price).toLocaleString();	
+ 	price = Number(price).toLocaleString();	 //30000 -> 30,000
  	
- 	$(document).ready(function() {
+ 	//$(document).ready(function() {
+	$(function() { //동일한 코드
 		var good = $('#prodprice');
 		good.html(price+'원');
 	 	console.log(price);
