@@ -48,6 +48,7 @@
 	
 	<script type="text/javascript">
 	
+	var addr = ''; // 주소 변수
 	$(function() {
 		
 		//다음 주소 api 사용
@@ -55,8 +56,6 @@
 			new daum.Postcode({
 		        oncomplete: function(data) {
 		            
-		        	var addr = ''; // 주소 변수
-
 	                //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
 	                if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
 	                    addr = data.roadAddress;
@@ -88,28 +87,31 @@
  		IMP.init("imp13567041"); // 예: imp00000000a
  		
  		var UID = new Date().getTime().toString(20);
-		
  		console.log(UID);
  		
- 		
  		function requestPay() {
- 			console.log("pay시작")
+ 			console.log("pay시작");
+ 			console.log($('#addr1').val()+" "+$('#addr2').val());
+ 			var finaladdr = $('#addr1').val()+" "+$('#addr2').val()
  			
+ 			//요청객체
  		    IMP.request_pay({
  		      pg: "html5_inicis",
- 		      pay_method: "card",
+ 		      //pay_method: "card",  
  		      merchant_uid: UID,   // 주문번호
  		      name: "${product.prodName}",
  		      amount: "${product.price}",
  		      buyer_email: "${user.email}",
  		      buyer_name: "${user.userName}",
  		      buyer_tel: "${user.phone}",
- 		      buyer_addr: "addr"
+ 		      buyer_addr: finaladdr // 사용자가 입력한거 받아오든지 아예 전송안하든지 해야함.
  		    },
  		    
- 		    function (rsp) { // callback
+ 			// 결제 성공 시: 결제 승인 또는 가상계좌 발급에 성공한 경우
+ 		    // jQuery로 HTTP 요청
+ 		    function (rsp) { // callback객체
  		      if (rsp.success) {
- 		    	 $.ajax({
+ 		    	 /* $.ajax({
  		    		 
  		    		url: "/purchase/json/", 
  		            method: "POST",
@@ -119,15 +121,15 @@
  		             	merchant_uid: rsp.merchant_uid   // 주문번호
  		            }
  		    		 
- 		    	 }).done(
+ 		    	 }).done(function(data) { */
  		    			 
- 		    			 //성공하면 웹훅으로 사용자 휴대폰 번호로 SMS 전송
+ 		    		//성공하면 웹훅으로 사용자 휴대폰 번호로 SMS 전송
 	    			alert("결제성공입니다.");
 	 		        fncAddPurchase();	 
- 		    	 )   	  
+ 		    	 //})   	  
  		        
  		      } else {
- 		    	 alert("결제에 실패하였습니다. 에러 내용: " + rsp.error_msg);
+ 		    	alert("결제에 실패하였습니다. 에러 내용: " + rsp.error_msg);
  		      }
  		    });
  			console.log("pay끝")

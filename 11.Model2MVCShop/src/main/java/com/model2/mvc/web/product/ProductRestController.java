@@ -136,27 +136,27 @@ public class ProductRestController {
 	}
 	
 	//무한스크롤 ...
-	@RequestMapping( value="json/listProduct", method=RequestMethod.POST )
-	public Map<String , Object> listProduct2(@RequestBody Search search) throws Exception{
-		
-		System.out.println("Search 넘어온거는 ??? "+search);
-		System.out.println("/product/json/listProduct : POST");
-
-		//Business Logic
-		int pageUnit = 3;
-		int pageSize = 2;
-		
-		if(search.getCurrentPage()==0 ){
-			search.setCurrentPage(1);
-		}
-		search.setPageSize(pageSize);
-		
-		Map<String , Object> map=productService.getProductList(search);
-		map.put("message", "아주잘했어요");
-		System.out.println("list 완료");
-		
-		return map;
-	}
+//	@RequestMapping( value="json/listProduct", method=RequestMethod.POST )
+//	public Map<String , Object> listProduct2(@RequestBody Search search) throws Exception{
+//		
+//		System.out.println("Search 넘어온거는 ??? "+search);
+//		System.out.println("/product/json/listProduct : POST");
+//
+//		//Business Logic
+//		int pageUnit = 3;
+//		int pageSize = 2;
+//		
+//		if(search.getCurrentPage()==0 ){
+//			search.setCurrentPage(1);
+//		}
+//		search.setPageSize(pageSize);
+//		
+//		Map<String , Object> map=productService.getProductList(search);
+//		map.put("message", "아주잘했어요");
+//		System.out.println("list 완료");
+//		
+//		return map;
+//	}
 	
 	@RequestMapping(value="json/updateProduct", method=RequestMethod.POST)
 	public Product updateProduct(@RequestBody Product product) throws Exception{
