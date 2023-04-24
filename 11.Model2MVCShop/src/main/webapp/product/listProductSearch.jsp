@@ -64,32 +64,54 @@
 		
 // 		무한 스크롤 start
 
+		$(function() {
+		    var page = 0; //현재 로드된 페이지
+		    var size = 9; //한번에 로드할 데이터의 개수
+		    var isLoading = false; //데이터 로딩중인지 여부 확인
+		
+		    function loadData() {
+		    	//isLoading 변수를 사용하여, 데이터 로딩 중인 경우에는 추가 요청을 보내지 않습니다. 
+		      if (isLoading) return;
+		      isLoading = true;
+		
+		      $.ajax({
+		        url: '/product/json/infinite',
+		        type: 'POST',
+		        //data: {
+		        data: JSON.stringify({ //RestController로 보내려면 String 형태로 보내야한다. 
+		          page: page,
+		          size: size
+		        }),
+		        success: function(data) {
+		          if (data.length > 0) {
+		            var $container = $('#data-container');
+		            for (var i = 0; i < data.length; i++) {
+		              $container.append('<div>' + data[i].name + '</div>');
+		            }
+		            page++;
+		            isLoading = false;
+		          }
+		        }
+		      });
+		      }
+		  });
+			
+		    
+	    //스크롤 이벤트 핸들러 등록
+	    $(window).on('scroll', function() {
+	      var $window = $(window);
+	      var windowHeight = $window.height();
+	      var scrollTop = $window.scrollTop();
+	      var documentHeight = $(document).height();
 	
+	      if (windowHeight + scrollTop >= documentHeight) {
+	        loadData();
+	      }
+	    });
+		
+		    
 
-
-		//////////////////무한 스크롤 end//////////////
-		/*무한 스크롤 ajax
-		
-			$.ajax({
-				url:"",
-				method: "GET",
-				dataType: "json",
-				headers : {
-					"Accept" : "application/json",
-					"Content-Type" : "application/json"
-				},
-				success : function(JSONData, status) {
-					console.log(JSONData);
-					
-				}
-				
-			})
-		*/
-	
-		
-		
-		
-		
+// 		무한 스크롤 end		
 		
 	
 		function fncGetProductList(currentPage){
@@ -106,6 +128,7 @@
 				fncGetProductList(1);
 			});
 			
+			//'상세보기' 기능
 			$(".btn-primary").on("click", function() {
 // 				alert($(this).find("input").val().trim());
 				self.location="/product/getProduct?prodNo="+$(this).find("input").val().trim();
@@ -114,7 +137,8 @@
 			$(".ct_list_pop td:nth-child(3)").css("color" , "red");
 			$("h7").css("color" , "red");
 			$(".ct_list_pop:nth-child(4n+6)").css("background-color" , "whitesmoke");
-		
+			
+			//오토컴플릿
 			$("#searchKeyword").autocomplete({
 			      source: function(request, response) {
 			    	  
@@ -124,8 +148,7 @@
 			    	  console.log($('option:selected').val());
 			    	  console.log($('#searchKeyword').val());
 			    	  
-			    	  $.ajax(
-							{
+			    	  $.ajax({
 								url:"/product/json/getAll/"+searchCondition+"/"+searchKeyword ,
 								method : "GET",
 								dataType : "json",
@@ -227,7 +250,10 @@
 			  </div>
 			 
 		 </c:forEach>
-	</div>		
+	</div>	
+	
+	<!-- 무한스크롤 위한 div -->
+	<div id="data-container"></div>	
 
 
     

@@ -31,8 +31,8 @@
         }
         
         img {
-			  height: 300px;
-			  object-fit: cover;
+			 height: 300px;
+			 object-fit: cover;
 		}
     </style>
 	

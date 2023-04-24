@@ -136,11 +136,13 @@ public class ProductRestController {
 	}
 	
 	//무한스크롤 ...
-//	@RequestMapping( value="json/listProduct", method=RequestMethod.POST )
-//	public Map<String , Object> listProduct2(@RequestBody Search search) throws Exception{
+/*	@RequestMapping(value="json/infinite", method=RequestMethod.POST)
+//	public Map<String , Object> listProduct2(@RequestBody int page
+ * 											@RequestBody int size) throws Exception{
 //		
-//		System.out.println("Search 넘어온거는 ??? "+search);
-//		System.out.println("/product/json/listProduct : POST");
+//		System.out.println("   page 넘어온거는 ??? "+page);
+//		System.out.println("   size 넘어온거는 ??? "+size);
+//		System.out.println("/product/json/infinite : Start !");
 //
 //		//Business Logic
 //		int pageUnit = 3;
@@ -156,7 +158,7 @@ public class ProductRestController {
 //		System.out.println("list 완료");
 //		
 //		return map;
-//	}
+*/	}
 	
 	@RequestMapping(value="json/updateProduct", method=RequestMethod.POST)
 	public Product updateProduct(@RequestBody Product product) throws Exception{
