@@ -65,52 +65,86 @@
 // 		무한 스크롤 start
 
 		$(function() {
-		    var page = 0; //현재 로드된 페이지
+		    var page = 2; //현재 로드된 페이지
 		    var size = 9; //한번에 로드할 데이터의 개수
 		    var isLoading = false; //데이터 로딩중인지 여부 확인
-		
-		    function loadData() {
+		    var pagedata = {
+		    	page: page,
+			    size: size
+		    }
+		  
+		   
+			function loadData() {
 		    	//isLoading 변수를 사용하여, 데이터 로딩 중인 경우에는 추가 요청을 보내지 않습니다. 
 		      if (isLoading) return;
 		      isLoading = true;
-		
-		      $.ajax({
-		        url: '/product/json/infinite',
-		        type: 'POST',
-		        //data: {
-		        data: JSON.stringify({ //RestController로 보내려면 String 형태로 보내야한다. 
-		          page: page,
-		          size: size
-		        }),
-		        success: function(data) {
-		          if (data.length > 0) {
-		            var $container = $('#data-container');
-		            for (var i = 0; i < data.length; i++) {
-		              $container.append('<div>' + data[i].name + '</div>');
-		            }
-		            page++;
-		            isLoading = false;
-		          }
-		        }
-		      });
-		      }
-		  });
-			
+		      console.log("ajax 시작");  
+		      console.log("pagedata.page?"+pagedata.page);
+			      //스크롤시 업데이트 할 9개의 객체 요청하는 ajax
+			      $.ajax({
+			        url: '/product/json/infinite',
+			        method: 'POST',
+			        contentType: "application/json",
+			        data: JSON.stringify(pagedata), //RestController로 보내려면 String 형태로 보내야한다. 
+			        dataType: "json",
+			        success: function(serverData, status) {
+			        	
+			        	console.log("전송status는?"+status)
+			        	console.log("전송받은 data는?"+serverData)
+			        
+				          if (serverData.length != 0) {
+				        	  console.log("append 실시")
+				            var $container = $('#data-container');
+				            for (var i = 0; i < serverData.length; i++) {
+				              //append할 html
+				            	$container.append(
+				            		  '<div class="col-sm-6 col-md-4">'
+				            		  +'<div class="thumbnail" style="width: 300px; height: 250px;">'
+				            		  + '<img src="/images/uploadFiles/'+serverData[i].fileName+'"/>'
+				            		  + '<div class="caption">'
+				            		  + '<h4 id="prodName">상품명 : '+serverData[i].prodName+'</h4>'
+				            		  + '<h4>가격 : '+serverData[i].price+'원</h4>'
+				            		  + '<p>'
+				            		  + '<button type="button" class="btn btn-primary">'
+				            		  + '상세보기'
+				            		  + '<input type="hidden" value="'+serverData[i].prodNo+'"/>'
+				            		  + '</button>'
+				            		  + '<button type="button" class="btn btn-default" role="button">장바구니에 추가</button>'
+				            		  + '</p>'
+				            		  + '</div>'
+				            		  + '</div>'
+				            		  + '</div>'
+				                );
+				            }
+				            page++;
+				          }
+			        	isLoading = false;
+			        }
+			      });
+		      }	
 		    
-	    //스크롤 이벤트 핸들러 등록
-	    $(window).on('scroll', function() {
-	      var $window = $(window);
-	      var windowHeight = $window.height();
-	      var scrollTop = $window.scrollTop();
-	      var documentHeight = $(document).height();
-	
-	      if (windowHeight + scrollTop >= documentHeight) {
-	        loadData();
-	      }
-	    });
-		
+		    //스크롤바 동작 시 실행 함수
+		    $(window).scroll(function() {
+		    	var windowHeight = $(window).height(); //문서의 총 높이
+		    	var scrollTop = $(window).scrollTop(); // 현재 스크롤바가 있는 위치(0) 스크롤 할때 값이 증가
+		    	//var documentHeight = $(document).height(); //문서의 총 높이(새로운 데이터 불러오면 변경됨)
+		    	//스크롤이 끝까지 된 경우 windowHeight와 scrollTop의 합은 documentHeight의 크기와 같거나 더 크게 된다. 이 때 추가 데이터를 로딩하면 됨.
+		    	
+			    console.log("scrollTop 값은?"+scrollTop);
+			    console.log("windowHeight 값은?"+windowHeight);
+			    //console.log("documentHeight 값은?"+documentHeight);
+		    	
+			    
+		    	//if (windowHeight + scrollTop >= documentHeight) { 원래 이게 맞으나 windowHeight랑 documentHeight값이 동일한 ... 
+			      if (scrollTop >= (windowHeight-1000) && page <= ${resultPage.endUnitPage}) {    //request가 page 값이 쿼리 수행후 pageunit 수만큼만 수행되게끔   
+		    			console.log("마지막 도달 ! loadData()요청 시작");
+			            pagedata.page = page; //page++ 값을 전송하는 data의 page값으로 지정
+			            console.log("pagedata.page ???" + pagedata.page);
+			            loadData();
+			    }
+		    });
+		});
 		    
-
 // 		무한 스크롤 end		
 		
 	
@@ -160,9 +194,9 @@
 									console.log(JSONData);
 									response(JSONData);				
 								}
-					   });
+					  });
 			    	}
-			    });
+			 });
 		
 		});	
 		
@@ -190,7 +224,8 @@
 	    
 		    <div class="col-md-6 text-left">
 		    	<p class="text-primary">
-		    		전체  ${resultPage.totalCount } 건수, 현재 ${resultPage.currentPage}  페이지
+		    		전체  ${resultPage.totalCount } 건수 
+		    		<!--  , 현재 ${resultPage.currentPage}  페이지-->
 		    	</p>
 		    </div>
 		    
@@ -199,7 +234,9 @@
 			    
 				  <div class="form-group">
 				    <select class="form-control" name="searchCondition" >
-						<option value="0"  ${ ! empty search.searchCondition && search.searchCondition==0 ? "selected" : "" }>상품번호</option>
+				    	<c:if test="${user.userName == 'admin'}">
+							<option value="0"  ${ ! empty search.searchCondition && search.searchCondition==0 ? "selected" : "" }>상품번호</option>
+				        </c:if>
 				        <option value="1"  ${ ! empty search.searchCondition && search.searchCondition==1 ? "selected" : "" }>상품명</option>
 				        <option value="2"  ${ ! empty search.searchCondition && search.searchCondition==2 ? "selected" : "" }>상품가격</option>
 					</select>
@@ -225,54 +262,50 @@
 		
 	 <c:set var="i" value="0" />
 	 
-	<div class="row">
-		 <c:forEach var="product" items="${list}">
-		  	<c:set var="i" value="${i+1}" />
-		    
-			  <div class="col-sm-6 col-md-4">
-			  
-					    <div class="thumbnail">
-					      <img src="/images/uploadFiles/${product.fileName}"/>
-					      <div class="caption">
-					        <h4 id="prodName">상품명 : ${product.prodName}</h4>
-					        
-					        <h4>가격 : ${product.price} 원</h4>
-						        <p>
-							       <button type="button" class="btn btn-primary">
-							       		상세보기
-							       		<input type="hidden" value="${product.prodNo}"/>
-							       </button>
-							       <button type="button" class="btn btn-default" role="button">장바구니에 추가</button>
-						        </p>
-					      </div>
-					    </div>
-					    
-			  </div>
-			 
-		 </c:forEach>
-	</div>	
-	
+		<div class="row" id="data-container">
+			 <c:forEach var="product" items="${list}">
+			  	<c:set var="i" value="${i+1}" />
+			    
+				  <div class="col-sm-6 col-md-4">
+				  
+						    <div class="thumbnail" style="width: 300px; height: 250px;">
+						      <img src="/images/uploadFiles/${product.fileName}"/>
+						      <div class="caption">
+						        <h4 id="prodName">상품명 : ${product.prodName}</h4>
+						        
+						        <h4>가격 : ${product.price} 원</h4>
+							        <p>
+								       <button type="button" class="btn btn-primary">
+								       		상세보기
+								       		<input type="hidden" value="${product.prodNo}"/>
+								       </button>
+								       <button type="button" class="btn btn-default" role="button">장바구니에 추가</button>
+							        </p>
+						      </div>
+						    </div>
+						    
+				  </div>
+				 
+			 </c:forEach>
+			 <!-- <div id="data-container"></div> -->	
+		</div>	
+		
 	<!-- 무한스크롤 위한 div -->
-	<div id="data-container"></div>	
+	
 
 
     
 
 
 </div>
-		
-		
-		
-	  
- 	</div>
  	<!--  화면구성 div End /////////////////////////////////////-->
  	
  	
- 	<!-- PageNavigation Start... -->
+ 	<%-- -- PageNavigation Start... 
 	<jsp:include page="../common/pageNavigator_new.jsp">
 		<jsp:param name="id" value="product" />
 	</jsp:include>
-	<!-- PageNavigation End... -->
+	-->--%>
 	
 </body>
 

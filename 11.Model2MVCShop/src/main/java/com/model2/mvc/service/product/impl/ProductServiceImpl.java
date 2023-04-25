@@ -41,7 +41,6 @@ public class ProductServiceImpl implements ProductService{
 
 	public Product getProduct(int productNo) throws Exception {
 		return productDao.getProduct(productNo);
-		
 	}
 
 	public Map<String, Object> getProductList(Search search) throws Exception {
@@ -53,6 +52,11 @@ public class ProductServiceImpl implements ProductService{
 		map.put("totalCount", new Integer(totalCount));
 		
 		return map;   
+	}
+	
+	public List<Product> infiniteList(Search search) throws Exception {
+		List<Product> list= productDao.getProductList(search);
+		return list;
 	}
 
 	public void updateProduct(Product product) throws Exception {

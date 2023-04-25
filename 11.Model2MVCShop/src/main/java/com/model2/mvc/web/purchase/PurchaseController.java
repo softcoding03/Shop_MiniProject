@@ -135,7 +135,7 @@ public class PurchaseController {
 		System.out.println("    model?? ->"+purchase);
 		model.addAttribute("purchase", purchase);
 		
-	        return "/purchase/addPurchase.jsp";
+	    return "/purchase/addPurchase.jsp";
 	}
 	
 	
@@ -162,7 +162,7 @@ public class PurchaseController {
 								Model model , HttpServletRequest request) throws Exception{
 		
 		System.out.println("   /purchase/listPurchase : GET / POST");
-		System.out.println("   search ดย? "+ search);
+		  System.out.println("   search ดย? "+ search);
 		
 		if(search.getCurrentPage()==0 ){
 			search.setCurrentPage(1);

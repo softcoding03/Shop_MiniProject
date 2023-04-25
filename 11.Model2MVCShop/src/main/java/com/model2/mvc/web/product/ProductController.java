@@ -181,12 +181,15 @@ public class ProductController {
 		
 		System.out.println("/product/listProduct : GET / POST");
 		System.out.println("menu 잘 넘어 왔나요 ?? --->"+menu);
-		System.out.println("  search넘어온게 있어?? "+search); //없음
+		  System.out.println("  search넘어온게 있어?? "+search); //없음
 		
 		if(search.getCurrentPage()==0 ){
 			search.setCurrentPage(1);
 		}
 		search.setPageSize(pageSize);
+		
+		System.out.println("  search설정해준거 뭐야?? "+search);
+		
 		
 		// Business logic 수행
 		Map<String , Object> map=productService.getProductList(search);

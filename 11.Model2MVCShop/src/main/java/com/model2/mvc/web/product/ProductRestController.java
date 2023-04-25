@@ -26,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.model2.mvc.common.Page;
 import com.model2.mvc.common.Search;
+import com.model2.mvc.service.domain.PageData;
 import com.model2.mvc.service.domain.Product;
 import com.model2.mvc.service.product.ProductService;
 
@@ -136,29 +137,32 @@ public class ProductRestController {
 	}
 	
 	//무한스크롤 ...
-/*	@RequestMapping(value="json/infinite", method=RequestMethod.POST)
-//	public Map<String , Object> listProduct2(@RequestBody int page
- * 											@RequestBody int size) throws Exception{
-//		
-//		System.out.println("   page 넘어온거는 ??? "+page);
-//		System.out.println("   size 넘어온거는 ??? "+size);
-//		System.out.println("/product/json/infinite : Start !");
-//
-//		//Business Logic
-//		int pageUnit = 3;
-//		int pageSize = 2;
-//		
-//		if(search.getCurrentPage()==0 ){
-//			search.setCurrentPage(1);
-//		}
-//		search.setPageSize(pageSize);
-//		
-//		Map<String , Object> map=productService.getProductList(search);
-//		map.put("message", "아주잘했어요");
-//		System.out.println("list 완료");
-//		
-//		return map;
-*/	}
+	@RequestMapping(value="json/infinite", method=RequestMethod.POST)
+	public List<Product> infinite(@RequestBody String pageData) throws Exception{
+		
+		System.out.println("/product/json/infinite : Start !");
+		System.out.println("   pageData 넘어온거는 ??? "+pageData);
+		
+		//PageData VO에 브라우저에서 가져온 값 세팅해주고 
+		//이 값 기반으로 sql 돌려서 데이터들 9개씩 list에 담아서 보내주면 된다.
+		//PageData 세팅({  ~ } 정보 서브스트링 써서 숫자만 뽑아서 사용)
+		String a =pageData.substring(pageData.indexOf(":") + 1, pageData.indexOf(","));
+		String b =pageData.substring(pageData.lastIndexOf(":") + 1, pageData.length()-1);
+		int pageNum = Integer.parseInt(a);
+		int sizeNum = Integer.parseInt(b);
+		System.out.println("   서브스트링해준것들?"+pageNum+" & "+sizeNum);
+		
+		Search search = new Search();
+		search.setCurrentPage(pageNum);
+		search.setPageSize(sizeNum);
+		System.out.println("  담아준 서치? "+search);
+		
+		List<Product> list = productService.infiniteList(search);
+		
+		System.out.println("    list 완료 -> list는? "+ list);
+		
+		return list;
+	}
 	
 	@RequestMapping(value="json/updateProduct", method=RequestMethod.POST)
 	public Product updateProduct(@RequestBody Product product) throws Exception{

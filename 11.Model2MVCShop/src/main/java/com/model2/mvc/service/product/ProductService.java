@@ -21,6 +21,9 @@ public interface ProductService {
 	// 상품정보리스트 
 	public Map<String , Object> getProductList(Search search) throws Exception;
 	
+	// 무한스크롤
+	public List<Product> infiniteList(Search search) throws Exception;
+	
 	// 상품정보 수정
 	public void updateProduct(Product product) throws Exception ;
 	

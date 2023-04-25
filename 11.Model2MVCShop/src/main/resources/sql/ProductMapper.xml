@@ -109,7 +109,6 @@
 
 				WHERE ROWNUM <![CDATA[ <=]]> #{endRowNum} )
 		-->
-	
 	<!-- SQL : SELECT ROW Count -->	 
 	 <select  id="getTotalCount"  parameterType="search"	 resultType="int">
 	  	SELECT COUNT(*)
