@@ -50,6 +50,35 @@
   			  min-width: 100px; 
 /*   			  object-fit: scale-down;  */
 		  }
+		  
+		  /*로딩 애니메이션 CSS */
+			.loading-overlay {
+			  position: fixed;
+			  top: 0;
+			  left: 0;
+			  width: 100%;
+			  height: 100%;
+			  background: rgba(255, 255, 255, 0.5);
+			  z-index: 9999;
+			}  
+		  	.loader {
+			  border: 16px solid #f3f3f3; 
+			  border-top: 16px solid #3498db;
+			  border-radius: 50%;
+			  width: 80px;
+			  height: 80px;
+			  animation: spin 2s linear infinite;
+			  position: absolute;
+			  top: 50%;
+			  left: 50%;
+			  margin-top: -40px;
+			  margin-left: -40px;
+			}
+			
+			@keyframes spin {
+			  0% { transform: rotate(0deg); }
+			  100% { transform: rotate(360deg); }
+			}
 					  
 		</style>
 	
@@ -68,14 +97,20 @@
 		    var page = 2; //현재 로드된 페이지
 		    var size = 9; //한번에 로드할 데이터의 개수
 		    var isLoading = false; //데이터 로딩중인지 여부 확인
+		    
 		    var pagedata = {
 		    	page: page,
-			    size: size
+			    size: size,
+			    searchCondition : $('option').val(),
+			    searchKeyword : $('#searchKeyword').val()
 		    }
+		    console.log("condition?"+pagedata.searchCondition);
+		    console.log("keyword?"+pagedata.searchKeyword);
+		    
 		  
 		   
 			function loadData() {
-		    	//isLoading 변수를 사용하여, 데이터 로딩 중인 경우에는 추가 요청을 보내지 않습니다. 
+		      //isLoading 변수를 사용하여, 데이터 로딩 중인 경우에는 추가 요청을 보내지 않습니다. 
 		      if (isLoading) return;
 		      isLoading = true;
 		      console.log("ajax 시작");  
@@ -84,7 +119,7 @@
 			      $.ajax({
 			        url: '/product/json/infinite',
 			        method: 'POST',
-			        contentType: "application/json",
+			        contentType: "application/json; charset=euc-kr",
 			        data: JSON.stringify(pagedata), //RestController로 보내려면 String 형태로 보내야한다. 
 			        dataType: "json",
 			        success: function(serverData, status) {
@@ -117,11 +152,18 @@
 				                );
 				            }
 				            page++;
+				            $('.loading-overlay').hide(); //데이터 불러오는게 완료되면 애니메이션 숨기기
 				          }
 			        	isLoading = false;
 			        }
 			      });
 		      }	
+		    
+		 	// 로딩 애니메이션 추가
+		    $('body').append('<div class="loading-overlay"><div class="loader"></div></div>');
+		 	// 초기 상태로 로딩 애니메이션 숨기기
+		    $('.loading-overlay').hide();
+		 	
 		    
 		    //스크롤바 동작 시 실행 함수
 		    $(window).scroll(function() {
@@ -138,7 +180,9 @@
 		    	//if (windowHeight + scrollTop >= documentHeight) { 원래 이게 맞으나 windowHeight랑 documentHeight값이 동일한 ... 
 			      if (scrollTop >= (windowHeight-1000) && page <= ${resultPage.endUnitPage}) {    //request가 page 값이 쿼리 수행후 pageunit 수만큼만 수행되게끔   
 		    			console.log("마지막 도달 ! loadData()요청 시작");
-			            pagedata.page = page; //page++ 값을 전송하는 data의 page값으로 지정
+		    			$('.loading-overlay').show(); //로딩애니메이션 표시 시작		
+						
+			      		pagedata.page = page; //page++ 값을 전송하는 data의 page값으로 지정
 			            console.log("pagedata.page ???" + pagedata.page);
 			            loadData();
 			    }
@@ -147,6 +191,8 @@
 		    
 // 		무한 스크롤 end		
 		
+	
+	
 	
 		function fncGetProductList(currentPage){
 	// 		document.getElementById("currentPage").value = currentPage;
@@ -164,7 +210,7 @@
 			
 			//'상세보기' 기능
 			$(".btn-primary").on("click", function() {
-// 				alert($(this).find("input").val().trim());
+			//	alert($(this).find("input").val().trim());
 				self.location="/product/getProduct?prodNo="+$(this).find("input").val().trim();
 			});
 			
@@ -200,8 +246,7 @@
 		
 		});	
 		
-		
-		
+		 
 		
 	</script>
 	</head>
@@ -242,6 +287,8 @@
 					</select>
 				  </div>
 				  
+				  
+				  
 				  <div class="form-group">
 				    <label class="sr-only" for="searchKeyword">검색어</label>
 				    <input type="text" class="form-control" id="searchKeyword" name="searchKeyword"  placeholder="검색어"
@@ -262,12 +309,10 @@
 		
 	 <c:set var="i" value="0" />
 	 
-		<div class="row" id="data-container">
+		<div class="row" id="data-container"> <!-- 무한스크롤 위한 div에 id 지정 -->
 			 <c:forEach var="product" items="${list}">
 			  	<c:set var="i" value="${i+1}" />
-			    
 				  <div class="col-sm-6 col-md-4">
-				  
 						    <div class="thumbnail" style="width: 300px; height: 250px;">
 						      <img src="/images/uploadFiles/${product.fileName}"/>
 						      <div class="caption">
@@ -283,19 +328,11 @@
 							        </p>
 						      </div>
 						    </div>
-						    
 				  </div>
-				 
 			 </c:forEach>
-			 <!-- <div id="data-container"></div> -->	
 		</div>	
 		
-	<!-- 무한스크롤 위한 div -->
-	
-
-
-    
-
+	<div class="modal"><!-- Place at bottom of page --></div>
 
 </div>
  	<!--  화면구성 div End /////////////////////////////////////-->

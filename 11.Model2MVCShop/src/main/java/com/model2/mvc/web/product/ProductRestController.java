@@ -31,6 +31,11 @@ import com.model2.mvc.service.domain.Product;
 import com.model2.mvc.service.product.ProductService;
 
 
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 //==> 상품관리 RestController
 @RestController
 @RequestMapping("/product/*")
@@ -143,18 +148,27 @@ public class ProductRestController {
 		System.out.println("/product/json/infinite : Start !");
 		System.out.println("   pageData 넘어온거는 ??? "+pageData);
 		
-		//PageData VO에 브라우저에서 가져온 값 세팅해주고 
-		//이 값 기반으로 sql 돌려서 데이터들 9개씩 list에 담아서 보내주면 된다.
-		//PageData 세팅({  ~ } 정보 서브스트링 써서 숫자만 뽑아서 사용)
-		String a =pageData.substring(pageData.indexOf(":") + 1, pageData.indexOf(","));
-		String b =pageData.substring(pageData.lastIndexOf(":") + 1, pageData.length()-1);
-		int pageNum = Integer.parseInt(a);
-		int sizeNum = Integer.parseInt(b);
-		System.out.println("   서브스트링해준것들?"+pageNum+" & "+sizeNum);
+		//데이터들 9개씩 list에 담아서 보내주면 된다.
+		
+		JSONObject jsonObj = (JSONObject)JSONValue.parse(pageData);
+		System.out.println("   JSON Object 확인 : " +jsonObj);
+		
+		String a = String.valueOf(jsonObj.get("page"));
+		String b = String.valueOf(jsonObj.get("size"));
+		String c = String.valueOf(jsonObj.get("searchCondition"));
+		String d = String.valueOf(jsonObj.get("searchKeyword"));
+		
+		int aa = Integer.parseInt(a);
+		int bb = Integer.parseInt(b);
+		
+		System.out.println("   파싱해준것들?"+aa+" & "+bb+" & "+c+" & "+d);
 		
 		Search search = new Search();
-		search.setCurrentPage(pageNum);
-		search.setPageSize(sizeNum);
+		search.setCurrentPage(aa);
+		search.setPageSize(bb);
+		search.setSearchCondition(c);
+		search.setSearchKeyword(d);
+		
 		System.out.println("  담아준 서치? "+search);
 		
 		List<Product> list = productService.infiniteList(search);

@@ -11,5 +11,6 @@
 			<attribute name="owner.project.facets" value="jst.web"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/user/Desktop/HOME/z.utility/z.dependency/json_simple-1.1-all/lib/json_simple-1.1.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
