@@ -81,9 +81,28 @@
 	                         <li class="divider"></li>
 	                         <li><a href="#">etc..</a></li>
 	                     </ul>
-	                 </li>
+	               </li>
+	               
+	               
+	               <!-- 게시물관리 DrowDown -->
+	              <li class="dropdown">
+	                     <a  href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+	                         <span >커뮤니티 게시판</span>
+	                         <span class="caret"></span>
+	                     </a>
+	                     <ul class="dropdown-menu">
+	                         <li><a href="#">게시물 목록</a></li>
+	                         <li><a href="#">게시물 작성</a></li>
+	                         <li class="divider"></li>
+	                         <li><a href="#">etc..</a></li>
+	                     </ul>
+	               </li>
 	                 
-	                 <li><a href="#">etc...</a></li>
+	                 
+	                 
+	                 
+	               <!--  etc  -->
+	               <li><a href="#">etc...</a></li>
 	             </ul>
 	             
 	             <ul class="nav navbar-nav navbar-right">
@@ -142,6 +161,11 @@
 		$( "a:contains('구매이력조회')" ).on("click" , function() {
 	 		
 			$(self.location).attr("href","/purchase/listPurchase");
+		});
+		
+		$( "a:contains('게시물 작성')" ).on("click" , function() {
+	 		
+			$(self.location).attr("href","/post/addPost");
 		});
 		
 		
