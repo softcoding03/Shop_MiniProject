@@ -86,12 +86,13 @@
  		const IMP = window.IMP; // 생략 가능
  		IMP.init("imp13567041"); // 예: imp00000000a
  		
- 		var UID = new Date().getTime().toString(20);
+ 		var UID = new Date().getTime().toString(20)+${product.prodNo};
  		console.log(UID);
  		
  		function requestPay() {
  			console.log("pay시작");
  			console.log($('#addr1').val()+" "+$('#addr2').val());
+ 			//고객이 입력한 주소
  			var finaladdr = $('#addr1').val()+" "+$('#addr2').val()
  			
  			//요청객체
@@ -111,21 +112,24 @@
  		    // jQuery로 HTTP 요청
  		    function (rsp) { // callback객체
  		      if (rsp.success) {
- 		    	 /* $.ajax({
+ 		    	  console.log(rsp);
+ 		    	  console.log(rsp.imp_uid);
+ 		    	  console.log(rsp.merchant_uid);
+ 		    	  
+	    	     $.ajax({
+	 		    		url: "/purchase/json/price/"+UID
+	 		            method: "GET",
+	 		            dataType : "json",
+	 		            headers : {
+							"Accept" : "application/json",
+							"Content-Type" : "application/json"
+						},
  		    		 
- 		    		url: "/purchase/json/", 
- 		            method: "POST",
- 		            headers: { "Content-Type": "application/json" },
- 		            data: {
- 		             	imp_uid: rsp.imp_uid,            // 결제 고유번호
- 		             	merchant_uid: rsp.merchant_uid   // 주문번호
- 		            }
- 		    		 
- 		    	 }).done(function(data) { */
+ 		    	 }).done(function(data) { 
  		    			 
  		    		//성공하면 웹훅으로 사용자 휴대폰 번호로 SMS 전송
 	    			alert("결제성공입니다.");
-	 		        fncAddPurchase();	 
+	 		        fncAddPurchase();	 //아임포트 서버에 정상적으로 결제되었는지. 저장되었는지 확인되면 요청할 것
  		    	 //})   	  
  		        
  		      } else {
