@@ -40,6 +40,10 @@ public class PurchaseRestController {
 	@Autowired
 	@Qualifier("purchaseServiceImpl")
 	private PurchaseService purchaseService;
+	
+	@Autowired
+	@Qualifier("productServiceImpl")
+	private ProductService productService;
 	//setter Method 구현 않음
 		
 	public PurchaseRestController(){
@@ -47,19 +51,28 @@ public class PurchaseRestController {
 	}
 	
 
-	@RequestMapping( value="json/price/{prodNo}", method=RequestMethod.GET )
-	public Product getFileName(@PathVariable String prodNo) throws Exception{
-		System.out.println("prodNo 넘어온거는 ??? "+prodNo);
-		System.out.println("/product/json/getFileName : GET");
+	@RequestMapping( value="json/price/{prodNo}/{price}", method=RequestMethod.GET )
+	public String comparePrice(@PathVariable String prodNo,
+								@PathVariable int price) throws Exception{
+		System.out.println("   prodNo 넘어온거는 ??? "+prodNo);
+		System.out.println("   price 넘어온거는 ??? "+price);
+		//이 prodNo를 가지고 db의 price랑 import에서 결제한 가격이랑 같은지 판단
+		String a = prodNo.substring(10);
+		System.out.println(a);
+		int prodNo1 = Integer.parseInt(a);
+		System.out.println(prodNo1);
 		
-		int prodNo1 = Integer.parseInt(prodNo);
-		Product product = new Product();
-		product.setProdNo(prodNo1);
-		//Business Logic
+		Product product = productService.getProduct(prodNo1);
+		System.out.println("   product 가져온거는 ???"+product);
 		
-		product.setFileName(productService.getFileName(product));
-		
-		return product;
+		String text = null;
+		if (price == product.getPrice()) {
+			text = "성공";
+		} else { 
+			text ="실패";
+		}
+		System.out.println("   text ?"+text);
+		return text;
 	}
 	
 }

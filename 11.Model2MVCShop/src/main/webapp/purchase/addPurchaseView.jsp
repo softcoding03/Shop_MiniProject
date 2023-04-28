@@ -78,11 +78,10 @@
 		$('#bt4').on("click", function() {
 			$('#addr1').val('${user.addr}');
 		})
-	
-	
 	})
 	
-
+	
+		// 아임포트
  		const IMP = window.IMP; // 생략 가능
  		IMP.init("imp13567041"); // 예: imp00000000a
  		
@@ -117,27 +116,31 @@
  		    	  console.log(rsp.merchant_uid);
  		    	  
 	    	     $.ajax({
-	 		    		url: "/purchase/json/price/"+UID
+	 		    		url: "/purchase/json/price/"+rsp.merchant_uid+"/"+rsp.paid_amount,
 	 		            method: "GET",
-	 		            dataType : "json",
+	 		            dataType : "text",
 	 		            headers : {
 							"Accept" : "application/json",
 							"Content-Type" : "application/json"
 						},
- 		    		 
- 		    	 }).done(function(data) { 
- 		    			 
- 		    		//성공하면 웹훅으로 사용자 휴대폰 번호로 SMS 전송
-	    			alert("결제성공입니다.");
-	 		        fncAddPurchase();	 //아임포트 서버에 정상적으로 결제되었는지. 저장되었는지 확인되면 요청할 것
- 		    	 //})   	  
- 		        
+						success : function(Data, status) {
+							
+							if (Data == "성공") {
+								alert("결제성공입니다.");
+				 		        fncAddPurchase(); //db 저장할 때 결제번호라든지 결제 정보도 추가 저장해주기
+				 		        //사용자 휴대폰 번호로 웹훅 전송
+							} else {
+								alert("가격이 위조 되었습니다.");
+							}
+						}
+ 		    	 }) 
  		      } else {
  		    	alert("결제에 실패하였습니다. 에러 내용: " + rsp.error_msg);
  		      }
  		    });
  			console.log("pay끝")
  		} 
+ 		// 아임포트 끝
 
 	$(function() {
 		
