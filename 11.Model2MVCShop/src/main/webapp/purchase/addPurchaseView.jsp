@@ -128,7 +128,37 @@
 							if (Data == "성공") {
 								alert("결제성공입니다.");
 				 		        fncAddPurchase(); //db 저장할 때 결제번호라든지 결제 정보도 추가 저장해주기
+				 		        var n = ${user.phone};
+				 		        var p1 = n.substr(0,3);
+				 		        var p2 = n.substr(4,4);
+				 		        var p3 = n.substr(8,4);
+				 		        var phoneNumber = p1 + p2 + p3; //SENS APi 요청시 필요한 유저 전화번호는 -제외하고 숫자만 들어가야함.				 		        
 				 		        //사용자 휴대폰 번호로 웹훅 전송
+				 		        $.ajax({
+				 		        	url: "https://sens.apigw.ntruss.com/sms/v2/services/ncp%3Asms%3Akr%3A305202255084%3A200ok/messages", // SMS key 입력된 url
+				 		        	method: "POST",
+				 		        	dataType: "JSON",
+				 		        	headers: {
+				 		        		"Content-Type": "application/json; charset=utf-8",
+				 		        	    "x-ncp-apigw-timestamp": Date.now(),
+				 		        	    "x-ncp-iam-access-key": "{HoFpKO3WT9dHwGbJhDe5}", //기본 api 키
+				 		        	    "x-ncp-apigw-signature-v2": "{SET9yjOk6tNijRDhpxVy0DjPdMswALE8YepbtqoT}" //secret api 키
+				 		        	},
+				 		        	data: {
+				 		        		"type":"SMS",
+				 		        	    "contentType":"COMM",
+				 		        	    // "countryCode":"82", default가 82 
+				 		        	    "from":"01097833446",
+				 		        	    "content":"고객님의 상품 구매가 완료 되었습니다.\n", //공통 문자 내용
+				 		        	    "messages":[
+				 		        	        {
+				 		        	            "to":phoneNumber,
+				 		        	            "content":"구매 상품명:"+${product.prodName} //메세지 내용
+				 		        	        }
+				 		        	    ],
+				 		        	   //"reserveTime": "yyyy-MM-dd HH:mm",  메세지 발송 예약 일시
+				 		        	}
+				 		        })
 							} else {
 								alert("가격이 위조 되었습니다.");
 							}
