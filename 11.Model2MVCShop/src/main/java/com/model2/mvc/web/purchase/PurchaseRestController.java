@@ -80,9 +80,9 @@ public class PurchaseRestController {
 		
 		String text = null;
 		if (price == product.getPrice()) {
-			text = "성공";
+			text = "검증성공";
 		} else { 
-			text ="실패";
+			text ="검증실패";
 		}
 		System.out.println("   text ?"+text);
 		return text;
@@ -107,6 +107,8 @@ public class PurchaseRestController {
 		JSONObject toJson = new JSONObject();
 	    JSONArray  toArr = new JSONArray();
 	    
+	    //body 부분에 들어갈 내용들 작성. 
+	    //예약 문자 발송을 위해선 APi참고 할 것.
 	    
 	    bodyJson.put("type","SMS");
 	    bodyJson.put("contentType","COMM");

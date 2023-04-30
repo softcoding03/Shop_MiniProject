@@ -107,6 +107,8 @@
 	 		    	  console.log(rsp);
 	 		    	  console.log(rsp.imp_uid);
 	 		    	  console.log(rsp.merchant_uid);
+	 		    	  $('#impUid').val(rsp.imp_uid);			//controller의 purchase객체에 imp,mer의 uid값 넘겨주기위함.
+	 		    	  $('#merchantUid').val(rsp.merchant_uid);
 	 		    	  
 		    	     $.ajax({				// 결제 후 검증 로직
 		 		    		url: "/purchase/json/price/"+rsp.merchant_uid+"/"+rsp.paid_amount,
@@ -118,43 +120,12 @@
 							},
 							success : function(Data, status) {
 								
-								if (Data == "성공") {
+								if (Data == "검증성공") {
 									  alert("결제성공입니다.");
-					 		        //fncAddPurchase(); //db 저장할 때 결제번호라든지 결제 정보도 추가 저장해주기 (컬럼만들고)
-					 		        
-					 		        //Naver SENS SMS 결제 완료 메세지 발송
-					 		        /*$.ajax({
-					 		        		
-						 		        	 url: "https://sens.apigw.ntruss.com/sms/v2/services/ncp:sms:kr:305202255084:200ok/messages", // SMS key 입력된 url
-						 		        	method: "POST",
-						 		        	headers: {
-						 		        		 "Content-Type": "application/json; charset=utf-8",
-						 		        	    "x-ncp-apigw-timestamp": timestamp,
-						 		        	    "x-ncp-iam-access-key": accessKey, //기본 api 키
-						 		        	    "x-ncp-apigw-signature-v2": key //secret api 키
-						 		        	},
-						 		        	data: JSON.stringify({
-						 		        		 "type":"SMS",
-						 		        	    "contentType":"COMM",
-						 		        	    // "countryCode":"82", default가 82 
-						 		        	    "from":"01097833446",
-						 		        	    "content":"고객님의 상품 구매가 완료 되었습니다.\n", //공통 문자 내용
-						 		        	    "messages":[
-						 		        	        {
-						 		        	            //"to":phoneNumber,
-						 		        	            "to":"01097833446",
-						 		        	            "content":"구매 상품명:${product.prodName}" //메세지 내용
-						 		        	        }
-						 		        	    ]
-						 		        	   //"reserveTime": "yyyy-MM-dd HH:mm",  메세지 발송 예약 일시
-						 		        	}),
-						 		        	success : function(result){
-						 		        		alert(result);
-						 		        	} 
-						 		        	
-					 		        })*/
-					 		        
-										$.ajax({				
+					 		        fncAddPurchase(); //db 저장할 때 결제번호라든지 결제 정보도 추가 저장해주기 (컬럼만들고)
+		
+					 		        //SMS 발송 ajax
+					 		        $.ajax({				
 					 				    	url: "/purchase/json/sendSMS",
 					 			         method: "GET",
 					 			         dataType : "text",
@@ -164,9 +135,8 @@
 					 						},
 					 						success : function(Data, status) {
 					 							alert("결과는?"+status);
-					 						}
-					 					});
-					 		        
+					 				 		}
+					 				  });
 								} else {
 								  alert("결제 실패 : 가격이 위조 되었습니다.");
 								}
@@ -174,14 +144,13 @@
 	 		    	 }) //결제 후 검증 끝
 	 		      } else {
 		 		    	alert("결제에 실패하였습니다. 에러 내용: " + rsp.error_msg);
-		 		      }
+		 		   }
 	 		    });
  		} 
 //아임포트 + NAVER SENS 끝
 
 
 	$(function() {
-		
 		$('#bt1').on("click" , function() {
 			requestPay();
 		});
@@ -296,51 +265,6 @@
 		<!-- form Start /////////////////////////////////////-->
 		<form class="form-horizontal">
 			<h2 class="bg-primary text-center">배송 정보 입력</h2>
-		  
-<%-- 		  <div class="form-group">
-		    <label for="prodNo" class="col-sm-offset-1 col-sm-3 control-label">상품번호</label>
-		    <div class="col-sm-4">
-		      <input type="text" class="form-control" id="prodNo" value="${product.prodNo}" readonly>
-		    </div>
-		  </div>
-		  
-		  
-		  <div class="form-group">
-		    <label for="manuDate" class="col-sm-offset-1 col-sm-3 control-label">제조일자</label>
-		    <div class="col-sm-4">
-		      <input type="text" class="form-control" id="manuDate" value="${product.manuDate}" readonly>
-		    </div>
-		  </div> 
-		  
-		  
-		등록일자 및 구매자아이디는 구매 시 알 필요 없음	
-		  <div class="form-group">
-		    <label for="regDate" class="col-sm-offset-1 col-sm-3 control-label">등록일자</label>
-		    <div class="col-sm-4">
-		      <input type="text" class="form-control" id="regDate" value="${product.regDate}" readonly>
-		    </div>
-		  </div> 
-		  
-		  <div class="form-group">
-		    <label for="buyerId" class="col-sm-offset-1 col-sm-3 control-label">구매자 아이디</label>
-		    <div class="col-sm-4">
-		      <input type="text" class="form-control" id="buyerId" value="${user.userId}" readonly>
-		    </div>
-		  </div>
-		  
-		  
-		    아임포트 사용할 것이라 필요없지만 테이블에 Null Point Exception 뜨므로 일단 놔두기 
-		  <div class="form-group">
-		    <label for="paymentOption" class="col-sm-offset-1 col-sm-3 control-label">결제 방법</label>
-		    <select name="paymentOption"	class="ct_input_g" 
-							style="width: 100px; height: 19px" maxLength="20">
-				<option value="1" selected="selected">현금구매</option>
-				<option value="2">신용구매</option>
-			</select>
-		  </div>
-		  --%>
-		  
-		  	
 
 		  <div class="form-group">
 		    <label for="receiverName" class="col-sm-offset-1 col-sm-3 control-label">배송받을분 이름</label>
@@ -374,9 +298,10 @@
 		      <input type="text" class="form-control" id="dlvyRequest" name="dlvyRequest" >
 		    </div>
 		  </div>
-		 
-		 
-		  
+		 <!-- controller에 값 넘겨주기위한 hidden -->
+		 <input type="hidden" id="impUid" name="impUid" value=""/>
+		 <input type="hidden" id="merchantUid" name="merchantUid" value=""/>
+		 		  
 		  <div class="form-group">
 		    <div class="col-sm-offset-4  col-sm-4 text-center">
 		      <!--  <button type="button" id="add" class="btn-primary" >구&nbsp;매</button>-->

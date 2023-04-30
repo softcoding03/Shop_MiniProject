@@ -17,6 +17,8 @@
 		<result property="dlvyRequest" 			column="dlvy_request" 		jdbcType="VARCHAR" />		
 		<result property="tranCode" 			column="tran_status_code" 	jdbcType="VARCHAR" />
 		<result property="orderDate" 			column="order_data" 		jdbcType="DATE" />		
+		<result property="impUid" 			column="imp_uid" 	jdbcType="VARCHAR" />
+		<result property="merchantUid" 			column="merchant_uid" 	jdbcType="VARCHAR" />
 	</resultMap>
 	
 	<!-- SQL : 구매 하기(구매이력에 추가) INSERT -->
@@ -24,7 +26,8 @@
 	 	INSERT
 		INTO transaction 
 		VALUES	 (seq_transaction_tran_no.nextval, #{purchaseProd.prodNo} , #{buyer.userId} , 
-				 #{receiverName}, #{receiverPhone},	#{dlvyAddr} , #{dlvyRequest} ,#{tranCode}, sysdate)
+				 #{receiverName}, #{receiverPhone},	#{dlvyAddr} , #{dlvyRequest} ,#{tranCode}, sysdate,
+				 #{impUid}, #{merchantUid}) 
 	</insert>
 	 
 	 <!-- SQL : 선택한 하나의 상품 구매상세내역 보기 SELECT ONE -->

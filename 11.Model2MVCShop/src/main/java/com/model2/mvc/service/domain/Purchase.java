@@ -20,7 +20,8 @@ public class Purchase {
 	private String tranCode;
 	private Date orderDate; //sql 컬럼명은 order_data
 	private String dlvyDate; //.
-	
+	private String impUid;
+	private String merchantUid;
 		
 	public Purchase(){
 	}
@@ -103,6 +104,19 @@ public class Purchase {
 	public void setTranNo(int tranNo) {
 		this.tranNo = tranNo;
 	}
+	public String getImpUid() {
+		return impUid;
+	}
+	public void setImpUid(String impUid) {
+		this.impUid = impUid;
+	}
+	public String getMerchantUid() {
+		return merchantUid;
+	}
+	public void setMerchantUid(String merchantUid) {
+		this.merchantUid = merchantUid;
+	}
+	
 	
 	@Override
 	public String toString() {
@@ -112,6 +126,6 @@ public class Purchase {
 				+ paymentOption + ", purchaseProd=" + purchaseProd
 				+ ", receiverName=" + receiverName + ", receiverPhone="
 				+ receiverPhone + ", tranCode=" + tranCode + ", tranNo="
-				+ tranNo + "]";
+				+ tranNo + ", impUid=" + impUid + ", merchantUid=" + merchantUid +"]";
 	}
 }

@@ -122,7 +122,6 @@ public class PurchaseController {
 		purchase2.setBuyer(user);
 		purchase2.setPurchaseProd(product);
 		
-		
 		redirect.addFlashAttribute("purchase",purchase2);
 		System.out.println("   ¹¹¾ß ? -> "+ purchase2);
 		
