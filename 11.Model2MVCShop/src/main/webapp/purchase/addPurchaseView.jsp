@@ -7,10 +7,10 @@
 <html>
 <head>
 <title>구매 등록</title>
-		<meta charset="EUC-KR">
-		
-		<!-- 참조 : http://getbootstrap.com/css/   참조 -->
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta charset="EUC-KR">
+	
+	<!-- 참조 : http://getbootstrap.com/css/   참조 -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		
 	<!--  ///////////////////////// Bootstrap, jQuery CDN ////////////////////////// -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
@@ -22,18 +22,14 @@
 	<!-- Bootstrap Dropdown Hover CSS -->
    <link href="/css/animate.min.css" rel="stylesheet">
    <link href="/css/bootstrap-dropdownhover.min.css" rel="stylesheet">
-   
-    <!-- iamport.payment.js -->
-    <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
-   
+   <!-- iamport.payment.js -->
+   <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
    <!--  다음 주소 api -->
    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-   
-    <!-- Bootstrap Dropdown Hover JS -->
+   <!-- Bootstrap Dropdown Hover JS -->
    <script src="/javascript/bootstrap-dropdownhover.min.js"></script>
 	
 	
-	<!-- Datepicker CDN -->
 	<style>
         body > div.container{
         	border: 3px solid #D6CDB7;
@@ -43,134 +39,146 @@
         body {
            padding-top : 50px;
       	}
-    </style>
+   </style>
 	
 	
 	<script type="text/javascript">
 	
-	var addr = ''; // 주소 변수
-	$(function() {
+	
+//다음 주소 api
+		var addr = ''; // 주소 변수
 		
-		//다음 주소 api 사용
-		$('#bt3').on("click" , function() {
-			new daum.Postcode({
-		        oncomplete: function(data) {
-		            
+		$(function() {
+			$('#bt3').on("click" , function() {
+				new daum.Postcode({
+			   	oncomplete: function(data) {
 	                //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
 	                if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
 	                    addr = data.roadAddress;
 	                } else { // 사용자가 지번 주소를 선택했을 경우(J)
 	                    addr = data.jibunAddress;
 	                }
-		        	
-		        	console.log(addr);
-		        	
+		        		console.log(addr);
 	                $("#addr1").val(addr);
-	                
 	                // 커서를 상세주소 필드로 이동한다.
 	                $('#addr2').focus();
-		        }
-		 	}).open();
-		});
-		
-		
-		//기본 user.addr 값 바로 넣어주기
-		$('#bt4').on("click", function() {
-			$('#addr1').val('${user.addr}');
+			        }
+			 	}).open();
+			});
+			//기본 user.addr 값 바로 넣어주기
+			$('#bt4').on("click", function() {
+				$('#addr1').val('${user.addr}');
+			})
 		})
-	})
-	
-	
-		// 아임포트
- 		const IMP = window.IMP; // 생략 가능
- 		IMP.init("imp13567041"); // 예: imp00000000a
- 		
- 		var UID = new Date().getTime().toString(20)+${product.prodNo};
+//다음 주소 api 끝
+
+
+//아임포트 + NAVER SENS
+
+		// Naver SENS 변수
+		var n = '${user.phone}';
+	   var p1 = n.substr(0,3);
+	   var p2 = n.substr(4,4);
+	   var p3 = n.substr(9,4);
+	   var phoneNumber = p1 + p2 + p3; //SENS APi 요청시 필요한 유저 전화번호는 -제외하고 숫자만 들어가야함.	
+		
+	   //아임포트 변수
+		var UID = new Date().getTime().toString(20)+${product.prodNo}; //유니크한 값 + 제품 번호
  		console.log(UID);
+ 		var finaladdr = $('#addr1').val()+" "+$('#addr2').val() //고객이 입력한 주소
+ 		const IMP = window.IMP; 
+ 		IMP.init("imp13567041"); 
  		
  		function requestPay() {
- 			console.log("pay시작");
- 			console.log($('#addr1').val()+" "+$('#addr2').val());
- 			//고객이 입력한 주소
- 			var finaladdr = $('#addr1').val()+" "+$('#addr2').val()
- 			
- 			//요청객체
- 		    IMP.request_pay({
- 		      pg: "html5_inicis",
- 		      //pay_method: "card",  
- 		      merchant_uid: UID,   // 주문번호
- 		      name: "${product.prodName}",
- 		      amount: "${product.price}",
- 		      buyer_email: "${user.email}",
- 		      buyer_name: "${user.userName}",
- 		      buyer_tel: "${user.phone}",
- 		      buyer_addr: finaladdr // 사용자가 입력한거 받아오든지 아예 전송안하든지 해야함.
- 		    },
- 		    
- 			// 결제 성공 시: 결제 승인 또는 가상계좌 발급에 성공한 경우
- 		    // jQuery로 HTTP 요청
- 		    function (rsp) { // callback객체
- 		      if (rsp.success) {
- 		    	  console.log(rsp);
- 		    	  console.log(rsp.imp_uid);
- 		    	  console.log(rsp.merchant_uid);
- 		    	  
-	    	     $.ajax({
-	 		    		url: "/purchase/json/price/"+rsp.merchant_uid+"/"+rsp.paid_amount,
+ 		   console.log("pay시작");
+ 		   
+ 		   IMP.request_pay({  // 요청객체
+	 		      pg: "html5_inicis",
+	 		      merchant_uid: UID,   // 주문번호
+	 		      name: "${product.prodName}",
+	 		      amount: "${product.price}",
+	 		      buyer_email: "${user.email}",
+	 		      buyer_name: "${user.userName}",
+	 		      buyer_tel: "${user.phone}",
+	 		      buyer_addr: finaladdr 
+ 		   },
+	 		   function (rsp) { // callback객체
+	 		      if (rsp.success) {	// 결제 성공 시 로지
+	 		    	  console.log(rsp);
+	 		    	  console.log(rsp.imp_uid);
+	 		    	  console.log(rsp.merchant_uid);
+	 		    	  
+		    	     $.ajax({				// 결제 후 검증 로직
+		 		    		url: "/purchase/json/price/"+rsp.merchant_uid+"/"+rsp.paid_amount,
 	 		            method: "GET",
 	 		            dataType : "text",
 	 		            headers : {
 							"Accept" : "application/json",
 							"Content-Type" : "application/json"
-						},
-						success : function(Data, status) {
-							
-							if (Data == "성공") {
-								alert("결제성공입니다.");
-				 		        fncAddPurchase(); //db 저장할 때 결제번호라든지 결제 정보도 추가 저장해주기
-				 		        var n = ${user.phone};
-				 		        var p1 = n.substr(0,3);
-				 		        var p2 = n.substr(4,4);
-				 		        var p3 = n.substr(8,4);
-				 		        var phoneNumber = p1 + p2 + p3; //SENS APi 요청시 필요한 유저 전화번호는 -제외하고 숫자만 들어가야함.				 		        
-				 		        //사용자 휴대폰 번호로 웹훅 전송
-				 		        $.ajax({
-				 		        	url: "https://sens.apigw.ntruss.com/sms/v2/services/ncp%3Asms%3Akr%3A305202255084%3A200ok/messages", // SMS key 입력된 url
-				 		        	method: "POST",
-				 		        	dataType: "JSON",
-				 		        	headers: {
-				 		        		"Content-Type": "application/json; charset=utf-8",
-				 		        	    "x-ncp-apigw-timestamp": Date.now(),
-				 		        	    "x-ncp-iam-access-key": "{HoFpKO3WT9dHwGbJhDe5}", //기본 api 키
-				 		        	    "x-ncp-apigw-signature-v2": "{SET9yjOk6tNijRDhpxVy0DjPdMswALE8YepbtqoT}" //secret api 키
-				 		        	},
-				 		        	data: {
-				 		        		"type":"SMS",
-				 		        	    "contentType":"COMM",
-				 		        	    // "countryCode":"82", default가 82 
-				 		        	    "from":"01097833446",
-				 		        	    "content":"고객님의 상품 구매가 완료 되었습니다.\n", //공통 문자 내용
-				 		        	    "messages":[
-				 		        	        {
-				 		        	            "to":phoneNumber,
-				 		        	            "content":"구매 상품명:"+${product.prodName} //메세지 내용
-				 		        	        }
-				 		        	    ],
-				 		        	   //"reserveTime": "yyyy-MM-dd HH:mm",  메세지 발송 예약 일시
-				 		        	}
-				 		        })
-							} else {
-								alert("가격이 위조 되었습니다.");
+							},
+							success : function(Data, status) {
+								
+								if (Data == "성공") {
+									  alert("결제성공입니다.");
+					 		        //fncAddPurchase(); //db 저장할 때 결제번호라든지 결제 정보도 추가 저장해주기 (컬럼만들고)
+					 		        
+					 		        //Naver SENS SMS 결제 완료 메세지 발송
+					 		        /*$.ajax({
+					 		        		
+						 		        	 url: "https://sens.apigw.ntruss.com/sms/v2/services/ncp:sms:kr:305202255084:200ok/messages", // SMS key 입력된 url
+						 		        	method: "POST",
+						 		        	headers: {
+						 		        		 "Content-Type": "application/json; charset=utf-8",
+						 		        	    "x-ncp-apigw-timestamp": timestamp,
+						 		        	    "x-ncp-iam-access-key": accessKey, //기본 api 키
+						 		        	    "x-ncp-apigw-signature-v2": key //secret api 키
+						 		        	},
+						 		        	data: JSON.stringify({
+						 		        		 "type":"SMS",
+						 		        	    "contentType":"COMM",
+						 		        	    // "countryCode":"82", default가 82 
+						 		        	    "from":"01097833446",
+						 		        	    "content":"고객님의 상품 구매가 완료 되었습니다.\n", //공통 문자 내용
+						 		        	    "messages":[
+						 		        	        {
+						 		        	            //"to":phoneNumber,
+						 		        	            "to":"01097833446",
+						 		        	            "content":"구매 상품명:${product.prodName}" //메세지 내용
+						 		        	        }
+						 		        	    ]
+						 		        	   //"reserveTime": "yyyy-MM-dd HH:mm",  메세지 발송 예약 일시
+						 		        	}),
+						 		        	success : function(result){
+						 		        		alert(result);
+						 		        	} 
+						 		        	
+					 		        })*/
+					 		        
+										$.ajax({				
+					 				    	url: "/purchase/json/sendSMS",
+					 			         method: "GET",
+					 			         dataType : "text",
+					 			         headers : {
+					 							"Accept" : "application/json",
+					 							"Content-Type" : "application/json"
+					 						},
+					 						success : function(Data, status) {
+					 							alert("결과는?"+status);
+					 						}
+					 					});
+					 		        
+								} else {
+								  alert("결제 실패 : 가격이 위조 되었습니다.");
+								}
 							}
-						}
- 		    	 }) 
- 		      } else {
- 		    	alert("결제에 실패하였습니다. 에러 내용: " + rsp.error_msg);
- 		      }
- 		    });
- 			console.log("pay끝")
+	 		    	 }) //결제 후 검증 끝
+	 		      } else {
+		 		    	alert("결제에 실패하였습니다. 에러 내용: " + rsp.error_msg);
+		 		      }
+	 		    });
  		} 
- 		// 아임포트 끝
+//아임포트 + NAVER SENS 끝
+
 
 	$(function() {
 		
