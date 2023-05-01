@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -128,7 +129,6 @@ public class PurchaseController {
 		return "redirect:redirectedPage";
 	}
 	
-	
 	@RequestMapping(value="/redirectedPage", method = RequestMethod.GET)
 	    public String redirectedPage(@ModelAttribute("purchase") Purchase purchase, Model model) {
 		System.out.println("    model?? ->"+purchase);
@@ -153,42 +153,27 @@ public class PurchaseController {
 		
 		return "forward:/purchase/getPurchase.jsp";
 	}
-	
-	
 
-	@RequestMapping(value="listPurchase")
-	public String listPurchase( @ModelAttribute("search") Search search,
-								Model model , HttpServletRequest request) throws Exception{
-		
-		System.out.println("   /purchase/listPurchase : GET / POST");
-		  System.out.println("   search 는? "+ search);
-		
-		if(search.getCurrentPage()==0 ){
-			search.setCurrentPage(1);
+	@RequestMapping("listPurchase")
+	public ModelAndView listPurchase(@ModelAttribute("search") Search search ,@RequestParam(value="currentPage", required = false) Integer currentPage,
+			HttpSession session) throws Exception{
+		if(currentPage == null) {
+			currentPage =1;
 		}
+		search.setCurrentPage(currentPage);
 		search.setPageSize(pageSize);
 		
-		System.out.println("  pageSize는 ? "+pageSize);
+		Map<String, Object> map = purchaseService.getPurchaseList(search, ((User)session.getAttribute("user")).getUserId());
 		
-		HttpSession session=request.getSession();
-		User user = (User)session.getAttribute("user");
+		Page resultPage = new Page(search.getCurrentPage(),((Integer)map.get("totalCount")).intValue(),pageUnit, pageSize);
 		
-		HashMap<String, Object> map = new HashMap<String, Object>();
-		map.put("search", search);
-		map.put("user", user);
-		System.out.println("   search는 무엇? :  "+search);
-		System.out.println("   map은 무엇 ? :  "+map);
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("resultPage",resultPage);
+		modelAndView.addObject("list", map.get("list"));
+		System.out.println("   list는 ???"+map.get("list"));
 		
-		Map<String , Object> map2=purchaseService.getPurchaseList(map);
-		
-		System.out.println("   map2는 무엇 ?  :  "+map2);
-
-		// Model 과 View 연결
-		model.addAttribute("list", map2.get("list"));
-
-		System.out.println("   list ?? --->"+map2.get("list"));
-
-			return "forward:/purchase/listPurchase.jsp";
+		modelAndView.setViewName("forward:/purchase/listPurchase.jsp");
+		return modelAndView;
 	}
 		
 
@@ -248,7 +233,6 @@ public class PurchaseController {
 		
 		Purchase purchase = new Purchase();
 		purchase.setTranNo(tranNo);
-		
 		
 		purchaseService.updateTranCode(purchase);
 		System.out.println("디버깅 UpdateTranCode 완료");

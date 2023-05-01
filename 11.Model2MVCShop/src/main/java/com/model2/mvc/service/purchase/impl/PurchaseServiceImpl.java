@@ -56,29 +56,11 @@ public class PurchaseServiceImpl implements PurchaseService{
 	}
 	
 	
-	public Map<String, Object> getPurchaseList(HashMap<String, Object> map) throws Exception {
-		
-		List<Purchase> list = purchaseDao.getPurchaseList(map); 
-		User user = (User) map.get("user");
-		
-		System.out.println("    ServiceImple에서 list 는 ?" +list);
-		
-		int prodNo = list.get(0).getPurchaseProd().getProdNo();
-		System.out.println("    prodNo는 ? "+prodNo);
-		
-		//prodNo있는 걸로 product 객체 Get 해오고 그 정보들 purchaseProd로 세팅해주기
-		Product product = productDao.getProduct(prodNo);
-		System.out.println("    새롭게 세팅해준 product ? : "+product);
-		
-		list.get(0).setPurchaseProd(product);
-		
-		int totalCount = purchaseDao.getTotalCount(user.getUserId());
-		
-		Map<String, Object> map2 = new HashMap<String, Object>();
-		map2.put("list", list );
-		map2.put("totalCount", new Integer(totalCount));
-		
-		return map2;
+	public Map<String, Object> getPurchaseList(Search search, String userId) throws Exception {
+		Map<String, Object> map = new HashMap<String,Object>();
+		map.put("list",purchaseDao.getPurchaseList(search, userId));
+		map.put("totalCount",purchaseDao.getTotalCount(search,userId));
+		return map;
 	}
 
 	

@@ -30,8 +30,7 @@ public interface PurchaseDao {
 		public Purchase getPurchase(int tranNo) throws Exception ;
 	
 		// SELECT LIST
-		public List<Purchase> getPurchaseList(HashMap<String, Object> map) throws Exception ;
-		//map안에 Search search, String userId 담겨져서 넘겨 받아야함.
+		public List<Purchase> getPurchaseList(Search search, String userId)throws Exception;
 		
 		// UPDATE Purchase
 		public void updatePurchase(Purchase purchase) throws Exception ;
@@ -39,8 +38,7 @@ public interface PurchaseDao {
 		// UPDATE TranCode
 		public void updateTranCode(Purchase purchase) throws Exception ;
 		
-		
-		public int getTotalCount(String userId) throws Exception ;
+		public int getTotalCount(Search search,String userId) throws Exception;
 
 		public int getPurchaseLast() throws Exception;
 	

@@ -47,17 +47,13 @@
 		  
 		</style>
 	
-	
-	
 		<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 	  	<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 		<script type="text/javascript">
 	
 		function fncGetPurchaseList(currentPage){
-// 			document.getElementById("currentPage").value = currentPage;
 			$("#currentPage").val(currentPage)
-			//document.detailForm.submit();
-			$("form").attr("method" ,"POST").attr("action" , "/purchase/listPurchase?").submit();
+			$("form").attr("method" ,"POST").attr("action" , "/purchase/listPurchase").submit();
 		}
 		
 // 		//구매이력보기를 Admin입장에서 봐야할 때 제작============= userId 에 회원정보보기  Event  처리(Click) =============	
@@ -74,8 +70,6 @@
 // 		});	
 		
 		
-		
-		
 		$(function() {
 			//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
 			//==> 1 과 3 방법 조합 : $("tagName.className:filter함수") 사용함.	
@@ -87,8 +81,8 @@
 			$("h7").css("color" , "red");
 			$(".ct_list_pop:nth-child(4n+6)" ).css("background-color" , "whitesmoke");
 			
+			
 		});		
-		
 		
 	</script>
 	</head>
@@ -101,11 +95,11 @@
 	
 	<!--  화면구성 div Start /////////////////////////////////////-->
 	<div class="container">
-	
+		
 		<div class="page-header text-info">
 	       <h3>구매 목록 조회</h3>
-	    </div>
-	    
+	   </div>
+	   
 	    <!-- table 위쪽 검색 Start /////////////////////////////////////-->
 	    
 		<!-- table 위쪽 검색 end /////////////////////////////////////-->
@@ -118,50 +112,50 @@
             <th align="center">No</th>
             <th align="left">주문 번호</th>
             <th align="left">상품명</th>
-            <th align="left">주문자 이름</th>
             <th align="left">전화 번호</th>
             <th align="left">배송현황</th>
             <th align="left">정보수정</th>
           </tr>
         </thead>
-       
+     
 		<tbody>
-		
-		  <c:set var="i" value="0" />
-		  <c:forEach var="purchase" items="${list}">
-			<c:set var="i" value="${i+1}"/>
-			<tr>
-			  <td align="center">${ i }</td>
-			  <td align="left"  title="Click : 구매정보 확인">${purchase.tranNo}</td>
-			  <td align="left">${purchase.purchaseProd.prodName}</td>
-			  <td align="left">${purchase.receiverName}</td>
-			  <td align="left">${purchase.receiverPhone}</td>
-			  <td align="left">
-			  	 	<c:if test="${purchase.tranCode == '0'}">
-		               판매중
-		            </c:if>
-		            <c:if test="${purchase.tranCode == '1'}">
-		               구매완료(배송 전)  
-		               <a href="/purchase/updateTranCodeByProd?prodNo=${purchase.purchaseProd.prodNo}&tranCode=2">
-		                  배송하기
-		               </a>
-		            </c:if>
-		            <c:if test="${product.tranCode == '2'}">
-		               배송중
-		            </c:if>
-		            <c:if test="${product.tranCode == '3'}">
-		               배송완료
-		            </c:if>
-			  </td>
-			  <td align="left">
-			  		<c:set var="b" value="${purchase.tranCode}" />
-					<c:if test="${b=='2'}">
-						<a href="/purchase/updateTranCode?tranNo=${purchase.tranNo}&tranCode=3">물건 도착</a>
-					</c:if>
-			  </td>
-			</tr>
-          </c:forEach>
-        
+			<form>
+			<!-- PageNavigation 선택 페이지 값을 보내는 부분 -->
+			<input type="hidden" id="currentPage" name="currentPage" value=""/>
+			
+			  <c:set var="i" value="0" />
+			  <c:forEach var="purchase" items="${list}">
+				<c:set var="i" value="${i+1}"/>
+				<tr>
+				  <td align="center">${ i }</td>
+				  <td align="left"  title="Click : 구매정보 확인">${purchase.tranNo}</td>
+				  <td align="left">${purchase.purchaseProd.prodName}</td>
+				  <td align="left">${purchase.receiverPhone}</td>
+				  <td align="left">
+				  		<c:set var="code" value="${purchase.tranCode}"/>
+			            <c:if test="${code eq '1'}">
+			               구매완료(배송 전)  
+			            </c:if>
+			            <c:if test="${code eq '2'}">
+			               배송중
+			               <a href="/purchase/updateTranCodeByProd?prodNo=${purchase.purchaseProd.prodNo}&tranCode=3">
+			                  상품 도착(구매확정)
+			               </a>
+			            </c:if>
+			            <c:if test="${code eq '3'}">
+			               배송완료
+			            </c:if>
+				  </td>
+				  <td align="left">
+				  		<c:set var="b" value="${purchase.tranCode}" />
+						<c:if test="${b=='2'}">
+							<a href="/purchase/updateTranCode?tranNo=${purchase.tranNo}&tranCode=3">물건 도착</a>
+						</c:if>
+				  </td>
+				</tr>
+	         </c:forEach>
+	        	 
+			  </form>	  
         </tbody>
       
       </table>

@@ -1,5 +1,4 @@
-	<%@ page language="java" contentType="text/html; charset=EUC-KR"
-	    pageEncoding="EUC-KR"%>
+	<%@ page language="java" contentType="text/html; charset=EUC-KR" pageEncoding="EUC-KR"%>
 	<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 	
 	<html>
@@ -47,16 +46,12 @@
 		  
 		</style>
 	
-	
-	
 		<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 	  	<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 		<script type="text/javascript">
 	
 		function fncGetProductList(currentPage){
-// 			document.getElementById("currentPage").value = currentPage;
 			$("#currentPage").val(currentPage)
-			//document.detailForm.submit();
 			$("form").attr("method" ,"POST").attr("action" , "/product/listProduct?menu=manage").submit();
 		}
 		
@@ -237,7 +232,7 @@
 			  <td align="left">${product.price}</td>
 			  <td align="left">${product.regDate}</td>
 			  <td align="left">
-			  	 	<c:if test="${product.proTranCode == '0'}">
+			  	 		<c:if test="${product.proTranCode == '0'}">
 		               ∆«∏≈¡ﬂ
 		            </c:if>
 		            <c:if test="${product.proTranCode == '1'}">

@@ -187,23 +187,21 @@ public class ProductController {
 			search.setCurrentPage(1);
 		}
 		search.setPageSize(pageSize);
-		
 		System.out.println("  search설정해준거 뭐야?? "+search);
-		
 		
 		// Business logic 수행
 		Map<String , Object> map=productService.getProductList(search);
 		
-		Page resultPage = new Page( search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
+		Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
 		System.out.println("  resultPage ? -> "+resultPage);
 		
 		// Model 과 View 연결
 		model.addAttribute("list", map.get("list"));
 		model.addAttribute("resultPage", resultPage);
 		model.addAttribute("search", search);
-		System.out.println("resultpage 잘 세팅되었나요 ??? --->"+resultPage);
-		System.out.println("menu 잘 넘어 왔나요 222?? --->"+menu);
-		System.out.println("list 잘 넘어 왔나요 ?? --->"+map.get("list"));
+		System.out.println("   resultpage 잘 세팅되었나요 ??? --->"+resultPage);
+		System.out.println("   menu 잘 넘어 왔나요 222?? --->"+menu);
+		System.out.println("   list 잘 넘어 왔나요 ?? --->"+map.get("list"));
 
 		if (menu.equals("manage")) {
 			return "forward:/product/listProductManage.jsp";

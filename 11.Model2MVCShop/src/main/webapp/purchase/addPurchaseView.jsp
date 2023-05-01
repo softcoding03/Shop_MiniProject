@@ -126,7 +126,7 @@
 		
 					 		        //SMS ¹ß¼Û ajax
 					 		        $.ajax({				
-					 				    	url: "/purchase/json/sendSMS",
+					 				    	url: "/purchase/json/sendSMS/"+rsp.merchant_uid,
 					 			         method: "GET",
 					 			         dataType : "text",
 					 			         headers : {

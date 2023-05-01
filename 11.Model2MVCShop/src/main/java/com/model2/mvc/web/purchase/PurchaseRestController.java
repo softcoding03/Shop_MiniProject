@@ -40,6 +40,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.model2.mvc.common.Page;
 import com.model2.mvc.common.Search;
 import com.model2.mvc.service.domain.Product;
+import com.model2.mvc.service.domain.User;
 import com.model2.mvc.service.product.ProductService;
 import com.model2.mvc.service.purchase.PurchaseService;
 
@@ -63,7 +64,7 @@ public class PurchaseRestController {
 		System.out.println(this.getClass());
 	}
 	
-
+	//가격으로 결제를 검증하는 로직
 	@RequestMapping( value="json/price/{prodNo}/{price}", method=RequestMethod.GET )
 	public String comparePrice(@PathVariable String prodNo,
 								@PathVariable int price) throws Exception{
@@ -89,8 +90,26 @@ public class PurchaseRestController {
 	}
 	
 	
-	@RequestMapping( value="json/sendSMS", method=RequestMethod.GET )
-	public String sendSMS() throws Exception{
+	@RequestMapping( value="json/sendSMS/{uid}", method=RequestMethod.GET )
+	public String sendSMS(@PathVariable String uid, HttpServletRequest request) throws Exception{
+		
+			//prodNo 추출해서 product 정보 get하는 로직
+			System.out.println("   uid 넘어온거?"+uid);
+			String a = uid.substring(10); //prodNo 추출
+			int prodNo1 = Integer.parseInt(a);
+			Product product = productService.getProduct(prodNo1);
+			String prodName =product.getProdName(); //사용할 상품 이름
+			
+			//유저정보 get
+			HttpSession session=request.getSession();
+			User user = (User)session.getAttribute("user");
+			String userName = user.getUserName(); //사용할 user 이름
+			String phone = user.getPhone();
+			String[] phoneNumber = phone.split("-"); //body에서는 번호만 입력되어야 함
+			String userPhone = phoneNumber[0]+phoneNumber[1]+phoneNumber[2]; //사용할 user전화번호
+			System.out.println("   split해준 userPhone은 ??"+userPhone);
+			//저장 끝
+		
 		String hostNameUrl = "https://sens.apigw.ntruss.com";     		// 호스트 URL
 		String requestUrl= "/sms/v2/services/";               		// 요청 URL
 		String requestUrlType = "/messages";                      		// 요청 URL
@@ -109,18 +128,17 @@ public class PurchaseRestController {
 	    
 	    //body 부분에 들어갈 내용들 작성. 
 	    //예약 문자 발송을 위해선 APi참고 할 것.
-	    
 	    bodyJson.put("type","SMS");
 	    bodyJson.put("contentType","COMM");
 	    bodyJson.put("from","01097833446");					// Mandatory, 발신번호, 사전 등록된 발신번호만 사용 가능		
-	    bodyJson.put("content","abc");	// Mandatory(필수), 기본 메시지 내용, SMS: 최대 80byte, LMS, MMS: 최대 2000byte
-	    toJson.put("content","zxcb");	// Optional, messages.content	개별 메시지 내용, SMS: 최대 80byte, LMS, MMS: 최대 2000byte
-	    toJson.put("to","01097833446");						// Mandatory(필수), messages.to	수신번호, -를 제외한 숫자만 입력 가능
+	    bodyJson.put("content","왜전송이안되는지..?");		// Mandatory(필수), 기본 메시지 내용, SMS: 최대 80byte, LMS, MMS: 최대 2000byte
+	    toJson.put("content","안녕하세요, "+userName+"님"+"\n"+"'"+prodName+"'"+" 상품구매가 완료되었습니다.");	// Optional, messages.content	개별 메시지 내용, SMS: 최대 80byte, LMS, MMS: 최대 2000byte
+	    toJson.put("to", userPhone);						// Mandatory(필수), messages.to	수신번호, -를 제외한 숫자만 입력 가능
 	    toArr.add(toJson);
 	    bodyJson.put("messages", toArr);					// Mandatory(필수), 아래 항목들 참조 (messages.XXX), 최대 1,000개
 	    
-	    //String body = bodyJson.toJSONString();
-	    String body = bodyJson.toString();
+	    //한글 에러 해결하기 위한 인코딩
+	    String body = new String(bodyJson.toString().getBytes("UTF-8"), "UTF-8");
 	    
 	    System.out.println("  세팅 body? "+body);
 	    
@@ -140,7 +158,7 @@ public class PurchaseRestController {
             con.setDoOutput(true);
             DataOutputStream wr = new DataOutputStream(con.getOutputStream());
             
-            wr.write(body.getBytes());
+            wr.write(body.getBytes("UTF-8"));
             wr.flush();
             wr.close();
 

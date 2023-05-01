@@ -192,12 +192,16 @@
 // 		무한 스크롤 end		
 		
 	
-	
+		
+		//'상세보기' 기능 -> .btn-primary 요소에 대한 이벤트 핸들러를 등록하는 것이 아니고  
+		$(document).on("click", ".btn-primary", function() {
+			self.location="/product/getProduct?prodNo="+$(this).find("input").val().trim();
+		});
 	
 		function fncGetProductList(currentPage){
-	// 		document.getElementById("currentPage").value = currentPage;
+	 		//document.getElementById("currentPage").value = currentPage;
 			$("#currentPage").val(currentPage)
-	// 		document.detailForm.submit();
+	 		//document.detailForm.submit();
 			$("form").attr("method" ,"POST").attr("action" , "/product/listProduct?menu=search").submit();
 		}
 		
@@ -206,12 +210,6 @@
 			//==> 1 과 3 방법 조합 : $("tagName.className:filter함수") 사용함.	
 			$("button.btn.btn-default").on("click" , function() {
 				fncGetProductList(1);
-			});
-			
-			//'상세보기' 기능
-			$(".btn-primary").on("click", function() {
-			//	alert($(this).find("input").val().trim());
-				self.location="/product/getProduct?prodNo="+$(this).find("input").val().trim();
 			});
 			
 			$(".ct_list_pop td:nth-child(3)").css("color" , "red");
@@ -326,11 +324,11 @@
 								       </button>
 								       <button type="button" class="btn btn-default" role="button">장바구니에 추가</button>
 							        </p>
-						      </div>
+						      </div>                                 
 						    </div>
 				  </div>
 			 </c:forEach>
-		</div>	
+		< /div>	
 		
 	<div class="modal"><!-- Place at bottom of page --></div>
 

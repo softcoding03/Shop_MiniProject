@@ -3,13 +3,14 @@ package com.model2.mvc.service.purchase.impl;
 
 import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
+import com.model2.mvc.common.Search;
 import com.model2.mvc.service.domain.*;
 import com.model2.mvc.service.purchase.PurchaseDao;
 
@@ -41,8 +42,11 @@ public class PurchaseDaoImpl implements PurchaseDao{
 	}
 
 	//map안에 Search search, String userId 담겨져서 넘겨 받아야함.
-	public List<Purchase> getPurchaseList(HashMap<String, Object> map) throws Exception {
-		return sqlSession.selectList("PurchaseMapper.getPurchaseList", map);
+	public List<Purchase> getPurchaseList(Search search, String userId) throws Exception {
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("search", search);
+		map.put("userId",userId);
+		return sqlSession.selectList("PurchaseMapper.getPurchaseList",map);
 	}
 
 	//구매 상세정보 변경
@@ -56,12 +60,14 @@ public class PurchaseDaoImpl implements PurchaseDao{
 	}
 
 	
-	public int getTotalCount(String userId) throws Exception {
-		return sqlSession.selectOne("PurchaseMapper.getTotalCount", userId);
-	}
-
 	public int getPurchaseLast() throws Exception {
 		return sqlSession.selectOne("PurchaseMapper.getPurchaseLast");
+	}
+	public int getTotalCount(Search search,String userId) throws Exception {
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("search", search);
+		map.put("userId",userId);
+		return sqlSession.selectOne("PurchaseMapper.getTotalCount",map);
 	}
 
 	///Method
