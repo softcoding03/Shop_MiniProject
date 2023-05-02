@@ -57,7 +57,8 @@
 		                     </a>
 		                     <ul class="dropdown-menu">
 		                         <li><a href="#">판매굿즈등록</a></li>
-		                         <li><a href="#">판매굿즈관리</a></li>
+		                         <li><a href="#">굿즈정보관리</a></li>
+		                         <li><a href="#">판매완료굿즈</a></li>
 		                         <li class="divider"></li>
 		                         <li><a href="#">etc..</a></li>
 		                     </ul>
@@ -74,10 +75,8 @@
 	                         <li><a href="#">굿 즈 검 색</a></li>
 	                         
 	                         <c:if test="${sessionScope.user.role == 'user'}">
-	                           <li><a href="#">구매이력조회</a></li>
+	                           <li><a href="#">구매내역조회</a></li>
 	                         </c:if>
-	                         
-	                         <li><a href="#">최근본굿즈</a></li>
 	                         <li class="divider"></li>
 	                         <li><a href="#">etc..</a></li>
 	                     </ul>
@@ -148,9 +147,14 @@
 			$(self.location).attr("href","/product/addProduct");
 		});
 	 	
-	 	$( "a:contains('판매굿즈관리')" ).on("click" , function() {
+	 	$( "a:contains('굿즈정보관리')" ).on("click" , function() {
 	 		
 			$(self.location).attr("href","/product/listProduct?menu=manage");
+		});
+	 	
+		$( "a:contains('판매완료굿즈')" ).on("click" , function() {
+	 		
+			$(self.location).attr("href","/purchase/listPurchaseManager");
 		});
 	 	
 		$( "a:contains('굿 즈 검 색')" ).on("click" , function() {
@@ -158,7 +162,7 @@
 			$(self.location).attr("href","/product/listProduct?menu=search");
 		});
 		
-		$( "a:contains('구매이력조회')" ).on("click" , function() {
+		$( "a:contains('구매내역조회')" ).on("click" , function() {
 	 		
 			$(self.location).attr("href","/purchase/listPurchase");
 		});

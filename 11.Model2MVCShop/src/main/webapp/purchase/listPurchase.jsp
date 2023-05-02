@@ -110,11 +110,10 @@
         <thead>
           <tr>
             <th align="center">No</th>
-            <th align="left">주문 번호</th>
-            <th align="left">상품명</th>
-            <th align="left">전화 번호</th>
-            <th align="left">배송현황</th>
-            <th align="left">정보수정</th>
+            <th align="center">주문 번호</th>
+            <th align="center">상품명</th>
+            <th align="center">배송현황</th>
+            <th align="center">구매확정</th>
           </tr>
         </thead>
      
@@ -128,29 +127,32 @@
 				<c:set var="i" value="${i+1}"/>
 				<tr>
 				  <td align="center">${ i }</td>
-				  <td align="left"  title="Click : 구매정보 확인">${purchase.tranNo}</td>
+				  <td align="left">${purchase.tranNo}</td>
 				  <td align="left">${purchase.purchaseProd.prodName}</td>
-				  <td align="left">${purchase.receiverPhone}</td>
 				  <td align="left">
 				  		<c:set var="code" value="${purchase.tranCode}"/>
-			            <c:if test="${code eq '1'}">
-			               구매완료(배송 전)  
-			            </c:if>
-			            <c:if test="${code eq '2'}">
-			               배송중
-			               <a href="/purchase/updateTranCodeByProd?prodNo=${purchase.purchaseProd.prodNo}&tranCode=3">
-			                  상품 도착(구매확정)
-			               </a>
-			            </c:if>
-			            <c:if test="${code eq '3'}">
-			               배송완료
-			            </c:if>
+			         <c:choose>
+			         	<c:when test="${code.trim() eq '1'}"> 구매완료 (배송 전)
+			         	</c:when>
+			         	<c:when test="${code.trim() eq '2'}"> 배송중
+			         	</c:when>
+			         	<c:when test="${code.trim() eq '3'}"> 배송완료
+			         	</c:when>
+			         	<c:otherwise>해당없음</c:otherwise>
+			         </c:choose>   
 				  </td>
 				  <td align="left">
-				  		<c:set var="b" value="${purchase.tranCode}" />
-						<c:if test="${b=='2'}">
-							<a href="/purchase/updateTranCode?tranNo=${purchase.tranNo}&tranCode=3">물건 도착</a>
-						</c:if>
+				  		<c:set var="b" value="${purchase.tranCode}"/>
+							<c:if test="${b.trim() eq '3'}">
+								구매가 확정 되었습니다.
+							</c:if>
+							<c:if test="${b.trim() eq '2'}">
+								<a href="/purchase/updateTranCode?tranNo=${purchase.tranNo}&tranCode=3">상품 도착(구매확정)</a>
+							</c:if>
+							<c:if test="${b.trim() eq '1'}">
+								<button type="button" id="refund" class="btn btn-danger">환불 요청(구매취소)</button>
+							</c:if>
+							
 				  </td>
 				</tr>
 	         </c:forEach>

@@ -84,7 +84,6 @@
 
 					alert($(this).find("input").val().trim());
 // 					self.location ="/product/getProduct?prodNo="+$(this).find("input").val().trim();
-					
 					var prodNo = $(this).find("input").val().trim();
 					$.ajax(
 							{

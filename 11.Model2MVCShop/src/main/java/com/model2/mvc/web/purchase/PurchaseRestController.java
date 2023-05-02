@@ -13,6 +13,7 @@ import java.nio.file.Paths;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -40,6 +41,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.model2.mvc.common.Page;
 import com.model2.mvc.common.Search;
 import com.model2.mvc.service.domain.Product;
+import com.model2.mvc.service.domain.Purchase;
 import com.model2.mvc.service.domain.User;
 import com.model2.mvc.service.product.ProductService;
 import com.model2.mvc.service.purchase.PurchaseService;
@@ -92,22 +94,37 @@ public class PurchaseRestController {
 	
 	@RequestMapping( value="json/sendSMS/{uid}", method=RequestMethod.GET )
 	public String sendSMS(@PathVariable String uid, HttpServletRequest request) throws Exception{
-		
+		String userName =null;
+		String prodName=null;
+		String userPhone;
+		if(uid.length() <=6) {
+			//tranNumber로 receiverPhone 번호 가져와서 그 번호로 발송
+			System.out.println("   uid 넘어온거 11?"+uid);
+			int tranNo = Integer.parseInt(uid);
+			Purchase purchase = purchaseService.getPurchase(tranNo);
+			System.out.println("   purchase ? "+purchase);
+			String phone = purchase.getReceiverPhone();
+			String[] phoneNumber = phone.split("-"); //body에서는 번호만 입력되어야 함
+			userPhone = phoneNumber[0]+phoneNumber[1]+phoneNumber[2];
+		} else {
 			//prodNo 추출해서 product 정보 get하는 로직
-			System.out.println("   uid 넘어온거?"+uid);
+			System.out.println("   uid 넘어온거 22?"+uid);
 			String a = uid.substring(10); //prodNo 추출
 			int prodNo1 = Integer.parseInt(a);
 			Product product = productService.getProduct(prodNo1);
-			String prodName =product.getProdName(); //사용할 상품 이름
+			prodName =product.getProdName(); //사용할 상품 이름
 			
 			//유저정보 get
 			HttpSession session=request.getSession();
 			User user = (User)session.getAttribute("user");
-			String userName = user.getUserName(); //사용할 user 이름
+			userName = user.getUserName(); //사용할 user 이름
 			String phone = user.getPhone();
 			String[] phoneNumber = phone.split("-"); //body에서는 번호만 입력되어야 함
-			String userPhone = phoneNumber[0]+phoneNumber[1]+phoneNumber[2]; //사용할 user전화번호
+			userPhone = phoneNumber[0]+phoneNumber[1]+phoneNumber[2]; //사용할 user전화번호
 			System.out.println("   split해준 userPhone은 ??"+userPhone);
+		}
+			
+			
 			//저장 끝
 		
 		String hostNameUrl = "https://sens.apigw.ntruss.com";     		// 호스트 URL
@@ -132,7 +149,11 @@ public class PurchaseRestController {
 	    bodyJson.put("contentType","COMM");
 	    bodyJson.put("from","01097833446");					// Mandatory, 발신번호, 사전 등록된 발신번호만 사용 가능		
 	    bodyJson.put("content","왜전송이안되는지..?");		// Mandatory(필수), 기본 메시지 내용, SMS: 최대 80byte, LMS, MMS: 최대 2000byte
-	    toJson.put("content","안녕하세요, "+userName+"님"+"\n"+"'"+prodName+"'"+" 상품구매가 완료되었습니다.");	// Optional, messages.content	개별 메시지 내용, SMS: 최대 80byte, LMS, MMS: 최대 2000byte
+	    if(uid.length() >6) {
+	    	toJson.put("content","안녕하세요, "+userName+"님"+"\n"+"'"+prodName+"'"+" 상품구매가 완료되었습니다.");	// Optional, messages.content	개별 메시지 내용, SMS: 최대 80byte, LMS, MMS: 최대 2000byte
+	    } else {
+	    	toJson.put("content","상품 배송이 시작되었습니다.");	// Optional, messages.content	개별 메시지 내용, SMS: 최대 80byte, LMS, MMS: 최대 2000byte
+	    }
 	    toJson.put("to", userPhone);						// Mandatory(필수), messages.to	수신번호, -를 제외한 숫자만 입력 가능
 	    toArr.add(toJson);
 	    bodyJson.put("messages", toArr);					// Mandatory(필수), 아래 항목들 참조 (messages.XXX), 최대 1,000개
@@ -216,5 +237,23 @@ public class PurchaseRestController {
 		System.out.println("   encodeBase64String는? "+encodeBase64String);
 	  return encodeBase64String;
 	}
+		
+	//간략정보 조회 로직
+	@RequestMapping( value="json/getPurchase/{tranNo}/{prodNo}", method=RequestMethod.GET )
+	public Map<String , Object> getPurchase(@PathVariable int tranNo,
+											@PathVariable int prodNo) throws Exception{
+		System.out.println("   tranNO ??? "+tranNo);
+		System.out.println("   prodNo ??? "+prodNo);
+		System.out.println("/purchase/json/getPurchase : GET");
+		
+		Map<String , Object> map = new HashMap<String , Object>();
+		
+		Product product = productService.getProduct(prodNo);
+		Purchase purchase = purchaseService.getPurchase(tranNo);
+		map.put("product", product);
+		map.put("purchase", purchase);
 
+		System.out.println("   마지막으로 map 세팅해준거 ?"+map);
+		return map;
+	}
 }

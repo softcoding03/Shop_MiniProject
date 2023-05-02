@@ -108,23 +108,6 @@
 			    </div>
 			  </div>
 			  
-		<!--	   아임포트 사용할 것 -
-			  <div class="form-group"> 
-	 		    <label for="paymentOption" class="col-sm-offset-1 col-sm-3 control-label">구매방법</label> -->
-	<!-- 		    <div class="col-sm-4"> -->
-	<!-- 		      	<div> -->
-	<%-- 					<c:if test="${purchase.paymentOption == '1'}"> --%>
-	<!-- 								현금구매 -->
-	<%-- 					</c:if> --%>
-	<%-- 					<c:if test="${purchase.paymentOption == '2'}"> --%>
-	<!-- 								신용구매 -->
-	<%-- 					</c:if> --%>
-	<!-- 				</div> -->
-	<!-- 		    </div> -->
-	<!-- 		  </div> -->
-			  
-			  
-			  
 			  <div class="form-group">
 			    <label for="receiverName" class="col-sm-offset-1 col-sm-3 control-label">배송받을분 이름</label>
 			    <div class="col-sm-4">

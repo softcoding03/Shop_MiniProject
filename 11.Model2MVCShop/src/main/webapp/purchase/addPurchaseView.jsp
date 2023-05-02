@@ -197,11 +197,8 @@
 	
 		<h1 class="bg-primary text-center">주문/결제</h1>
 		
-		
 <div class="product_area">
-    
     <table cellspacing="0" class="tb_products">
-	    
 	    <colgroup>
 	        <col width="300">
 	        <col width="220">
@@ -212,50 +209,41 @@
 	    </colgroup>
 	    <thead class="point_plus">
 	    <tr>
-	    <th scope="col"></th>
-		<th scope="col">상품명</th>
-		<th scope="col">상품상세정보</th>
-	    <th scope="col">배송비</th>
-	    <th scope="col">수량</th>
-	    
-	    <th scope="col" class="col_price">상품금액</th>
+		    <th scope="col"></th>
+			 <th scope="col">상품명</th>
+			 <th scope="col">상품상세정보</th>
+		    <th scope="col">배송비</th>
+		    <th scope="col">수량</th>
+		    <th scope="col" class="col_price">상품금액</th>
 	    </tr>
 	    </thead>
+	    
 	    <tbody>
-
-		<tr >
+		 <tr >
 			<td>
 			    <span class="bdr"></span>
 			    <div class="product_info">
 					<a href="/product/getProduct?prodNo=${product.prodNo}" class="product_thmb" target="_blank" >
 	        			<span class="mask"></span><img src="/images/uploadFiles/${product.fileName}" width="240" height="240">
 	        		</a>
-			        
 			    </div>
 			</td>
-			
 			<td rowspan="1">
-	            	<span class="deli_fee">[${product.prodName}]</span> 
-	        </td>    	
-	            	</br></br></br>
-	            	
-	        <td rowspan="1">    	
-	            	<span class="deli_fee">${product.prodDetail}</span>
-            </td>
-			
+	           	<span class="deli_fee">[${product.prodName}]</span> 
+	      </td>    	
+	      </br></br></br>
+	      <td rowspan="1">    	
+	            <span class="deli_fee">${product.prodDetail}</span>
+         </td>
 			<td rowspan="1">
-	            	<span class="deli_fee">무료</span>
-            </td>
-
+	           	<span class="deli_fee">무료</span>
+         </td>
 			<td>1개</td>
-			
 			<td class="col_price">
 			    <span id="prodprice" value=""> </span>
 			</td>
 		</tr>
-
-
-	    </tbody>
+	   </tbody>
 	</table>
 </div>
 		

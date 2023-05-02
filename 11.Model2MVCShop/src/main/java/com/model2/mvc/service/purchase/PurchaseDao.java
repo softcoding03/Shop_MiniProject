@@ -32,6 +32,8 @@ public interface PurchaseDao {
 		// SELECT LIST
 		public List<Purchase> getPurchaseList(Search search, String userId)throws Exception;
 		
+		public List<Purchase> getPurchaseList2(Search search, String userId)throws Exception;
+		
 		// UPDATE Purchase
 		public void updatePurchase(Purchase purchase) throws Exception ;
 		
@@ -39,6 +41,7 @@ public interface PurchaseDao {
 		public void updateTranCode(Purchase purchase) throws Exception ;
 		
 		public int getTotalCount(Search search,String userId) throws Exception;
+		public int getTotalCount2(Search search,String userId) throws Exception;
 
 		public int getPurchaseLast() throws Exception;
 	

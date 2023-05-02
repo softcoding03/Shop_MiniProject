@@ -59,6 +59,19 @@
 	 
 	 </select>
 	 
+	 <select  id="getPurchaseList2"  parameterType="java.util.Map"	resultMap="purchaseSelectMap">
+	  		  	
+	  	SELECT * 
+	  	FROM (SELECT inner_table. * , ROWNUM AS row_seq 
+	  			FROM (select t.*, p.prod_name 
+	  					from transaction t
+	  					JOIN product p ON t.prod_no = p.prod_no
+	  					order by tran_no) inner_table 
+	  			WHERE ROWNUM &lt;= #{search.endRowNum} )
+		WHERE row_seq BETWEEN #{search.startRowNum} AND #{search.endRowNum} 
+	 
+	 </select>
+	 
 	 
 	 <!-- SQL : 구매 상세정보 변경 UPDATE -->
 	 <update	id="updatePurchase"	parameterType="purchase" >
@@ -74,16 +87,13 @@
 	 </update>
 	 
 	 
-	 <!-- 구매상태 변경 0,1,2 sql -->
+	 <!-- 구매상태 변경 1,2,3 sql -->
 	 <update	id="updateTranCode"	parameterType="purchase" >
 	   	UPDATE transaction
 	   	<set>
 	   		tran_status_code = #{tranCode} 
 	   	</set>
-	   	<if test="purchaseProd == '' ">
 	   		WHERE tran_NO = #{tranNo}
-	   	</if>
-	   		WHERE prod_no = #{prodNo}
 	 </update>
 	 
 	 
@@ -94,6 +104,14 @@
 	  	FROM(	SELECT *
 	  			FROM transaction
 	  			WHERE buyer_id = #{userId}
+	  			Order by tran_no ) countTable						
+	 </select>
+	
+	<!-- purchaseListManager위한 모든 count -->	 
+	 <select  id="getTotalCount2"  parameterType="string" resultType="int">
+	  	SELECT COUNT(*)
+	  	FROM(	SELECT *
+	  			FROM transaction
 	  			Order by tran_no ) countTable						
 	 </select>
 	 

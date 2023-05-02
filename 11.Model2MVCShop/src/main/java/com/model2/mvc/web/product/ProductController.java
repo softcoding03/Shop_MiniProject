@@ -172,8 +172,8 @@ public class ProductController {
 		
 		return "forward:/product/getProduct.jsp";
 	}
+
 	
-//	@RequestMapping("/listProduct.do")
 	@RequestMapping(value="listProduct")
 	public String listProduct( @ModelAttribute("search") Search search,
 							@RequestParam("menu") String menu,

@@ -63,7 +63,7 @@ public class PurchaseController {
 	
 	//@Value("#{commonProperties['pageSize']}")
 	@Value("#{commonProperties['pageSize'] ?: 5}")
-	int pageSize;
+	int pageSize = 15;
 	
 	
 	//구매View
@@ -175,6 +175,28 @@ public class PurchaseController {
 		modelAndView.setViewName("forward:/purchase/listPurchase.jsp");
 		return modelAndView;
 	}
+	
+	@RequestMapping("listPurchaseManager")
+	public ModelAndView listPurchaseManager(@ModelAttribute("search") Search search ,@RequestParam(value="currentPage", required = false) Integer currentPage,
+			HttpSession session) throws Exception{
+		if(currentPage == null) {
+			currentPage =1;
+		}
+		search.setCurrentPage(currentPage);
+		search.setPageSize(15);
+		
+		Map<String, Object> map = purchaseService.getPurchaseList2(search, ((User)session.getAttribute("user")).getUserId());
+		
+		Page resultPage = new Page(search.getCurrentPage(),((Integer)map.get("totalCount")).intValue(),pageUnit, 15);
+		System.out.println("   resultPage ??"+resultPage);
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("resultPage",resultPage);
+		modelAndView.addObject("list", map.get("list"));
+		System.out.println("   list는 ???"+map.get("list"));
+		
+		modelAndView.setViewName("forward:/purchase/listPurchaseManager.jsp");
+		return modelAndView;
+	}
 		
 
 	@RequestMapping(value="updatePurchase", method=RequestMethod.GET)
@@ -208,35 +230,29 @@ public class PurchaseController {
 		return "forward:/purchase/updatePurchase.jsp";
 	}
 	
-	@RequestMapping(value="updateTranCode", method=RequestMethod.GET)
-	public String updateTranCode(@RequestParam("tranCode") String tranCode,
-									@RequestParam("tranNo") int tranNo,
-								Model model ) throws Exception{
-
-		System.out.println("tranCode 와 tranNo 는 ?  :  " + tranCode+"&"+tranNo);
-		
-		Purchase purchase = new Purchase();
-		purchase.setTranNo(tranNo);
-		purchase.setTranCode(tranCode);
-		purchaseService.updateTranCode(purchase);
-		System.out.println("디버깅 UpdateTran 완료");
-		
-		return "forward:/purchase/listPurchase.jsp";
-	}
 	
-	@RequestMapping(value="updateTranCodeByProd", method=RequestMethod.GET)
-	public String updateTranCodeByProd(@RequestParam("prodNo") int prodNo,
-									@RequestParam("tranNo") int tranNo,
+	@RequestMapping(value="updateTranCode", method=RequestMethod.GET)
+	public String updateTranCode(@RequestParam("tranNo") int tranNo,
+								@RequestParam("tranCode") String tranCode,
 								Model model ) throws Exception{
 
-		System.out.println("prodNo 와 tranNo 는 ?  :  " + prodNo+"&"+tranNo);
+		System.out.println("tranNo 와 tranCode 는 ?  :  " + tranNo+"&"+tranCode);
 		
-		Purchase purchase = new Purchase();
-		purchase.setTranNo(tranNo);
+		Purchase purchase = purchaseService.getPurchase(tranNo);
+		purchase.setTranCode(tranCode);
+		System.out.println("  세팅한 purchase ? "+purchase);
 		
 		purchaseService.updateTranCode(purchase);
-		System.out.println("디버깅 UpdateTranCode 완료");
-		
-		return "forward:/purchase/listProductManage.jsp";
+		System.out.println("  UpdateTranCode 완료");
+		String result;
+		if (tranCode.equals("3")) {
+			result ="listPurchase";
+		} else if (tranCode.equals("2")){
+			result ="listPurchaseManager";
+		} else {
+			result = null;
+		}
+		System.out.println("  resultㄴ,ㄴ ?"+result);
+		return result;
 	}
 }

@@ -48,6 +48,13 @@ public class PurchaseDaoImpl implements PurchaseDao{
 		map.put("userId",userId);
 		return sqlSession.selectList("PurchaseMapper.getPurchaseList",map);
 	}
+	
+	public List<Purchase> getPurchaseList2(Search search, String userId) throws Exception {
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("search", search);
+		map.put("userId",userId);
+		return sqlSession.selectList("PurchaseMapper.getPurchaseList2",map);
+	}
 
 	//구매 상세정보 변경
 	public void updatePurchase(Purchase purchase) throws Exception {
@@ -59,15 +66,23 @@ public class PurchaseDaoImpl implements PurchaseDao{
 		sqlSession.update("PurchaseMapper.updateTranCode", purchase);		
 	}
 
-	
 	public int getPurchaseLast() throws Exception {
 		return sqlSession.selectOne("PurchaseMapper.getPurchaseLast");
 	}
+	
 	public int getTotalCount(Search search,String userId) throws Exception {
 		Map<String,Object> map = new HashMap<String,Object>();
 		map.put("search", search);
 		map.put("userId",userId);
 		return sqlSession.selectOne("PurchaseMapper.getTotalCount",map);
+	}
+	
+	//
+	public int getTotalCount2(Search search,String userId) throws Exception {
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("search", search);
+		map.put("userId",userId);
+		return sqlSession.selectOne("PurchaseMapper.getTotalCount2",map);
 	}
 
 	///Method
