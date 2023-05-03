@@ -44,7 +44,20 @@
 		  body {
             padding-top : 50px;
           }
-		  
+		  .button {
+			  display: inline-block;
+			  padding: 10px 20px;
+			  background-color: #f1f1f1;
+			  border: 1px solid #ccc;
+			  text-decoration: none;
+			  color: #333;
+			  font-weight: bold;
+			  cursor: pointer;
+			}
+			
+			.button:hover {
+			  background-color: #ddd;
+			}
 		</style>
 	
 		<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
@@ -70,9 +83,9 @@
 		
 			//purchase 정보 간략하게 조회 ...
 			$('button').on("click",function() {
-				var tranNo = $(this).find('#tranNo').val().trim();
-				var prodNo = $(this).find('#prodNo').val().trim();
-				//alert(tranNo +"/"+ prodNo);
+				var tranNo = $(this).find('#tranNo').val();
+				var prodNo = $(this).find('#prodNo').val();
+				alert(tranNo +"/"+ prodNo);
 				
 				$.ajax({
 							url:"/purchase/json/getPurchase/"+tranNo+"/"+prodNo ,
@@ -85,8 +98,9 @@
 							success : function(Data, status) {
 								console.log(Data);
 								$('#p1').html(Data.product.prodName);
-								$('#p2').html(Data.product.prodDetail);
+								$('#p2').html(Data.purchase.merchantUid);
 								$('#p3').html(Data.product.price+"원");
+								$('#p4').html(Data.purchase.tranNo);
 								$('#img').attr('src', '/images/uploadFiles/'+Data.product.fileName);
 							}
 				}); 
@@ -101,9 +115,9 @@
 			//배송시작 시 sendSMS
 			$('a[name="deliStart"]').on("click", function() {
 				alert("SMS API 실행")
-				var tranNumber = $(this).find('#tranNo').val().trim();
-				var receiverPhone = $(this).find('#receiverPhone').val().trim();
-				var receiverName = $(this).find('#receiverName').val().trim();
+				var tranNumber = $(this).find('#tranNo').val();
+				var receiverPhone = $(this).find('#receiverPhone').val();
+				var receiverName = $(this).find('#receiverName').val();
 					$.ajax({				
 				    	url: "/purchase/json/sendSMS/"+tranNumber+"/"+receiverPhone+"/"+receiverName,
 			         method: "GET",
@@ -117,6 +131,42 @@
 				 		}
 				  });
 			})
+			//배송시작 SMS 끝///
+			
+			//환불요청시 아임포트 환불 + 환불 메세지 sendSMS
+			$('#refund').on("click", function() {
+				alert("환불요청 실행")
+				var merUid = $('#p2').html();
+				var tranNo = $('#p4').html();
+					$.ajax({				
+				    	url: "/purchase/json/importRefund/"+merUid+"/"+tranNo,
+			         method: "GET",
+			         dataType : "json",
+			         headers : {
+							"Accept" : "application/json",
+							"Content-Type" : "application/json"
+						},
+						success : function(Data, status) {
+							alert("결과는?"+status+"&"+Data);
+							//SMS 발송 ajax
+			 		        $.ajax({				
+			 				    	url: "/purchase/json/sendSMS/0/"+Data.receiverPhone+"/"+Data.receiverName,
+			 			         method: "GET",
+			 			         dataType : "text",
+			 			         headers : {
+			 							"Accept" : "application/json",
+			 							"Content-Type" : "application/json"
+			 						},
+			 						success : function(Data, status) {
+			 							alert("결과는?"+status);
+			 				 		}
+			 				  });
+				 		}
+				  });
+			})
+			//환불요청시 아임포트 환불 + 환불 메세지 sendSMS
+			
+			
 		});
 	</script>
 	</head>
@@ -139,9 +189,9 @@
       
         <thead>
           <tr>
-            <th align="center">No</th>
-            <th align="left">주문 번호</th>
-            <th align="left">구매자</th>
+            <th align="center">결제번호</th>
+            <th align="left">주문번호</th>
+            <th align="left">구매자ID</th>
             <th align="left">베송지 주소</th>
             <th align="left">구매 일자</th>
             <th align="left">배송현황</th>
@@ -157,22 +207,16 @@
 			  <c:forEach var="purchase" items="${list}">
 				<c:set var="i" value="${i+1}"/>
 				<tr>
-				  <td align="center">${ i }</td>
-				  <td align="left"  title="Click : 구매정보 확인">
-				  		${purchase.tranNo}
-						<button type="button" id="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">
-						  상세조회
-						   <input type="hidden" id="tranNo" value="${purchase.tranNo}"/> <!-- ajax 위한 값 hidden -->
-				  			<input type="hidden" id="prodNo" value="${purchase.purchaseProd.prodNo}"/>
-						</button>	
-				  </td>
+				  <td align="center">${purchase.impUid}</td>
+				  <td align="left">${purchase.tranNo}</td>
 				  <td align="left">${purchase.buyer.userId}</td>
 				  <td align="left">${purchase.dlvyAddr}</td>
 				  <td align="left">${purchase.orderDate}</td>
 				  <td align="left">
 				  		<c:set var="code" value="${purchase.tranCode}"/>
+				  		<c:set var="r" value="${purchase.refund}"/>
 			         <c:choose>
-			         	<c:when test="${code.trim() eq '1'}"> 
+			         	<c:when test="${code.trim() eq '1' and r eq '0'}"> 
 			         		판매완료(배송 전)
 			         		<a name="deliStart" href="/purchase/updateTranCode?tranNo=${purchase.tranNo}&tranCode=2">
 			                  배송시작
@@ -181,11 +225,19 @@
 			               	<input type="hidden" id="receiverName" value="${purchase.receiverName}"/> <!-- ajax 위한 값 hidden -->
 			               </a>
 			         	</c:when>
-			         	<c:when test="${code.trim() eq '2'}"> 배송중
+			         	<c:when test="${code.trim() eq '2' and r eq '0'}"> 배송중
 			         	</c:when>
-			         	<c:when test="${code.trim() eq '3'}"> 배송완료 
+			         	<c:when test="${code.trim() eq '3' and r eq '0'}"> 배송완료 
 			         	</c:when>
-			         	<c:otherwise>해당없음</c:otherwise>
+			         	<c:when test="${r eq '2'}"> 취소완료 
+			         	</c:when>
+			         	<c:otherwise>
+			         		<button type="button" id="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal">
+								  환불요청
+								   <input type="hidden" id="tranNo" value="${purchase.tranNo}"/> <!-- ajax 위한 값 hidden -->
+						  			<input type="hidden" id="prodNo" value="${purchase.purchaseProd.prodNo}"/>
+								</button>
+			         	</c:otherwise>
 			         </c:choose>   
 				  </td>
 				</tr>
@@ -205,27 +257,28 @@
 		    <div class="modal-content">
 		      <div class="modal-header">
 		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-		        <h4 class="modal-title" id="myModalLabel">상품 상세정보</h4>
+		        <h4 class="modal-title" id="myModalLabel">결제 정보</h4>
 		      </div>
 		      <div class="modal-body"> <!-- 바디 시작 -->
 			       <div class="product_area">
 					    <table cellspacing="0" class="tb_products">
 						    <colgroup>
-						        <col width="200">
-						        <col width="150">
-						        <col width="150">
-						        <col width="80">
-						        <col width="100">
-						        <col>
+						        <col align="center" width="200">
+						        <col align="center" width="130">
+						        <col align="center" width="100">
+						        <col align="center" width="120">
+						        <col align="center" width="100">
+						        <col align="center" width="100">
 						    </colgroup>
 						    <thead class="point_plus">
 						    <tr>
-							    <th scope="col"></th>
-								 <th scope="col">상품명</th>
-								 <th scope="col">상품상세정보</th>
-							    <th scope="col">배송비</th>
-							    <th scope="col">수량</th>
-							    <th scope="col" class="col_price">상품금액</th>
+							    <th align="center" scope="col"></th>
+								 <th align="center" scope="col">상품명</th>
+								 <th align="center" scope="col">구매번호</th>
+								 <th align="center" scope="col">주문번호ID</th>
+							    <th align="center" scope="col">배송비</th>
+							    <th align="center" scope="col">수량</th>
+							    <th align="center" scope="col" class="col_price">결제금액</th>
 						    </tr>
 						    </thead>
 						    
@@ -243,23 +296,27 @@
 						           	<span class="deli_fee" id="p1"></span> 
 						      </td>    	
 						      </br></br></br>
+						      <td rowspan="1">
+						           	<span class="deli_fee" id="p4"></span> 
+						      </td> 
 						      <td rowspan="1">    	
 						            <span class="deli_fee" id="p2"></span>
 					         </td>
 								<td rowspan="1">
-						           	<span class="deli_fee">무료</span>
+						           	<span class="deli_fee">  무료</span>
 					         </td>
 								<td>1개</td>
 								<td class="col_price">
 								    	<span id="p3"></span>
 								</td>
 							</tr>
-						   </tbody>
+						   </tbody>	
 						</table>
 					</div>
 		      </div> <!-- 바디 끝 -->
 		      <div class="modal-footer">
-		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		        <a href="#" class="button" id="refund">환불 하기</a>
+		        <a href="#" class="button" data-dismiss="modal">Close</a>
 		      </div>
 		    </div>
 		  </div>

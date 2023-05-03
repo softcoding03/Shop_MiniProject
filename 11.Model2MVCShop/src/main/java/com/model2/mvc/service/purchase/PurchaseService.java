@@ -24,6 +24,8 @@ public interface PurchaseService {
 	public void updateTranCode(Purchase purchase) throws Exception;
 	
 	public int getPurchaseLast() throws Exception;
+	
+	public int getRefund() throws Exception;
 
 	
 }

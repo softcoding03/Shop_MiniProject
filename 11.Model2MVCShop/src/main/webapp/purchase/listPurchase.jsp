@@ -65,10 +65,26 @@
 			$("h7").css("color" , "red");
 			$(".ct_list_pop:nth-child(4n+6)" ).css("background-color" , "whitesmoke");
 			
-			//환불요청 로직
+			//환불요청 로직 (고객->admin)
 			$('button').on("click" , function() {
-				//admin에게 알람 가야함.
+				var tranNo = $(this).find('#tranNo').val().trim();
+				var a = $(this).find('#p');
+				$.ajax({
+					url:"/purchase/json/refund/"+tranNo ,
+					method: "GET",
+					dataType : "text",
+					headers : {
+						"Accept" : "application/json",
+						"Content-Type" : "application/json"
+					},
+					success : function(Data, status) {
+						alert("환불 요청이 완료되었습니다. 환불이 완료되면 고객님 번호로 문자가 발송됩니다.");
+						a.html("환불요청완료");
+					}
+				})
 			});
+			
+			
 		});		
 		
 	</script>
@@ -114,26 +130,50 @@
 				  <td align="left">${purchase.purchaseProd.prodName}</td>
 				  <td align="left">
 				  		<c:set var="code" value="${purchase.tranCode}"/>
+				  		<c:set var="r" value="${purchase.refund}"/>
 			         <c:choose>
-			         	<c:when test="${code.trim() eq '1'}"> 구매완료 (배송 전)
+			         	<c:when test="${code.trim() eq '1' and r eq '0'}"> 구매완료 (배송 전)
 			         	</c:when>
-			         	<c:when test="${code.trim() eq '2'}"> 배송중
+			         	<c:when test="${code.trim() eq '2' and r eq '0'}"> 배송중
 			         	</c:when>
-			         	<c:when test="${code.trim() eq '3'}"> 배송완료
+			         	<c:when test="${code.trim() eq '3' and r eq '0'}"> 배송완료
 			         	</c:when>
-			         	<c:otherwise>해당없음</c:otherwise>
+			         	<c:when test="${r eq '2'}"> 
+			         		<div style="color:green;">
+			         			환불완료
+			         		</div>
+			         	</c:when>
+			         	<c:otherwise>
+			    			     	<div style="color:red;">
+										환불요청완료
+									</div>
+			         	</c:otherwise>
 			         </c:choose>   
 				  </td>
 				  <td align="left">
 				  		<c:set var="b" value="${purchase.tranCode}"/>
+				  		<c:set var="r" value="${purchase.refund}"/>
 							<c:if test="${b.trim() eq '3'}">
 								구매가 확정 되었습니다.
 							</c:if>
 							<c:if test="${b.trim() eq '2'}">
 								<a href="/purchase/updateTranCode?tranNo=${purchase.tranNo}&tranCode=3">상품 도착(구매확정)</a>
 							</c:if>
-							<c:if test="${b.trim() eq '1'}">
-								<button type="button" id="refund" class="btn btn-danger">환불 요청(구매취소)</button>
+							<c:if test="${b.trim() eq '1' and r.trim() eq '0'}">
+									<button type="button" id="refund" class="btn btn-danger">
+										<div id="p">환불 요청(구매취소)</div>
+										<input type="hidden" id="tranNo" value="${purchase.tranNo}"/> <!-- ajax 위한 값 hidden -->
+									</button>
+							</c:if>
+							<c:if test="${b.trim() eq '1' and r.trim() eq '1'}">
+									<div style="color:red;">
+										환불요청완료
+									</div>
+							</c:if>
+							<c:if test="${r.trim() eq '2'}">
+									<div style="color:green;">
+										환불완료
+									</div>
 							</c:if>
 							
 				  </td>

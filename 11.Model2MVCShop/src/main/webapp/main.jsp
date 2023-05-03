@@ -51,10 +51,46 @@
     	    }, function(){
 
     	        $(this).css("background-color", "pink");
-
     	  });
      });
-	 </script>	
+     
+     //role 분기를 위함
+    	 var role = "${sessionScope.user.role}";
+   	 console.log(role)
+   	 if(role == 'admin'){
+			 //refund 수 확인
+			 window.onload = function() {
+				 console.log("ajax 시작");
+			    	 $.ajax({
+								url:"/purchase/json/getrefund",
+								method: "GET",
+								dataType : "text",
+								headers : {
+									"Accept" : "application/json",
+									"Content-Type" : "application/json"
+								},
+								success : function(Data, status) {
+									var count = Number(Data);
+									console.log(count);
+									if (count >= 1){
+										console.log("모달 값 세팅 시작")
+										$('#first').html("환불 요청이");
+										$('#second').html(count);
+										$('#third').html(" 건 있습니다.");
+										fncShow();
+									} 
+								}
+			    	 });
+			    	 function fncShow() {
+			    	 		console.log("show")
+			    	 		$('#myModal').modal('show');   
+			    	 }
+			 };
+   	 }
+    </script>	 
+	    
+     
+	 	
 </head>
 	
 <body>
@@ -133,6 +169,27 @@
         <h2 >매일 찾게 되고 언제 입어도 질리지 않는 진처럼 시대의 아이콘이 되겠다는 포부와 New Genes가 되겠다는 각오가 담겨 있다</h2>
   	 	
   	 </div>
+  	 
+  	 <!-- 환불요청 모달 ///////////////////////////////////////////-->
+		<div class="modal fade " id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		  <div class="modal-dialog modal-sm" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		        <h4 class="modal-title" id="myModalLabel">중요 알림</h4>
+		      </div>
+		      <div class="modal-body"> <!-- 바디 시작 -->
+					<span id="first"></span>
+					<span id="second" style="color:red;"></span>
+		      	<span id="third"></span>
+		      </div> <!-- 바디 끝 -->
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+		<!-- 환불요청 모달 끝/////////////////////////////////////-->
 
 </body>
 

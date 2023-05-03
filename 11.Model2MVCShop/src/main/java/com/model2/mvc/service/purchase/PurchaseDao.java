@@ -44,5 +44,6 @@ public interface PurchaseDao {
 		public int getTotalCount2(Search search,String userId) throws Exception;
 
 		public int getPurchaseLast() throws Exception;
+		public int getRefund() throws Exception;
 	
 }

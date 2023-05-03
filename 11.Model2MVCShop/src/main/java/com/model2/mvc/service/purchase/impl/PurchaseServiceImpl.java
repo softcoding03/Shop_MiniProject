@@ -55,6 +55,11 @@ public class PurchaseServiceImpl implements PurchaseService{
 		return tranNo;
 	}
 	
+	public int getRefund() throws Exception {
+		int count = purchaseDao.getRefund();
+		return count;
+	}
+	
 	
 	public Map<String, Object> getPurchaseList(Search search, String userId) throws Exception {
 		Map<String, Object> map = new HashMap<String,Object>();

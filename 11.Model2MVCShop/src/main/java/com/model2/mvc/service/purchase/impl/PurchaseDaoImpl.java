@@ -70,6 +70,10 @@ public class PurchaseDaoImpl implements PurchaseDao{
 		return sqlSession.selectOne("PurchaseMapper.getPurchaseLast");
 	}
 	
+	public int getRefund() throws Exception {
+		return sqlSession.selectOne("PurchaseMapper.getRefund");
+	}
+	
 	public int getTotalCount(Search search,String userId) throws Exception {
 		Map<String,Object> map = new HashMap<String,Object>();
 		map.put("search", search);

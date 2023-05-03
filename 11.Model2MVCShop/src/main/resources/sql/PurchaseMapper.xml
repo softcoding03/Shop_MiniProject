@@ -19,6 +19,7 @@
 		<result property="orderDate" 			column="order_data" 		jdbcType="DATE" />		
 		<result property="impUid" 				column="imp_uid" 	jdbcType="VARCHAR" />
 		<result property="merchantUid" 		column="merchant_uid" 	jdbcType="VARCHAR" />
+		<result property="refund" 		column="refund" 	jdbcType="VARCHAR" />
 		<result property="purchaseProd.prodName"	column="prod_name" 			jdbcType="VARCHAR" />
 	</resultMap>
 	
@@ -26,9 +27,9 @@
 	<insert 	id="addPurchase"	parameterType="purchase" >
 	 	INSERT
 		INTO transaction 
-		VALUES	 (seq_transaction_tran_no.nextval, #{purchaseProd.prodNo} , #{buyer.userId} , 
+		VALUES (seq_transaction_tran_no.nextval, #{purchaseProd.prodNo} , #{buyer.userId} , 
 				 #{receiverName}, #{receiverPhone},	#{dlvyAddr} , #{dlvyRequest} ,#{tranCode}, sysdate,
-				 #{impUid}, #{merchantUid}) 
+				 #{impUid}, #{merchantUid}, '0') 
 	</insert>
 	 
 	 <!-- SQL : 선택한 하나의 상품 구매상세내역 보기 SELECT ONE -->
@@ -73,15 +74,11 @@
 	 </select>
 	 
 	 
-	 <!-- SQL : 구매 상세정보 변경 UPDATE -->
+	 <!-- refund 0 -> 1 ->2 환불요청 UPDATE -->
 	 <update	id="updatePurchase"	parameterType="purchase" >
 	   	UPDATE transaction
 	   	<set>
-	   		payment_option 	= #{paymentOption} ,
-			receiver_name	= #{receiverName},
-			receiver_phone 	= #{receiverPhone} ,
-			dlvy_addr		= #{dlvyAddr} ,
-			dlvy_request	= #{dlvyRequest}
+	   	refund		= #{refund}
 	   	</set>
 	   	WHERE tran_NO = #{tranNo}
 	 </update>
@@ -95,6 +92,14 @@
 	   	</set>
 	   		WHERE tran_NO = #{tranNo}
 	 </update>
+	 
+	 <select  id="getRefund" resultType="int">
+	  	SELECT COUNT(*)
+	  	FROM(	SELECT *
+	  			FROM transaction
+	  			WHERE refund = '1') countTable						
+	 </select>
+	 
 	 
 	 
 	 	

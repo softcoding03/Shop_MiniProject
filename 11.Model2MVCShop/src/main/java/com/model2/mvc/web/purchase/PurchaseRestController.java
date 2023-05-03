@@ -1,10 +1,12 @@
 package com.model2.mvc.web.purchase;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -20,11 +22,13 @@ import java.util.UUID;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import javax.net.ssl.HttpsURLConnection;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -136,6 +140,8 @@ public class PurchaseRestController {
 	    bodyJson.put("content","왜전송이안되는지..?");		// Mandatory(필수), 기본 메시지 내용, SMS: 최대 80byte, LMS, MMS: 최대 2000byte
 	    if(uid.length() > 6) {
 	    	toJson.put("content","안녕하세요, "+userName+"님"+"\n"+"'"+prodName+"'"+" 상품구매가 완료되었습니다.");	// Optional, messages.content	개별 메시지 내용, SMS: 최대 80byte, LMS, MMS: 최대 2000byte
+	    } else if(uid.length() == 1) {
+	    	toJson.put("content","고객님의 상품구매가 취소되었습니다.");
 	    } else {
 	    	toJson.put("content","상품 배송이 시작되었습니다.");	// Optional, messages.content	개별 메시지 내용, SMS: 최대 80byte, LMS, MMS: 최대 2000byte
 	    }
@@ -241,4 +247,114 @@ public class PurchaseRestController {
 		System.out.println("   마지막으로 map 세팅해준거 ?"+map);
 		return map;
 	}
+	
+		//고객이 환불 요청 로직
+		@RequestMapping( value="json/refund/{tranNo}", method=RequestMethod.GET )
+		public String refund(@PathVariable int tranNo) throws Exception{
+			System.out.println("   tranNO ??? "+tranNo);
+			System.out.println("/purchase/json/refund : GET");
+			
+			Purchase purchase = purchaseService.getPurchase(tranNo);
+			purchase.setRefund("1");
+			purchaseService.updatePurchase(purchase);
+			
+			System.out.println("  refund 값 1로 변경 완료");
+			
+			return "변경완료";
+		}
+		
+		//환불 요청 수 알림
+		@RequestMapping( value="json/getrefund", method=RequestMethod.GET )
+		public String getrefund() throws Exception{
+			
+		int count = purchaseService.getRefund();
+		System.out.println("  refund 수는 ? "+count);
+		String countRefund = Integer.toString(count);
+			
+		return countRefund;
+		}
+		
+		
+		//아임포트로 환불 요청
+		@RequestMapping( value="json/importRefund/{merchantUid}/{tranNo}", method=RequestMethod.GET )
+		public Purchase importRefund(@PathVariable String merchantUid, 
+									@PathVariable int tranNo) throws Exception{
+		System.out.println("  merUid는 ? "+merchantUid);
+		
+		//access_token 발급을 위한 api요청
+			HttpURLConnection con =null;
+			String access_token = null;
+			URL url = new URL("https://api.iamport.kr/users/getToken"); //토큰 받아올 주소
+			con = (HttpURLConnection)url.openConnection();
+			con.setRequestMethod("POST");
+			con.setRequestProperty("Content-Type", "application/json");
+			con.setRequestProperty("Accept", "application/json");
+			con.setDoOutput(true);
+			
+			JSONObject obj = new JSONObject();
+			obj.put("imp_key", "4255836747306555");
+			obj.put("imp_secret", "kK2C2bK9csuHsNYd2joo532en1ceozF53kCqPNVQH4ySfonayKDFCiXtLli43TrrUCqsnUEY3TNFDRl4");
+			
+			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(con.getOutputStream()));
+			bw.write(obj.toString());
+			bw.flush();
+			bw.close();
+			
+			//서버로부터 응답 데이터 받기
+			String a =null;
+			int result = 0;
+			int responseCode = con.getResponseCode();
+			System.out.println("  응답코드?"+responseCode);
+			if(responseCode == 200) {
+				System.out.println("  응답성공 !");
+				BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+				StringBuilder sb = new StringBuilder();
+				String line = null;
+				while ((line = br.readLine()) != null) {
+					sb.append(line+"\n");
+				}
+				br.close();
+				System.out.println(""+sb.toString());
+				result = 1; // 성공 시 1 반환
+				a = sb.toString(); //{"code":0,"message":null,"response":{"access_token":"0d48967625d8bdc10436308979c60b780932d27d","now":1683142902,"expired_at":1683144628}}
+				JSONObject jsonObject = (JSONObject) new JSONParser().parse(a);
+				access_token = (String) ((JSONObject) jsonObject.get("response")).get("access_token");
+				System.out.println(access_token);
+				
+				///취소 로직
+				HttpsURLConnection conn = null;
+				url = new URL("https://api.iamport.kr/payments/cancel");
+		 
+				conn = (HttpsURLConnection) url.openConnection();
+				conn.setRequestMethod("POST");
+				conn.setRequestProperty("Content-type", "application/json");
+				conn.setRequestProperty("Accept", "application/json");
+				conn.setRequestProperty("Authorization", access_token);
+				conn.setDoOutput(true);
+				
+				JSONObject json = new JSONObject();
+				json.put("merchant_uid", merchantUid);
+		 
+			    bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
+				bw.write(json.toString());
+				bw.flush();
+				bw.close();
+				
+				br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
+		 
+				br.close();
+				conn.disconnect();
+				System.out.println("  취소 완료 !!");
+			} else {
+				System.out.println(con.getResponseMessage());
+			}
+			
+			//바로 문자 보내기 위한 유저 정보 보내주기.
+			Purchase purchase = purchaseService.getPurchase(tranNo);
+			System.out.println(" 마지막 세팅 후 purchase? "+purchase);
+			purchase.setRefund("2"); 			//refund db '1'(환불요청) -> '2'(취소완료)로 변경
+			purchaseService.updatePurchase(purchase);
+		return purchase;
+		}
+		
 }

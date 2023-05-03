@@ -22,6 +22,7 @@ public class Purchase {
 	private String dlvyDate; //.
 	private String impUid;
 	private String merchantUid;
+	private String refund;
 		
 	public Purchase(){
 	}
@@ -116,6 +117,12 @@ public class Purchase {
 	public void setMerchantUid(String merchantUid) {
 		this.merchantUid = merchantUid;
 	}
+	public String getRefund() {
+		return refund;
+	}
+	public void setRefund(String refund) {
+		this.refund = refund;
+	}
 	
 	
 	@Override
@@ -126,6 +133,7 @@ public class Purchase {
 				+ paymentOption + ", purchaseProd=" + purchaseProd
 				+ ", receiverName=" + receiverName + ", receiverPhone="
 				+ receiverPhone + ", tranCode=" + tranCode + ", tranNo="
-				+ tranNo + ", impUid=" + impUid + ", merchantUid=" + merchantUid +"]";
+				+ tranNo + ", impUid=" + impUid + ", merchantUid=" + merchantUid 
+				+ ", refund=" + refund +"]";
 	}
 }
