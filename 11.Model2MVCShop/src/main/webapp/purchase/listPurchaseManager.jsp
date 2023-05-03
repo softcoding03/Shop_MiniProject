@@ -102,8 +102,10 @@
 			$('a[name="deliStart"]').on("click", function() {
 				alert("SMS API 실행")
 				var tranNumber = $(this).find('#tranNo').val().trim();
+				var receiverPhone = $(this).find('#receiverPhone').val().trim();
+				var receiverName = $(this).find('#receiverName').val().trim();
 					$.ajax({				
-				    	url: "/purchase/json/sendSMS/"+tranNumber,
+				    	url: "/purchase/json/sendSMS/"+tranNumber+"/"+receiverPhone+"/"+receiverName,
 			         method: "GET",
 			         dataType : "text",
 			         headers : {
@@ -175,6 +177,8 @@
 			         		<a name="deliStart" href="/purchase/updateTranCode?tranNo=${purchase.tranNo}&tranCode=2">
 			                  배송시작
 			                  <input type="hidden" id="tranNo" value="${purchase.tranNo}"/> <!-- ajax 위한 값 hidden -->
+			                  <input type="hidden" id="receiverPhone" value="${purchase.receiverPhone}"/> <!-- ajax 위한 값 hidden -->
+			               	<input type="hidden" id="receiverName" value="${purchase.receiverName}"/> <!-- ajax 위한 값 hidden -->
 			               </a>
 			         	</c:when>
 			         	<c:when test="${code.trim() eq '2'}"> 배송중

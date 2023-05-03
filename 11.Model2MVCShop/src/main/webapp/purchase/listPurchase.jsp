@@ -56,32 +56,19 @@
 			$("form").attr("method" ,"POST").attr("action" , "/purchase/listPurchase").submit();
 		}
 		
-// 		//구매이력보기를 Admin입장에서 봐야할 때 제작============= userId 에 회원정보보기  Event  처리(Click) =============	
-// 		$(function() {
-		
-// 			//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
-// 			$( "td:nth-child(2)" ).on("click" , function() {
-// 				 self.location ="/product/getProduct?prodNo="+$(this).find("input").val().trim();
-// 			});
-						
-// 			//==> userId LINK Event End User 에게 보일수 있도록 
-// 			$( "td:nth-child(2)" ).css("color" , "red");
-			
-// 		});	
-		
 		
 		$(function() {
 			//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
 			//==> 1 과 3 방법 조합 : $("tagName.className:filter함수") 사용함.	
-			$( "button.btn.btn-default" ).on("click" , function() {
-				fncGetPurchaseList(1);
-			});
 			
 			$( ".ct_list_pop td:nth-child(3)" ).css("color" , "red");
 			$("h7").css("color" , "red");
 			$(".ct_list_pop:nth-child(4n+6)" ).css("background-color" , "whitesmoke");
 			
-			
+			//환불요청 로직
+			$('button').on("click" , function() {
+				//admin에게 알람 가야함.
+			});
 		});		
 		
 	</script>
@@ -100,10 +87,6 @@
 	       <h3>구매 목록 조회</h3>
 	   </div>
 	   
-	    <!-- table 위쪽 검색 Start /////////////////////////////////////-->
-	    
-		<!-- table 위쪽 검색 end /////////////////////////////////////-->
-		
       <!--  table Start /////////////////////////////////////-->
       <table class="table table-hover table-striped" >
       

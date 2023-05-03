@@ -92,41 +92,26 @@ public class PurchaseRestController {
 	}
 	
 	
-	@RequestMapping( value="json/sendSMS/{uid}", method=RequestMethod.GET )
-	public String sendSMS(@PathVariable String uid, HttpServletRequest request) throws Exception{
-		String userName =null;
-		String prodName=null;
-		String userPhone;
-		if(uid.length() <=6) {
-			//tranNumber로 receiverPhone 번호 가져와서 그 번호로 발송
-			System.out.println("   uid 넘어온거 11?"+uid);
-			int tranNo = Integer.parseInt(uid);
-			Purchase purchase = purchaseService.getPurchase(tranNo);
-			System.out.println("   purchase ? "+purchase);
-			String phone = purchase.getReceiverPhone();
-			String[] phoneNumber = phone.split("-"); //body에서는 번호만 입력되어야 함
-			userPhone = phoneNumber[0]+phoneNumber[1]+phoneNumber[2];
-		} else {
-			//prodNo 추출해서 product 정보 get하는 로직
-			System.out.println("   uid 넘어온거 22?"+uid);
-			String a = uid.substring(10); //prodNo 추출
-			int prodNo1 = Integer.parseInt(a);
-			Product product = productService.getProduct(prodNo1);
-			prodName =product.getProdName(); //사용할 상품 이름
-			
-			//유저정보 get
-			HttpSession session=request.getSession();
-			User user = (User)session.getAttribute("user");
-			userName = user.getUserName(); //사용할 user 이름
-			String phone = user.getPhone();
-			String[] phoneNumber = phone.split("-"); //body에서는 번호만 입력되어야 함
-			userPhone = phoneNumber[0]+phoneNumber[1]+phoneNumber[2]; //사용할 user전화번호
-			System.out.println("   split해준 userPhone은 ??"+userPhone);
-		}
-			
-			
-			//저장 끝
+	@RequestMapping( value="json/sendSMS/{uid}/{receiverPhone}/{receiverName}", method=RequestMethod.GET )
+	public String sendSMS(@PathVariable String uid,
+							@PathVariable String receiverPhone,
+							@PathVariable String receiverName,
+							HttpServletRequest request) throws Exception{
+		System.out.println("   넘어온거 ?"+uid+" & "+receiverPhone+" & "+receiverName);
+		String userName =receiverName;
+		String Phone =receiverPhone;
+		String[] phoneNumber = Phone.split("-"); //body에서는 번호만 입력되어야 함
+		String userPhone = phoneNumber[0]+phoneNumber[1]+phoneNumber[2];
+		String prodName =null;
 		
+		///////////prodNo 추출해서 product 정보 get하는 로직
+		if (uid.length() > 6) {
+		System.out.println("   uid 넘어온거 22? "+uid);
+		String a = uid.substring(10); //prodNo 추출
+		int prodNo1 = Integer.parseInt(a);
+		Product product = productService.getProduct(prodNo1);
+		prodName =product.getProdName(); //사용할 상품 이름
+		}
 		String hostNameUrl = "https://sens.apigw.ntruss.com";     		// 호스트 URL
 		String requestUrl= "/sms/v2/services/";               		// 요청 URL
 		String requestUrlType = "/messages";                      		// 요청 URL
@@ -149,7 +134,7 @@ public class PurchaseRestController {
 	    bodyJson.put("contentType","COMM");
 	    bodyJson.put("from","01097833446");					// Mandatory, 발신번호, 사전 등록된 발신번호만 사용 가능		
 	    bodyJson.put("content","왜전송이안되는지..?");		// Mandatory(필수), 기본 메시지 내용, SMS: 최대 80byte, LMS, MMS: 최대 2000byte
-	    if(uid.length() >6) {
+	    if(uid.length() > 6) {
 	    	toJson.put("content","안녕하세요, "+userName+"님"+"\n"+"'"+prodName+"'"+" 상품구매가 완료되었습니다.");	// Optional, messages.content	개별 메시지 내용, SMS: 최대 80byte, LMS, MMS: 최대 2000byte
 	    } else {
 	    	toJson.put("content","상품 배송이 시작되었습니다.");	// Optional, messages.content	개별 메시지 내용, SMS: 최대 80byte, LMS, MMS: 최대 2000byte

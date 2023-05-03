@@ -85,12 +85,17 @@
 	   //아임포트 변수
 		var UID = new Date().getTime().toString(20)+${product.prodNo}; //유니크한 값 + 제품 번호
  		console.log(UID);
- 		var finaladdr = $('#addr1').val()+" "+$('#addr2').val() //고객이 입력한 주소
+		
  		const IMP = window.IMP; 
  		IMP.init("imp13567041"); 
  		
  		function requestPay() {
  		   console.log("pay시작");
+ 		   
+ 		   var finaladdr = $('#addr1').val()+" "+$('#addr2').val()
+	 		var finalPhone = $('#receiverPhone').val();
+	 		var finalName = $('#receiverName').val();
+	 		alert(finaladdr+"&"+finalPhone+"&"+finalName)
  		   
  		   IMP.request_pay({  // 요청객체
 	 		      pg: "html5_inicis",
@@ -98,9 +103,9 @@
 	 		      name: "${product.prodName}",
 	 		      amount: "${product.price}",
 	 		      buyer_email: "${user.email}",
-	 		      buyer_name: "${user.userName}",
-	 		      buyer_tel: "${user.phone}",
-	 		      buyer_addr: finaladdr 
+	 		      buyer_name: finalName, //고객이 입력한 이름
+	 		      buyer_tel:  finalPhone, //고객이 입력한 번호
+	 		      buyer_addr: finaladdr //고객이 입력한 주소 
  		   },
 	 		   function (rsp) { // callback객체
 	 		      if (rsp.success) {	// 결제 성공 시 로지
@@ -126,7 +131,7 @@
 		
 					 		        //SMS 발송 ajax
 					 		        $.ajax({				
-					 				    	url: "/purchase/json/sendSMS/"+rsp.merchant_uid,
+					 				    	url: "/purchase/json/sendSMS/"+rsp.merchant_uid+"/"+finalPhone+"/"+finalName,
 					 			         method: "GET",
 					 			         dataType : "text",
 					 			         headers : {
@@ -265,6 +270,7 @@
 		    <label for="receiverPhone" class="col-sm-offset-1 col-sm-3 control-label">배송받을분 연락처</label>
 		    <div class="col-sm-4">
 		      <input type="text" class="form-control" id="receiverPhone" name="receiverPhone" value="${user.phone}">
+		    	<strong class="text-danger">번호 입력 시 '-'를 포함하여 입력해주세요.</strong>
 		    </div>
 		  </div>
 		  
@@ -279,7 +285,7 @@
 		      <strong class="text-danger">새로운 주소 검색 시 상세주소를 추가 입력 바랍니다.</strong>
 		    </div>
 		  </div>
-		  
+		 
 		  <div class="form-group">
 		    <label for="dlvyRequest" class="col-sm-offset-1 col-sm-3 control-label">배송요청사항</label>
 		    <div class="col-sm-6">
