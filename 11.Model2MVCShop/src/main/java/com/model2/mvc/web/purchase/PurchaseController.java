@@ -111,8 +111,6 @@ public class PurchaseController {
 			System.out.println("   세팅한 purchase객체는?  : "+purchase);
 			System.out.println("   상품추가완료");
 		
-//		model.addAttribute("purchase", purchase);
-		
 		//업데이트 된 제품의 tranNo 바로 가져오는 쿼리
 		int tranNo = purchaseService.getPurchaseLast();
 		System.out.println("   tranNO는 ? "+tranNo);

@@ -47,7 +47,7 @@ public class ProductController {
 	public ProductController(){
 		System.out.println(this.getClass());
 	}
-	
+	//.
 	//==> classpath:config/common.properties  ,  classpath:config/commonservice.xml 참조 할것
 	//==> 아래의 두개를 주석을 풀어 의미를 확인 할것
 	//@Value("#{commonProperties['pageUnit']}")

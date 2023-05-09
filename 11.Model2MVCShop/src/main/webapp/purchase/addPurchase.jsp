@@ -59,9 +59,7 @@
 	
 	//뒤로가기 금지 로직(새로고침은 redirect로 해결)
 		history.pushState(null, null, document.URL);
-		
 		window.addEventListener('popstate', function () {
-			
 			    history.pushState(null, null, document.URL);
 			    alert("뒤로가기가 금지된 페이지입니다. 상품목록보기로 이동합니다.")
 			    self.location = "/product/listProduct?menu=search";
@@ -83,9 +81,6 @@
 		<!-- form Start /////////////////////////////////////-->
 		<form class="form-horizontal">
 		
-				<div> 
-				${purchase}
-				</div>
 	 		  
 	 		  <div class="form-group">
 			    <label for="prodNo" class="col-sm-offset-1 col-sm-3 control-label">주문 번호</label>
