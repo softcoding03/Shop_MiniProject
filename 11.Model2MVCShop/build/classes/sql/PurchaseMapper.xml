@@ -19,7 +19,7 @@
 		<result property="orderDate" 			column="order_data" 		jdbcType="DATE" />		
 		<result property="impUid" 				column="imp_uid" 	jdbcType="VARCHAR" />
 		<result property="merchantUid" 		column="merchant_uid" 	jdbcType="VARCHAR" />
-		<result property="refund" 		column="refund" 	jdbcType="VARCHAR" />
+		<result property="refund" 				column="refund" 	jdbcType="VARCHAR" />
 		<result property="purchaseProd.prodName"	column="prod_name" 			jdbcType="VARCHAR" />
 	</resultMap>
 	
@@ -100,9 +100,6 @@
 	  			WHERE refund = '1') countTable						
 	 </select>
 	 
-	 
-	 
-	 	
 	<!-- SQL : SELECT ROW Count -->	 
 	 <select  id="getTotalCount"  parameterType="string" resultType="int">
 	  	SELECT COUNT(*)

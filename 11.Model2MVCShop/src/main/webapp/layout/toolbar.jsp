@@ -46,7 +46,7 @@
 	                         <li class="divider"></li>
 	                         <li><a href="#">etc...</a></li>
 	                     </ul>
-	                 </li>
+	              </li>
 	                 
 	              <!-- 판매상품관리 DrowDown  -->
 	               <c:if test="${sessionScope.user.role == 'admin'}">
@@ -170,6 +170,11 @@
 		$( "a:contains('게시물 작성')" ).on("click" , function() {
 	 		
 			$(self.location).attr("href","/post/addPost");
+		});
+		
+		$( "a:contains('etc')" ).on("click" , function() {
+	 		
+			$(self.location).attr("href","/post/analytics");
 		});
 		
 		

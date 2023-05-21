@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="PostMapper">
+ 	
+ 	
+	<resultMap id="postSelectMap" type="post">
+		<result property="postNo" 				column="post_no" 				jdbcType="NUMERIC"/>
+		<result property="postName"			column="post_name" 			jdbcType="VARCHAR" />
+		<result property="postContents" 		column="post_contents" 		jdbcType="CLOB" />
+		<result property="postImage" 			column="post_image" 			jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<insert id="addPost" parameterType="post" >
+		INSERT INTO post VALUES(seq_post_post_no.nextval,#{postName},#{postContents},#{postImage})
+	</insert>
+	
+	<select id="getPost" parameterType="int" resultMap="postSelectMap">
+		select * from post where post_no =#{value}
+	</select>
+</mapper>
